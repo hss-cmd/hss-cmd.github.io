@@ -1,0 +1,16 @@
+﻿{
+  "name": "云端小窝 CloudNest",
+  "short_name": "云端小窝",
+  "description": "治愈系像素云养宠 Demo：通勤路上、下班回家、睡前放松，都有小可爱等你回来。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f3ea",
+  "theme_color": "#7aa98d",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

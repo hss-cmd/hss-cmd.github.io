@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f7f3ea">
+<meta name="description" content="云端小窝 CloudNest - 一款治愈系像素风云养宠小游戏 Demo，通勤路上、下班回家、睡前放松，都有小可爱等你回来。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>云端小窝 CloudNest</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app" class="app" data-theme="minimal">
+
+  <!-- ============ 启动页 ============ -->
+  <section id="screen-splash" class="screen active">
+    <header class="splash-head">
+      <h1 class="splash-title">云端小窝</h1>
+      <p class="splash-sub">CLOUD NEST · 治愈系像素云养宠</p>
+    </header>
+    <canvas id="splashCanvas" class="splash-canvas" width="360" height="420"></canvas>
+    <p class="splash-tagline">就算再忙，也有人在等你回家</p>
+    <div class="splash-btns">
+      <button id="btnStart" class="btn btn-big">开始游戏</button>
+      <button id="btnContinue" class="btn btn-big btn-continue">继续游戏</button>
+    </div>
+    <p class="hint">建议戴耳机体验 · 点击画面有音效</p>
+    <nav class="bottom-nav splash-nav">
+      <button class="btn nav-btn" data-nav="journal">📖<span>图鉴</span></button>
+      <button class="btn nav-btn" data-nav="pets">🏆<span>成就</span></button>
+      <button class="btn nav-btn" data-nav="games">✅<span>任务</span></button>
+      <button class="btn nav-btn" data-nav="settings">⚙️<span>设置</span></button>
+      <button class="btn nav-btn" data-nav="shop">🎁<span>每日奖励</span></button>
+    </nav>
+  </section>
+
+  <!-- ============ 选择宠物类型 ============ -->
+  <section id="screen-type" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="splash">‹</button>
+      <h2>选择你的伙伴</h2>
+      <span class="head-space"></span>
+    </header>
+    <p class="screen-sub">今天想遇见谁呢？</p>
+    <div id="typeGrid" class="grid grid-2"></div>
+  </section>
+
+  <!-- ============ 花色 + 取名 ============ -->
+  <section id="screen-color" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="type">‹</button>
+      <h2>挑选花色与名字</h2>
+      <span class="head-space"></span>
+    </header>
+    <div class="color-layout">
+      <canvas id="colorPreview" class="color-preview" width="200" height="200"></canvas>
+      <div class="color-block">
+        <h3>颜色</h3>
+        <div id="colorSwatches" class="swatches"></div>
+      </div>
+      <div class="color-block">
+        <h3>花色</h3>
+        <div id="patternSwatches" class="swatches"></div>
+      </div>
+      <div class="color-block">
+        <h3>名字</h3>
+        <input id="petNameInput" class="pixel-input" type="text" maxlength="8" placeholder="给小可爱起个名字">
+        <button id="btnRandomName" class="btn btn-small">随机名字</button>
+      </div>
+    </div>
+    <button id="btnAdopt" class="btn btn-big">带它回家 ♥</button>
+  </section>
+
+  <!-- ============ 主界面（家） ============ -->
+  <section id="screen-home" class="screen">
+    <header class="home-head">
+      <div class="home-left">
+        <span id="homeCoins" class="pill pill-coin">🪙 120</span>
+        <span id="homeDay" class="pill">第 1 天</span>
+      </div>
+      <div class="home-right">
+        <button class="btn btn-icon" data-nav="journal" title="宠物日记">📖</button>
+        <button class="btn btn-icon" data-nav="pets" title="我的伙伴">伙伴</button>
+        <button class="btn btn-icon" data-nav="settings" title="设置">⚙</button>
+      </div>
+    </header>
+    <div class="home-stage">
+      <canvas id="homeCanvas" class="home-canvas" width="360" height="300"></canvas>
+      <div class="pet-meta">
+        <span id="homePetName" class="pet-name">小橘</span>
+        <span id="homeStage" class="badge">幼年体</span>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><span class="stat-icon">♥</span><div class="bar"><div id="barAffection" class="bar-fill" style="width:60%"></div></div><span id="numAffection" class="stat-num">60</span></div>
+        <div class="stat"><span class="stat-icon">🍖</span><div class="bar"><div id="barHunger" class="bar-fill hunger" style="width:80%"></div></div><span id="numHunger" class="stat-num">80</span></div>
+        <div class="stat"><span class="stat-icon">⚡</span><div class="bar"><div id="barEnergy" class="bar-fill energy" style="width:90%"></div></div><span id="numEnergy" class="stat-num">90</span></div>
+      </div>
+    </div>
+    <div id="sickBanner" class="sick-banner hidden">
+      <span>🤒 宝贝生病了，快给它喂药！</span>
+      <button id="btnMedicate" class="btn btn-small">💊 喂药</button>
+    </div>
+    <div id="actionGrid" class="action-grid">
+      <button class="btn action-btn" data-action="feed"><span class="action-icon">🍣</span>喂食</button>
+      <button class="btn action-btn" data-action="play"><span class="action-icon">⚽</span>玩耍</button>
+      <button class="btn action-btn" data-action="pet"><span class="action-icon">🖐</span>抚摸</button>
+      <button class="btn action-btn" data-action="sleep"><span class="action-icon">💤</span>睡觉</button>
+    </div>
+    <nav class="bottom-nav">
+      <button class="btn nav-btn" data-nav="home" data-active="1">🏠<span>小窝</span></button>
+      <button class="btn nav-btn" data-nav="shop">🛒<span>商店</span></button>
+      <button class="btn nav-btn" data-nav="games">🎮<span>小游戏</span></button>
+      <button class="btn nav-btn" data-nav="room">🛋<span>装修</span></button>
+      <button class="btn nav-btn" data-nav="pets">🐾<span>伙伴</span></button>
+    </nav>
+  </section>
+
+  <!-- ============ 商店 ============ -->
+  <section id="screen-shop" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">‹</button>
+      <h2>小卖部</h2>
+      <span class="pill pill-coin" id="shopCoins">🪙 120</span>
+    </header>
+    <div class="shop-tabs">
+      <button class="btn shop-tab active" data-tab="food">食物</button>
+      <button class="btn shop-tab" data-tab="toy">玩具</button>
+      <button class="btn shop-tab" data-tab="gear">换装</button>
+      <button class="btn shop-tab" data-tab="med">药品</button>
+      <button class="btn shop-tab" data-tab="house">小窝</button>
+    </div>
+    <div id="shopList" class="shop-list"></div>
+  </section>
+
+  <!-- ============ 小游戏 ============ -->
+  <section id="screen-games" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">‹</button>
+      <h2>游乐场</h2>
+      <span class="pill pill-coin" id="gamesCoins">🪙 120</span>
+    </header>
+    <p class="screen-sub">玩小游戏赚金币，给宝贝买好吃的！</p>
+    <div id="gameList" class="shop-list"></div>
+  </section>
+
+  <!-- ============ 装修 ============ -->
+  <section id="screen-room" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">‹</button>
+      <h2>房间装修</h2>
+      <span class="pill pill-coin" id="roomCoins">🪙 120</span>
+    </header>
+    <p class="screen-sub">给你们的家换个风格吧</p>
+    <canvas id="roomPreview" class="room-preview" width="360" height="240"></canvas>
+    <div id="themeList" class="shop-list"></div>
+  </section>
+
+  <!-- ============ 我的伙伴 ============ -->
+  <section id="screen-pets" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">‹</button>
+      <h2>我的伙伴</h2>
+      <span class="pill pill-coin" id="petsCoins">🪙 120</span>
+    </header>
+    <div id="petList" class="shop-list"></div>
+    <button id="btnAdoptNew" class="btn btn-big disabled" disabled>领养新伙伴（第一只成年后开放）</button>
+    <button id="btnReAdopt" class="btn btn-big danger" style="margin-top:10px">重新领养 · 清零进度</button>
+  </section>
+
+  <!-- ============ 宠物日记 ============ -->
+  <section id="screen-journal" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">‹</button>
+      <h2>宠物日记</h2>
+      <span class="head-space"></span>
+    </header>
+    <div class="journal-tabs">
+      <button class="btn shop-tab active" data-tab="log">暖心留言</button>
+      <button class="btn shop-tab" data-tab="achieve">成就</button>
+    </div>
+    <div id="journalList" class="journal-list"></div>
+  </section>
+
+  <!-- ============ 设置 ============ -->
+  <section id="screen-settings" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">‹</button>
+      <h2>设置</h2>
+      <span class="head-space"></span>
+    </header>
+    <div class="settings-list">
+      <div class="setting-row">
+        <span>音效</span>
+        <button id="btnSound" class="btn btn-small">开</button>
+      </div>
+      <div class="setting-row">
+        <span>演示时间加速</span>
+        <div class="warp-wrap">
+          <button class="btn btn-small" data-warp="1">1x</button>
+          <button class="btn btn-small" data-warp="10">10x</button>
+          <button class="btn btn-small" data-warp="60">1时/分</button>
+          <button class="btn btn-small" data-warp="360">1天/4分</button>
+          <button class="btn btn-small" data-warp="1440">1天/分</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span>关于</span>
+        <button id="btnAbout" class="btn btn-small">?</button>
+      </div>
+      <div class="setting-row">
+        <span>重新领养（清零进度）</span>
+        <button id="btnReset" class="btn btn-small danger">重新领养</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 小游戏全屏遮罩 -->
+<div id="gameOverlay" class="overlay hidden">
+  <canvas id="miniCanvas" width="360" height="520"></canvas>
+  <div id="miniHud" class="mini-hud"></div>
+</div>
+
+<!-- 装扮 / 小窝 弹窗 -->
+<div id="wardrobeOverlay" class="overlay hidden">
+  <div class="confirm-box pixel-panel">
+    <h3>🎀 装扮</h3>
+    <div id="wardrobeContent"></div>
+    <div class="confirm-btns"><button id="wardrobeClose" class="btn">完成</button></div>
+  </div>
+</div>
+<div id="houseOverlay" class="overlay hidden">
+  <div class="confirm-box pixel-panel">
+    <h3>🏠 小窝</h3>
+    <div id="houseContent"></div>
+    <div class="confirm-btns"><button id="houseClose" class="btn">完成</button></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<div id="confirmOverlay" class="overlay hidden">
+  <div class="confirm-box pixel-panel">
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmText"></p>
+    <div class="confirm-btns">
+      <button id="confirmOk" class="btn">好的</button>
+      <button id="confirmCancel" class="btn btn-gray">取消</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/sprites.js"></script>
+<script src="js/room.js"></script>
+<script src="js/game.js"></script>
+<script src="js/minigames.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

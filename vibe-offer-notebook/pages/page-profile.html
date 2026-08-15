@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mint">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 个人页 · 我的 — 校招记录本 · 单页样式稿</title>
+<style>
+/* ============ 基础 & 主题变量 ============ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --primary:#2EC4B6;--primary-deep:#189B90;--primary-soft:#DDF6F2;--on-primary:#fff;
+  --accent:#FFD166;--accent-deep:#E8A93C;--accent-soft:#FFF3D9;
+  --bg:#F3FAF8;--card:#FFFFFF;--line:#EAF0EE;--tabbar-bg:rgba(255,255,255,.92);
+  --text-1:#22303B;--text-2:#5E6E7C;--text-3:#9AA8B3;
+  --info:#4E9FF0;--info-soft:#E5F1FD;
+  --grape:#8B7CF6;--grape-soft:#ECE9FE;
+  --coral:#FF7A59;--coral-soft:#FFE9E1;
+  --warn:#F0A63A;--warn-soft:#FFF3D9;
+  --success:#2EC4B6;--success-soft:#DDF6F2;
+  --danger:#FF6B81;--danger-soft:#FFE7EC;
+  --shadow:0 10px 30px rgba(31,74,68,.09);
+  --radius:22px;
+  --tab-h:64px;
+}
+[data-theme="sky"]{--primary:#4E9FF0;--primary-deep:#2F7FD6;--primary-soft:#E5F1FD;--on-primary:#fff;--bg:#F4F8FC}
+[data-theme="coral"]{--primary:#FF7A59;--primary-deep:#EE5C36;--primary-soft:#FFE9E1;--on-primary:#fff;--bg:#FFF7F4}
+[data-theme="cream"]{--primary:#F5B342;--primary-deep:#D99424;--primary-soft:#FFF3D9;--on-primary:#4A3410;--bg:#FFFBF1}
+[data-theme="pink"]{--primary:#FF8FAB;--primary-deep:#F06E8F;--primary-soft:#FFE7EE;--on-primary:#5B2140;--bg:#FFF7F9}
+[data-theme="grape"]{--primary:#8B7CF6;--primary-deep:#6F5EE0;--primary-soft:#ECE9FE;--on-primary:#fff;--bg:#F8F7FD}
+body.dark{
+  --bg:#10141B;--card:#1A202A;--line:#29313D;--tabbar-bg:rgba(26,32,42,.92);
+  --text-1:#EDF1F6;--text-2:#A3AFBB;--text-3:#66727F;
+  --shadow:0 12px 34px rgba(0,0,0,.35);
+  --primary-soft:color-mix(in srgb,var(--primary) 18%,var(--card));
+  --accent-soft:color-mix(in srgb,var(--accent) 16%,var(--card));
+  --info-soft:color-mix(in srgb,var(--info) 16%,var(--card));
+  --grape-soft:color-mix(in srgb,var(--grape) 16%,var(--card));
+  --coral-soft:color-mix(in srgb,var(--coral) 16%,var(--card));
+  --warn-soft:color-mix(in srgb,var(--warn) 16%,var(--card));
+  --success-soft:color-mix(in srgb,var(--success) 16%,var(--card));
+  --danger-soft:color-mix(in srgb,var(--danger) 16%,var(--card));
+}
+html,body{height:100%}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#DFF3EE 0%,#F2F7F0 45%,#FDEEDF 100%);
+  color:var(--text-1);min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:36px 20px;transition:background .4s;
+}
+body.dark{background:linear-gradient(135deg,#0D1420 0%,#141821 45%,#1B1414 100%)}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
+input,select,textarea{font-family:inherit;font-size:14px;color:var(--text-1);outline:none}
+
+/* ============ Demo 外层布局 ============ */
+.demo-wrap{display:flex;align-items:center;justify-content:center;gap:52px;flex-wrap:wrap;max-width:1180px}
+.control{width:330px;background:var(--card);border-radius:26px;padding:26px;box-shadow:var(--shadow);transition:background .4s}
+.control .brand{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.control .brand .logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--on-primary);box-shadow:0 8px 18px color-mix(in srgb,var(--primary) 35%,transparent)}
+.control .brand b{font-size:19px;letter-spacing:.5px}
+.control .brand span{display:block;font-size:12px;color:var(--text-3);font-weight:400;margin-top:2px}
+.control p.desc{font-size:13px;line-height:1.7;color:var(--text-2);margin-bottom:20px}
+.ctl-group{margin-bottom:20px}
+.ctl-group h4{font-size:13px;color:var(--text-3);font-weight:600;margin-bottom:10px;letter-spacing:1px}
+.page-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.page-btns button{padding:9px 0;border-radius:12px;background:var(--primary-soft);color:var(--primary-deep);font-size:12px;font-weight:600;transition:transform .15s}
+.page-btns button:hover{transform:translateY(-2px)}
+.page-btns button.wide{grid-column:span 3;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:var(--on-primary)}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.swatch{width:34px;height:34px;border-radius:50%;border:3px solid transparent;transition:transform .15s;position:relative}
+.swatch:hover{transform:scale(1.12)}
+.swatch.active{border-color:var(--card);box-shadow:0 0 0 2px var(--primary),0 6px 14px rgba(0,0,0,.15)}
+.swatch i{position:absolute;inset:0;border-radius:50%;background:var(--c)}
+.swatch.active i::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.dark-toggle{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:14px;background:var(--primary-soft);font-size:13px;font-weight:600;color:var(--primary-deep);cursor:pointer}
+.dark-toggle input{display:none}
+.toggle-ui{width:42px;height:24px;border-radius:99px;background:color-mix(in srgb,var(--primary) 30%,transparent);position:relative;transition:background .25s}
+.toggle-ui::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:left .25s}
+.dark-toggle input:checked + .toggle-ui{background:var(--primary)}
+.dark-toggle input:checked + .toggle-ui::after{left:21px}
+.ctl-tips{background:var(--accent-soft);border-radius:14px;padding:12px 14px;font-size:12px;line-height:1.7;color:color-mix(in srgb,var(--accent-deep) 75%,var(--text-2))}
+.ctl-tips b{color:var(--accent-deep)}
+.ctl-links{margin-top:16px;font-size:12px;color:var(--text-3)}
+.ctl-links a{color:var(--primary-deep);text-decoration:none}
+
+/* ============ 手机壳 ============ */
+.phone{width:404px;height:862px;background:#101318;border-radius:58px;padding:12px;box-shadow:0 36px 90px rgba(10,16,20,.38),inset 0 0 0 2px #2A2F37;flex-shrink:0;position:relative}
+.screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:46px;overflow:hidden;transition:background .4s}
+.island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:118px;height:30px;background:#101318;border-radius:20px;z-index:60}
+.statusbar{position:absolute;top:0;left:0;right:0;height:46px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font-size:13px;font-weight:600;color:var(--text-1);z-index:55}
+.statusbar .sb-icons{display:flex;align-items:center;gap:5px;font-size:12px}
+
+/* ============ 页面容器 ============ */
+.page{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;scrollbar-width:none;padding:58px 18px calc(var(--tab-h) + 22px)}
+.page::-webkit-scrollbar{display:none}
+.page.active{display:flex;animation:pageIn .32s cubic-bezier(.22,.8,.36,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.page-edit{padding-bottom:40px}
+
+/* ============ 通用小组件 ============ */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.topbar h1{font-size:22px;font-weight:800;letter-spacing:.3px}
+.topbar .sub{font-size:12.5px;color:var(--text-2);margin-top:4px}
+.icon-btn{width:40px;height:40px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;color:var(--text-2);position:relative;flex-shrink:0}
+.icon-btn svg{width:19px;height:19px}
+.icon-btn .dot{position:absolute;top:9px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--danger);border:2px solid var(--card)}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin:22px 2px 12px}
+.section-head h2{font-size:17px;font-weight:800}
+.section-head .cnt{font-size:11px;color:var(--text-3);margin-left:6px}
+.section-head .more{font-size:12px;color:var(--text-3)}
+
+/* ============ 首页：进度卡 ============ */
+.progress-card{position:relative;overflow:hidden;border-radius:24px;padding:20px;color:var(--on-primary);background:linear-gradient(135deg,var(--primary) 0%,var(--primary-deep) 100%);box-shadow:0 14px 30px color-mix(in srgb,var(--primary) 40%,transparent)}
+.progress-card::before,.progress-card::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}
+.progress-card::before{width:150px;height:150px;right:-45px;top:-55px}
+.progress-card::after{width:90px;height:90px;right:70px;bottom:-42px}
+.pc-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.pc-top b{font-size:13px;font-weight:600;opacity:.95}
+.pc-top .pc-pct{font-size:26px;font-weight:800}
+.pc-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.26);margin:12px 0;position:relative;z-index:1;overflow:hidden}
+.pc-bar i{display:block;height:100%;width:26%;border-radius:99px;background:#fff;transition:width .6s ease}
+.pc-foot{display:flex;gap:6px;align-items:center;font-size:12px;opacity:.95;position:relative;z-index:1;flex-wrap:wrap}
+.pc-foot b{font-size:14px}
+.pc-foot .dot{opacity:.55}
+
+/* ============ 首页：统计卡 ============ */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.stat-card{border-radius:18px;padding:13px 14px;display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden}
+.stat-card .ico{font-size:17px}
+.stat-card b{font-size:22px;font-weight:800;line-height:1.15}
+.stat-card span{font-size:11.5px;font-weight:600;opacity:.85}
+.stat-card em{position:absolute;top:13px;right:13px;font-size:10px;font-style:normal;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.75)}
+.s-sky{background:var(--info-soft);color:#2F7FD6}
+.s-coral{background:var(--coral-soft);color:#EE5C36}
+.s-pink{background:var(--danger-soft);color:#E5496B}
+.s-mint{background:var(--success-soft);color:#189B90}
+
+/* ============ 首页：筛选 & 投递卡片 ============ */
+.filter-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px}
+.filter-row::-webkit-scrollbar{display:none}
+.chip{padding:7px 15px;border-radius:99px;font-size:12.5px;font-weight:600;background:var(--card);color:var(--text-2);box-shadow:0 3px 10px rgba(30,50,45,.05);white-space:nowrap;transition:all .2s}
+.chip.active{background:var(--primary);color:var(--on-primary);box-shadow:0 6px 14px color-mix(in srgb,var(--primary) 35%,transparent)}
+.job-card{background:var(--card);border-radius:20px;padding:15px 15px 13px;margin-bottom:11px;box-shadow:var(--shadow);transition:transform .15s;cursor:pointer}
+.job-card:active{transform:scale(.985)}
+.job-main{display:flex;gap:11px;align-items:flex-start}
+.job-logo{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 5px 12px rgba(0,0,0,.12)}
+.job-info{flex:1;min-width:0}
+.job-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.job-name b{font-size:15px;font-weight:700}
+.job-pos{font-size:12.5px;color:var(--text-2);margin-top:2px}
+.job-meta{font-size:11px;color:var(--text-3);margin-top:4px}
+.more-btn{width:26px;height:26px;border-radius:9px;background:var(--bg);color:var(--text-3);font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.st-pill{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.st-info{background:var(--info-soft);color:#2F7FD6}
+.st-grape{background:var(--grape-soft);color:#6F5EE0}
+.st-coral{background:var(--coral-soft);color:#EE5C36}
+.st-warn{background:var(--warn-soft);color:#D99424}
+.st-success{background:var(--success-soft);color:#189B90}
+.st-danger{background:var(--danger-soft);color:#E5496B}
+.steps{display:flex;align-items:center;gap:5px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
+.step{padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:700;background:var(--bg);color:var(--text-3);white-space:nowrap}
+.step.done{background:var(--primary-soft);color:var(--primary-deep)}
+.step.current{background:var(--primary);color:var(--on-primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.step.fail{background:var(--danger-soft);color:#E5496B}
+.conn{height:1.5px;flex:1;background:var(--line)}
+.offer-note{font-size:11.5px;color:var(--primary-deep);font-weight:600}
+.fail-note{font-size:11.5px;color:#E5496B;font-weight:600}
+
+/* ============ 悬浮 + 按钮 & 底部导航 ============ */
+.fab{position:absolute;right:18px;bottom:calc(var(--tab-h) + 20px);width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:var(--on-primary);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px color-mix(in srgb,var(--primary) 45%,transparent);z-index:46;transition:transform .15s}
+.fab:hover{transform:scale(1.08)}
+.fab svg{width:24px;height:24px}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--tabbar-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;z-index:45;padding-bottom:6px}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--text-3);font-size:10.5px;font-weight:600;position:relative}
+.tab-item svg{width:22px;height:22px}
+.tab-item.active{color:var(--primary)}
+.tab-item .bdg{position:absolute;top:6px;right:calc(50% - 20px);min-width:15px;height:15px;border-radius:99px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* ============ 编辑页 ============ */
+.edit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.edit-header .back{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-2);font-weight:600}
+.edit-header .back svg{width:18px;height:18px}
+.edit-header h1{font-size:18px;font-weight:800}
+.edit-header .save-link{font-size:13px;font-weight:700;color:var(--primary-deep);background:var(--primary-soft);padding:7px 15px;border-radius:99px}
+.ai-card{background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-radius:20px;padding:16px;margin-bottom:14px}
+.ai-head{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.ai-head .ai-ico{width:38px;height:38px;border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 10px rgba(0,0,0,.06)}
+.ai-head b{font-size:14px;font-weight:800}
+.ai-head p{font-size:11.5px;color:var(--text-2);margin-top:2px;line-height:1.4}
+.ai-upload{width:100%;padding:15px;border-radius:15px;border:2px dashed color-mix(in srgb,var(--primary) 45%,transparent);background:var(--card);display:flex;align-items:center;justify-content:center;gap:9px;font-size:13.5px;font-weight:700;color:var(--primary-deep);transition:all .2s}
+.ai-upload:hover{background:color-mix(in srgb,var(--primary) 8%,var(--card));border-color:var(--primary)}
+.ai-upload svg{width:20px;height:20px}
+.ai-tags{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text-3)}
+.ai-tags i{font-style:normal;padding:2px 8px;border-radius:6px;background:var(--card);font-weight:700;color:var(--text-2)}
+.ai-result{display:flex;align-items:center;gap:8px;background:var(--success-soft);color:var(--primary-deep);font-size:12px;font-weight:600;border-radius:14px;padding:10px 13px;margin-bottom:14px;animation:pageIn .3s ease}
+.form-card{background:var(--card);border-radius:22px;padding:17px;box-shadow:var(--shadow)}
+.field{margin-bottom:14px;display:block}
+.field:last-child{margin-bottom:0}
+.field > span{display:block;font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);background:var(--bg);border-radius:13px;padding:11px 13px;transition:border .2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary);background:var(--card)}
+.field textarea{resize:none;line-height:1.6}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-3) 50%),linear-gradient(135deg,var(--text-3) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stage-chips{display:flex;flex-wrap:wrap;gap:8px}
+.stage-chip{padding:8px 14px;border-radius:12px;font-size:12.5px;font-weight:700;background:var(--bg);color:var(--text-2);transition:all .18s}
+.stage-chip.active{background:var(--primary);color:var(--on-primary);box-shadow:0 5px 12px color-mix(in srgb,var(--primary) 32%,transparent)}
+.switch-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-radius:14px;padding:12px 14px;font-size:13px;font-weight:600}
+.save-btn{width:100%;margin-top:16px;padding:15px;border-radius:18px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:var(--on-primary);font-size:15.5px;font-weight:800;letter-spacing:2px;box-shadow:0 12px 24px color-mix(in srgb,var(--primary) 38%,transparent);transition:transform .15s}
+.save-btn:hover{transform:translateY(-2px)}
+
+/* ============ 发现页 ============ */
+.search-bar{display:flex;align-items:center;gap:9px;background:var(--card);border-radius:16px;padding:12px 15px;box-shadow:var(--shadow);margin-bottom:14px}
+.search-bar svg{width:17px;height:17px;color:var(--text-3)}
+.search-bar input{border:none;background:none;flex:1;font-size:13.5px}
+.search-bar .post-btn{font-size:12.5px;font-weight:700;color:var(--primary-deep);background:var(--primary-soft);padding:7px 13px;border-radius:99px;white-space:nowrap}
+.match-card{position:relative;overflow:hidden;border-radius:22px;padding:18px;background:linear-gradient(135deg,var(--grape) 0%,var(--info) 100%);color:#fff;box-shadow:0 14px 30px rgba(90,80,220,.3);margin-bottom:14px}
+.match-card::after{content:"🎯";position:absolute;right:-8px;bottom:-12px;font-size:74px;opacity:.28;transform:rotate(-12deg)}
+.match-card b{font-size:16px;font-weight:800;display:block;margin-bottom:5px}
+.match-card p{font-size:12px;opacity:.92;line-height:1.5;max-width:75%}
+.match-card .mc-btn{margin-top:13px;background:#fff;color:var(--grape);border-radius:99px;padding:9px 18px;font-size:13px;font-weight:800;box-shadow:0 6px 14px rgba(0,0,0,.15)}
+.match-card .mc-btn:disabled{opacity:.75;cursor:default}
+.match-loading{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:16px;padding:14px 16px;font-size:13px;color:var(--text-2);box-shadow:var(--shadow);margin-bottom:14px}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--grape);animation:blink 1s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+.match-job{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:18px;padding:13px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.match-job .score{width:46px;height:46px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--primary-soft);color:var(--primary-deep);flex-shrink:0}
+.match-job .score b{font-size:14px;line-height:1}
+.match-job .score span{font-size:8.5px;font-weight:600;margin-top:2px}
+.match-job .mj-info{flex:1;min-width:0}
+.match-job .mj-info b{font-size:14px;display:block}
+.match-job .mj-info p{font-size:11.5px;color:var(--text-3);margin-top:3px}
+.match-job .mj-go{font-size:12px;font-weight:800;color:var(--primary-deep);background:var(--primary-soft);padding:7px 13px;border-radius:99px}
+.feed-tabs{display:flex;gap:14px;margin:4px 2px 12px;border-bottom:1.5px solid var(--line)}
+.feed-tab{padding:8px 2px 10px;font-size:14px;font-weight:700;color:var(--text-3);position:relative;white-space:nowrap}
+.feed-tab.active{color:var(--primary-deep)}
+.feed-tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1.5px;height:3px;border-radius:3px;background:var(--primary)}
+.post-card{background:var(--card);border-radius:20px;padding:15px;margin-bottom:11px;box-shadow:var(--shadow)}
+.post-head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.p-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.p-name b{font-size:13.5px;display:block}
+.p-name span{font-size:11px;color:var(--text-3)}
+.p-tag{margin-left:auto;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:99px}
+.p-tag.t-面经{background:var(--grape-soft);color:#6F5EE0}
+.p-tag.t-求助{background:var(--warn-soft);color:#D99424}
+.p-tag.t-喜报{background:var(--success-soft);color:#189B90}
+.post-body{font-size:13.5px;line-height:1.65;color:var(--text-1)}
+.post-body b{color:var(--primary-deep)}
+.post-img{margin-top:10px;height:120px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:38px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--grape))}
+.post-acts{display:flex;gap:20px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);color:var(--text-3);font-size:12px}
+.post-acts button{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3)}
+.post-acts button.liked{color:var(--danger)}
+.post-acts svg{width:15px;height:15px}
+
+/* ============ 消息页 ============ */
+.remind-card{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,var(--coral-soft),var(--warn-soft));border-radius:20px;padding:15px;margin-bottom:14px}
+.remind-card .rm-ico{width:42px;height:42px;border-radius:14px;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;box-shadow:0 6px 14px rgba(255,122,89,.35)}
+.remind-card b{font-size:14px;display:block}
+.remind-card p{font-size:11.5px;color:var(--text-2);margin-top:3px;line-height:1.4}
+.remind-card .rm-btn{margin-left:auto;background:var(--coral);color:#fff;font-size:12px;font-weight:700;padding:8px 13px;border-radius:99px;white-space:nowrap}
+.msg-tabs{display:flex;gap:18px;margin-bottom:6px}
+.msg-tab{font-size:14px;font-weight:700;color:var(--text-3);padding:8px 2px;position:relative}
+.msg-tab.active{color:var(--primary-deep)}
+.msg-tab.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px;background:var(--primary)}
+.msg-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.msg-item{display:flex;gap:11px;align-items:center;background:var(--card);border-radius:18px;padding:13px 14px;box-shadow:var(--shadow);position:relative}
+.msg-ico{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.msg-info{flex:1;min-width:0}
+.msg-info b{font-size:13.5px;display:block}
+.msg-info p{font-size:11.5px;color:var(--text-2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-time{font-size:10.5px;color:var(--text-3);align-self:flex-start}
+.msg-badge{position:absolute;right:12px;bottom:12px;min-width:17px;height:17px;border-radius:99px;background:var(--danger);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}
+
+/* ============ 个人页 ============ */
+.profile-card{display:flex;gap:13px;align-items:center;background:var(--card);border-radius:22px;padding:17px;box-shadow:var(--shadow)}
+.p-avatar-lg{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--grape));color:var(--on-primary);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0;box-shadow:0 8px 18px color-mix(in srgb,var(--primary) 35%,transparent)}
+.profile-card b{font-size:17px;font-weight:800;display:block}
+.profile-card .p-school{font-size:12px;color:var(--text-2);margin-top:3px}
+.p-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.p-tags i{font-style:normal;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px}
+.p-tags i:first-child{background:var(--primary-soft);color:var(--primary-deep)}
+.p-tags i:last-child{background:var(--accent-soft);color:var(--accent-deep)}
+.profile-card .edit-p{width:34px;height:34px;border-radius:11px;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text-2);margin-left:auto}
+.resume-card{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--info-soft),var(--grape-soft));border-radius:20px;padding:15px;margin-top:12px}
+.resume-card .rc-ico{width:44px;height:44px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 5px 12px rgba(0,0,0,.08);flex-shrink:0}
+.resume-card b{font-size:14px;display:block}
+.resume-card .rc-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.75);margin-top:7px;overflow:hidden}
+.resume-card .rc-bar i{display:block;height:100%;width:85%;border-radius:99px;background:var(--info)}
+.resume-card .rc-pct{font-size:11px;color:var(--text-2);margin-top:5px}
+.resume-card .rc-btn{margin-left:auto;background:#fff;color:var(--info);font-size:12px;font-weight:800;padding:8px 14px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.my-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.my-stat{background:var(--card);border-radius:17px;padding:12px 0;text-align:center;box-shadow:var(--shadow)}
+.my-stat b{font-size:20px;font-weight:800;color:var(--primary-deep);display:block}
+.my-stat span{font-size:11px;color:var(--text-3)}
+.menu-card{background:var(--card);border-radius:22px;padding:6px 15px;margin-top:12px;box-shadow:var(--shadow)}
+.menu-item{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px;font-weight:600;width:100%;text-align:left}
+.menu-item:last-child{border-bottom:none}
+.menu-item .m-ico{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.menu-item .m-arr{margin-left:auto;color:var(--text-3);font-size:16px}
+.menu-item .m-switch{margin-left:auto}
+.ver-foot{text-align:center;font-size:11px;color:var(--text-3);margin-top:18px}
+
+/* ============ 弹层 / 底部面板 ============ */
+.mask{position:absolute;inset:0;background:rgba(18,24,32,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:70;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:28px 28px 0 0;padding:22px 20px 30px;z-index:71;animation:sheetUp .3s cubic-bezier(.22,.8,.36,1);max-height:78%;overflow-y:auto}
+@keyframes sheetUp{from{transform:translateY(60%);opacity:.6}to{transform:none;opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet h3{font-size:17px;font-weight:800;text-align:center}
+.sheet > p{text-align:center;font-size:12px;color:var(--text-3);margin:6px 0 18px}
+.sheet .swatches{justify-content:center;gap:16px;margin-bottom:18px}
+.sheet .sw-name{text-align:center;font-size:11px;color:var(--text-3);margin-top:5px}
+.sheet .save-btn{margin-top:4px}
+.scan-box{background:var(--card);border-radius:24px;padding:28px 34px;text-align:center;box-shadow:var(--shadow);width:80%}
+.scan-box .scan-ico{font-size:44px;animation:floatY 1.2s ease-in-out infinite}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.scan-box p{font-size:14px;font-weight:700;margin:12px 0 14px}
+.scanbar{height:6px;border-radius:99px;background:var(--bg);overflow:hidden}
+.scanbar i{display:block;height:100%;width:40%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--grape));animation:scan 1.2s ease-in-out infinite}
+@keyframes scan{0%{margin-left:-40%}100%{margin-left:100%}}
+.toast{position:absolute;left:50%;bottom:calc(var(--tab-h) + 88px);transform:translateX(-50%) translateY(14px);background:#20262F;color:#fff;font-size:13px;font-weight:600;padding:11px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:all .3s;z-index:80;box-shadow:0 10px 24px rgba(0,0,0,.3);white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+
+/* ===== 单页样式稿：说明面板 ===== */
+.spec-body{background:linear-gradient(135deg,#E4F5EF 0%,#F6F7F2 45%,#FDEEDF 100%)}
+.spec-wrap{display:flex;gap:48px;align-items:center;justify-content:center;flex-wrap:wrap;max-width:1220px}
+.spec-panel{width:392px;background:#fff;border-radius:28px;padding:30px;box-shadow:0 22px 54px rgba(28,62,56,.13);flex-shrink:0}
+.spec-kicker{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--primary-deep);margin-bottom:8px}
+.spec-panel h1{font-size:23px;font-weight:800;letter-spacing:.4px}
+.spec-en{font-size:12px;color:var(--text-3);margin:5px 0 20px;letter-spacing:.3px}
+.spec-block{margin-bottom:18px}
+.spec-block h3{font-size:13px;color:var(--text-3);margin-bottom:8px;letter-spacing:.5px}
+.spec-block p{font-size:13px;line-height:1.75;color:var(--text-2)}
+.spec-block ul{list-style:none;padding:0}
+.spec-block li{font-size:12.5px;color:var(--text-2);line-height:1.85;padding-left:18px;position:relative}
+.spec-block li::before{content:"•";position:absolute;left:4px;color:var(--primary);font-weight:800}
+.spec-tokens{display:flex;flex-wrap:wrap;gap:8px}
+.tok{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-2);background:var(--bg);padding:6px 11px;border-radius:99px;border:1px solid var(--line)}
+.tok i{width:10px;height:10px;border-radius:50%;background:var(--tc);flex-shrink:0}
+.spec-link{display:block;text-align:center;margin-top:10px;padding:13px;border-radius:15px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:var(--on-primary);font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 10px 22px color-mix(in srgb,var(--primary) 35%,transparent)}
+.spec-link:hover{transform:translateY(-2px)}
+</style>
+</head>
+<body class="spec-body">
+<div class="spec-wrap">
+
+    <aside class="spec-panel">
+      <div class="spec-kicker">校招记录本 · Offer Notebook</div>
+      <h1>05 个人页 · 我的</h1>
+      <p class="spec-en">Profile / Me</p>
+      <section class="spec-block"><h3>🎯 设计目标</h3><p>个人数据中心：简历状态、投递战报、常用功能与主题设置都收在这里，还给用户「换个颜色换个心情」的个性化入口。</p></section>
+      <section class="spec-block"><h3>🧩 核心组件</h3><ul><li>个人资料卡：主色渐变头像、学校信息、目标标签</li><li>简历卡：完整度进度条 85% + 更新入口</li><li>数据统计：累计投递 / 面试场次 / Offer</li><li>功能菜单：收藏、帖子、面试日历、数据导出、主题设置</li><li>主题设置底部面板：6 套主题色 + 深色模式</li></ul></section>
+      <section class="spec-block"><h3>🎨 设计规范</h3><div class="spec-tokens"><span class="tok" style="--tc:#2EC4B6"><i></i>头像 58px 主色渐变圆</span><span class="tok" style="--tc:#4E9FF0"><i></i>简历进度条 85% 天空蓝</span><span class="tok" style="--tc:#8B7CF6"><i></i>菜单图标 34px 圆角块</span><span class="tok" style="--tc:#10141B"><i></i>深色模式 一键切换</span></div></section>
+      <section class="spec-block"><h3>⚡ 交互说明</h3><ul><li>主题设置弹出底部面板，6 套主题色 + 深色模式即时生效</li><li>数据导出支持 TXT / CSV / Markdown 报告</li><li>简历更新、面试日历、主题设置均有对应入口</li></ul></section>
+      <a class="spec-link" href="index.html">← 返回完整交互 Demo</a>
+    </aside>
+  <div class="phone">
+    <div class="screen">
+      <div class="island"></div>
+      <div class="statusbar"><span>9:41</span><span class="sb-icons">📶 🔋</span></div>
+<section class="page" id="page-profile">
+        <header class="topbar">
+          <div>
+            <h1>我的</h1>
+            <p class="sub">秋招进行中 · 目标：产品经理</p>
+          </div>
+          <button class="icon-btn" onclick="openThemeSheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20a8 8 0 1 1 8-8"/><path d="M12 14a2 2 0 1 1 2-2"/><path d="M17 3v4M19 5h-4"/></svg>
+          </button>
+        </header>
+
+        <div class="profile-card">
+          <div class="p-avatar-lg">杨</div>
+          <div style="flex:1;min-width:0">
+            <b>小杨同学</b>
+            <p class="p-school">XX 大学 · 2027 届 · 计算机科学与技术</p>
+            <div class="p-tags"><i>秋招中</i><i>目标：产品经理</i></div>
+          </div>
+          <button class="edit-p" onclick="showToast('编辑资料 🚧')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          </button>
+        </div>
+
+        <div class="resume-card">
+          <div class="rc-ico">📄</div>
+          <div style="flex:1;min-width:0">
+            <b>我的简历</b>
+            <div class="rc-bar"><i></i></div>
+            <p class="rc-pct">简历完整度 85% · 记得保持最新</p>
+          </div>
+          <button class="rc-btn" onclick="showToast('简历上传 / 更新 🚧')">更新</button>
+        </div>
+
+        <div class="my-stats">
+          <div class="my-stat"><b id="pStatApplied">6</b><span>累计投递</span></div>
+          <div class="my-stat"><b id="pStatInterview">2</b><span>面试场次</span></div>
+          <div class="my-stat"><b>1</b><span>Offer</span></div>
+        </div>
+
+        <div class="menu-card">
+          <button class="menu-item" onclick="showToast('我的收藏 🚧')"><span class="m-ico" style="background:var(--accent-soft)">⭐</span>我的收藏<span class="m-arr">›</span></button>
+          <button class="menu-item" onclick="showToast('我的帖子 🚧')"><span class="m-ico" style="background:var(--grape-soft)">📝</span>我的帖子<span class="m-arr">›</span></button>
+          <button class="menu-item" onclick="showToast('面试日历：明天 10:00 字节一面 📅')"><span class="m-ico" style="background:var(--coral-soft)">📅</span>面试日历<span class="m-arr">›</span></button>
+          <button class="menu-item" onclick="showToast('已生成投递报告，可导出 TXT / CSV 📊')"><span class="m-ico" style="background:var(--info-soft)">📊</span>数据导出<span class="m-arr">›</span></button>
+          <button class="menu-item" onclick="openThemeSheet()"><span class="m-ico" style="background:var(--primary-soft)">🎨</span>主题设置<span class="m-arr">›</span></button>
+          <button class="menu-item" onclick="showToast('帮助与反馈 🚧')"><span class="m-ico" style="background:var(--warn-soft)">💬</span>帮助与反馈<span class="m-arr">›</span></button>
+          <button class="menu-item" onclick="showToast('校招记录本 v1.0.0 📒')"><span class="m-ico" style="background:var(--bg)">📒</span>关于我们<span class="m-arr">›</span></button>
+        </div>
+        <p class="ver-foot">校招记录本 Offer Notebook · v1.0.0<br>愿每一次记录，都有回响 ✨</p>
+      </section>
+
+      <nav class="tabbar">
+        <button class="tab-item active" data-page="home" onclick="goPage('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+          首页
+        </button>
+        <button class="tab-item" data-page="discover" onclick="goPage('discover')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>
+          发现
+        </button>
+        <button class="tab-item" data-page="messages" onclick="goPage('messages')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.6 0-3-.4-4.3-1.2L3 20l1.2-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg>
+          消息<span class="bdg">5</span>
+        </button>
+        <button class="tab-item" data-page="profile" onclick="goPage('profile')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+          我的
+        </button>
+      </nav>
+      <button class="fab" id="fab" onclick="openEdit()" title="新增投递">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <div class="toast" id="toast"></div>
+    </div>
+  </div>
+</div>
+<script>
+/* ============ 数据 ============ */
+const STAGE_META = {
+  submitted:{label:"已投递", cls:"st-info"},
+  written:{label:"笔试中", cls:"st-grape"},
+  interview:{label:"面试中", cls:"st-coral"},
+  offer_wait:{label:"等Offer", cls:"st-warn"},
+  offered:{label:"已通过", cls:"st-success"},
+  failed:{label:"挂了", cls:"st-danger"}
+};
+const STAGE_ORDER = ["submitted","written","interview","offer_wait"];
+const SEED = [
+  {id:1, company:"字节跳动", position:"产品经理（校招）", city:"深圳", date:"2026-07-28", stage:"interview", channel:"内推", salary:"20-30K", link:"https://jobs.bytedance.com/", note:"一面通过，准备二面；面试官深挖了实习项目", updated:"2小时前"},
+  {id:2, company:"腾讯", position:"后端开发工程师", city:"广州", date:"2026-08-01", stage:"written", channel:"官网投递", salary:"18-25K", link:"https://join.qq.com/", note:"8/20 笔试，刷了 3 套真题", updated:"昨天"},
+  {id:3, company:"美团", position:"商业分析", city:"上海", date:"2026-08-05", stage:"submitted", channel:"官网投递", salary:"", link:"", note:"", updated:"3 天前"},
+  {id:4, company:"拼多多", position:"数据分析", city:"上海", date:"2026-08-02", stage:"offered", channel:"内推", salary:"25K+", link:"", note:"已收到意向书，等正式 Offer 邮件", updated:"周一"},
+  {id:5, company:"小红书", position:"内容运营", city:"北京", date:"2026-08-10", stage:"failed", channel:"牛客", salary:"", link:"", note:"一面挂，反问环节没答好", updated:"上周"},
+  {id:6, company:"网易", position:"游戏策划", city:"杭州", date:"2026-08-11", stage:"offer_wait", channel:"宣讲会", salary:"18-25K", link:"", note:"HR 说这周给结果，蹲一个", updated:"2 天前"}
+];
+const LOGO_COLORS = {字节跳动:"#4E8EF7", 腾讯:"#12B7F5", 美团:"#FFC300", 拼多多:"#E02E24", 小红书:"#FF2442", 网易:"#C20E0E", 百度:"#2932E1", 阿里巴巴:"#FF6A00"};
+const THEMES = [
+  {id:"mint", name:"薄荷绿", c:"#2EC4B6"},
+  {id:"sky", name:"天空蓝", c:"#4E9FF0"},
+  {id:"coral", name:"珊瑚橙", c:"#FF7A59"},
+  {id:"cream", name:"奶油黄", c:"#F5B342"},
+  {id:"pink", name:"淡粉色", c:"#FF8FAB"},
+  {id:"grape", name:"葡萄紫", c:"#8B7CF6"}
+];
+
+let records = loadRecords();
+let currentFilter = "all";
+let editingId = null;
+let currentStage = "submitted";
+
+function loadRecords(){
+  try{
+    const raw = localStorage.getItem("offer_notebook_records");
+    if(raw && JSON.parse(raw).length) return JSON.parse(raw);
+  }catch(e){}
+  return SEED.slice();
+}
+function persistRecords(){ try{ localStorage.setItem("offer_notebook_records", JSON.stringify(records)); }catch(e){} }
+
+/* ============ 页面切换 ============ */
+function goPage(name){
+  const page = document.getElementById("page-"+name);
+  if(!page){ showToast("此页面请在完整交互 Demo 中体验"); return; }
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  page.classList.add("active");
+  page.scrollTop = 0;
+  document.querySelectorAll(".tab-item").forEach(t=>t.classList.toggle("active", t.dataset.page===name));
+  const isEdit = name==="edit";
+  const fab = document.getElementById("fab");
+  const tabbar = document.querySelector(".tabbar");
+  if(fab) fab.style.display = isEdit ? "none" : "flex";
+  if(tabbar) tabbar.style.display = isEdit ? "none" : "flex";
+  if(name==="home") renderHome();
+}
+function openEdit(id){
+  editingId = id ?? null;
+  document.getElementById("editTitle").textContent = id ? "编辑投递" : "新增投递";
+  document.getElementById("aiResult").hidden = true;
+  const r = id ? records.find(x=>x.id===id) : null;
+  document.getElementById("fCompany").value = r ? r.company : "";
+  document.getElementById("fPosition").value = r ? r.position : "";
+  document.getElementById("fCity").value = r ? r.city : "";
+  document.getElementById("fDate").value = r ? r.date : new Date().toISOString().slice(0,10);
+  document.getElementById("fSalary").value = r && r.salary ? r.salary : "";
+  document.getElementById("fChannel").value = r ? r.channel : "官网投递";
+  document.getElementById("fLink").value = r ? r.link : "";
+  document.getElementById("fNote").value = r ? r.note : "";
+  selectStage(r ? r.stage : "submitted");
+  goPage("edit");
+}
+
+/* ============ 首页渲染 ============ */
+function renderHome(){
+  const applied = records.length;
+  const interview = records.filter(r=>r.stage==="interview").length;
+  const failed = records.filter(r=>r.stage==="failed").length;
+  const offered = records.filter(r=>r.stage==="offered").length;
+  document.getElementById("statApplied").textContent = applied;
+  document.getElementById("statInterview").textContent = interview;
+  document.getElementById("statFailed").textContent = failed;
+  document.getElementById("statOffered").textContent = offered;
+  const psApplied = document.getElementById("pStatApplied"); if(psApplied) psApplied.textContent = applied;
+  const psInterview = document.getElementById("pStatInterview"); if(psInterview) psInterview.textContent = interview;
+  const active = records.filter(r=>["submitted","written","interview","offer_wait"].includes(r.stage)).length;
+  const pct = applied ? Math.round((active*0.55 + offered*1) / applied * 100) : 0;
+  document.getElementById("progressPct").textContent = pct + "%";
+  document.getElementById("progressBar").style.width = pct + "%";
+  document.getElementById("totalApplied").textContent = applied;
+  document.getElementById("listCount").textContent = applied + " 条";
+
+  let list = records.slice().sort((a,b)=> (b.date||"").localeCompare(a.date||""));
+  const filterMap = { all:()=>true, submitted:r=>r.stage==="submitted", written:r=>r.stage==="written", interview:r=>r.stage==="interview", offer_wait:r=>r.stage==="offer_wait", offered:r=>r.stage==="offered", failed:r=>r.stage==="failed" };
+  list = list.filter(filterMap[currentFilter] || filterMap.all);
+  document.getElementById("jobList").innerHTML = list.map(jobCardHTML).join("");
+}
+function jobCardHTML(r){
+  const m = STAGE_META[r.stage];
+  const logoBg = LOGO_COLORS[r.company] || "linear-gradient(135deg,var(--primary),var(--grape))";
+  const isInlineBg = LOGO_COLORS[r.company] ? "" : "background:"+logoBg;
+  const steps = stepsHTML(r);
+  return `
+  <article class="job-card" onclick="openEdit(${r.id})">
+    <div class="job-main">
+      <div class="job-logo" style="${isInlineBg}background:${logoBg}">${r.company[0]}</div>
+      <div class="job-info">
+        <div class="job-name"><b>${r.company}</b><span class="st-pill ${m.cls}">${m.label}</span></div>
+        <p class="job-pos">${r.position}</p>
+        <p class="job-meta">${r.city||"—"} · ${fmtDate(r.date)} 投递 · ${r.updated||""}更新</p>
+      </div>
+      <button class="more-btn" onclick="event.stopPropagation();openEdit(${r.id})">⋯</button>
+    </div>
+    ${steps}
+  </article>`;
+}
+function fmtDate(d){
+  if(!d) return "";
+  const p = d.split("-");
+  return p[1]+"."+p[2];
+}
+function stepsHTML(r){
+  if(r.stage==="offered"){
+    return `<div class="steps"><span class="offer-note">🎉 恭喜！已收到 Offer，记得更新入职信息</span></div>`;
+  }
+  if(r.stage==="failed"){
+    return `<div class="steps"><span class="step done">投递</span><span class="step done">笔试</span><span class="step current fail">面试</span><span class="step">Offer</span><span class="conn"></span><span class="fail-note">很遗憾，继续加油 💪</span></div>`;
+  }
+  const idx = STAGE_ORDER.indexOf(r.stage);
+  const labels = ["投递","笔试","面试","Offer"];
+  const html = labels.map((l,i)=>{
+    const cls = i<idx ? "done" : (i===idx ? "current" : "");
+    return `<span class="step ${cls}">${i<idx?"✓ ":""}${l}</span>`;
+  }).join('<span class="conn"></span>');
+  return `<div class="steps">${html}</div>`;
+}
+function setFilter(f){
+  currentFilter = f;
+  document.querySelectorAll("#filterRow .chip").forEach(c=>c.classList.toggle("active", c.dataset.filter===f));
+  renderHome();
+}
+
+/* ============ 编辑页交互 ============ */
+function buildStageChips(){
+  document.getElementById("stageChips").innerHTML = Object.entries(STAGE_META).map(([id,m])=>
+    `<button class="stage-chip" data-stage="${id}" onclick="selectStage('${id}')">${m.label}</button>`
+  ).join("");
+  selectStage("submitted");
+}
+function selectStage(id){
+  currentStage = id;
+  document.querySelectorAll(".stage-chip").forEach(c=>c.classList.toggle("active", c.dataset.stage===id));
+}
+function saveRecord(){
+  const company = document.getElementById("fCompany").value.trim();
+  const position = document.getElementById("fPosition").value.trim();
+  if(!company || !position){ showToast("公司名和岗位名不能为空哦"); return; }
+  const data = {
+    id: editingId || Date.now(),
+    company,
+    position,
+    city: document.getElementById("fCity").value.trim(),
+    date: document.getElementById("fDate").value,
+    stage: currentStage,
+    salary: document.getElementById("fSalary").value,
+    channel: document.getElementById("fChannel").value,
+    link: document.getElementById("fLink").value.trim(),
+    note: document.getElementById("fNote").value.trim(),
+    updated:"刚刚"
+  };
+  if(editingId){
+    records = records.map(r=>r.id===editingId ? data : r);
+    showToast("已更新 ✓");
+  }else{
+    records.unshift(data);
+    showToast("保存成功 ✓ 加油！");
+  }
+  persistRecords();
+  renderHome();
+  goPage("home");
+}
+function startScan(){
+  if(!document.getElementById("page-edit").classList.contains("active")) openEdit();
+  document.getElementById("scanMask").hidden = false;
+  setTimeout(()=>{
+    document.getElementById("scanMask").hidden = true;
+    const sample = {company:"字节跳动", position:"AI产品经理（校招）", city:"深圳", date:"2026-08-14", stage:"interview", salary:"20-30K", channel:"内推", link:"https://jobs.bytedance.com/ai"};
+    document.getElementById("fCompany").value = sample.company;
+    document.getElementById("fPosition").value = sample.position;
+    document.getElementById("fCity").value = sample.city;
+    document.getElementById("fDate").value = sample.date;
+    document.getElementById("fSalary").value = sample.salary;
+    document.getElementById("fChannel").value = sample.channel;
+    document.getElementById("fLink").value = sample.link;
+    document.getElementById("fNote").value = "示例：AI 已识别出 6 项信息，这里是自动填写的备注";
+    selectStage(sample.stage);
+    document.getElementById("aiResult").hidden = false;
+    showToast("AI 识别完成 🤖");
+  }, 1800);
+}
+
+/* ============ 发现页 ============ */
+
+function setFeed(tag){
+  document.querySelectorAll(".feed-tab").forEach(t=>t.classList.toggle("active", t.dataset.feed===tag));
+  document.querySelectorAll("#feedList .post-card").forEach(c=>{
+    c.style.display = (tag==="all" || c.dataset.tag===tag) ? "" : "none";
+  });
+}
+
+/* ============ 点赞 / Toast ============ */
+document.addEventListener("click", e=>{
+  const like = e.target.closest(".like-btn");
+  if(like){
+    const span = like.querySelector("span");
+    const num = parseInt(span.textContent.replace(/[^0-9.]/g,""));
+    if(like.classList.toggle("liked")){
+      span.textContent = (num>=1000 ? (num/1000).toFixed(1)+"k" : num+1);
+      showToast("已点赞 ❤️");
+    }else{
+      span.textContent = (num>=1000 ? (num/1000).toFixed(1)+"k" : Math.max(0,num-1));
+    }
+  }
+});
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+/* ============ 主题 ============ */
+function buildSwatches(){
+  const html = id => THEMES.map(t=>
+    `<button class="swatch ${id==="ctrlSwatches"?"":""}" data-theme="${t.id}" title="${t.name}" onclick="setTheme('${t.id}')" style="--c:${t.c}"><i></i></button>`
+  ).join("");
+  document.getElementById("ctrlSwatches").innerHTML = html();
+  document.getElementById("sheetSwatches").innerHTML = THEMES.map(t=>
+    `<div><button class="swatch" data-theme="${t.id}" onclick="setTheme('${t.id}')" style="--c:${t.c}"><i></i></button><div class="sw-name">${t.name}</div></div>`
+  ).join("");
+  syncTheme();
+}
+function setTheme(id){
+  document.documentElement.dataset.theme = id;
+  try{ localStorage.setItem("offer_notebook_theme", id); }catch(e){}
+  syncTheme();
+}
+function setDark(on){
+  document.body.classList.toggle("dark", !!on);
+  const ctrl = document.getElementById("ctrlDark"), sheet = document.getElementById("sheetDark");
+  if(ctrl) ctrl.checked = !!on; if(sheet) sheet.checked = !!on;
+  try{ localStorage.setItem("offer_notebook_dark", on?"1":"0"); }catch(e){}
+}
+function syncTheme(){
+  const cur = document.documentElement.dataset.theme;
+  document.querySelectorAll(".swatch[data-theme]").forEach(s=>s.classList.toggle("active", s.dataset.theme===cur));
+}
+function openThemeSheet(){ document.getElementById("themeMask").hidden = false; }
+function closeThemeSheet(){ document.getElementById("themeMask").hidden = true; }
+
+/* ============ 初始化 ============ */
+document.addEventListener("DOMContentLoaded", ()=>{
+  try{
+    const savedTheme = localStorage.getItem("offer_notebook_theme");
+    if(savedTheme && THEMES.some(t=>t.id===savedTheme)) document.documentElement.dataset.theme = savedTheme;
+    if(localStorage.getItem("offer_notebook_dark")==="1") setDark(true);
+  }catch(e){}
+  if(document.getElementById("ctrlSwatches")) buildSwatches();
+  if(document.getElementById("stageChips")) buildStageChips();
+  if(document.getElementById("jobList")) renderHome();
+});
+</script>
+<script>goPage('profile');</script>
+</body>
+</html>

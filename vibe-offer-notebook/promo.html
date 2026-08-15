@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>校招记录本 · Offer Notebook — 应届生的校招投递管家</title>
+<meta name="description" content="校招记录本：面向应届毕业生的校招投递记录工具。投递进度一目了然，AI 帮你整理投递截图，社区一起交流面经。">
+<style>
+:root{
+  --primary:#2EC4B6;--primary-deep:#189B90;--primary-soft:#DDF6F2;
+  --accent:#FFD166;--accent-deep:#E8A93C;--accent-soft:#FFF3D9;
+  --coral:#FF7A59;--coral-soft:#FFE9E1;
+  --sky:#4E9FF0;--sky-soft:#E5F1FD;
+  --grape:#8B7CF6;--grape-soft:#ECE9FE;
+  --pink:#FF8FAB;--pink-soft:#FFE7EE;
+  --bg:#F6FBF9;--card:#FFFFFF;--line:#E7F0ED;
+  --text-1:#22303B;--text-2:#5E6E7C;--text-3:#93A2AD;
+  --shadow:0 14px 40px rgba(32,86,78,.10);
+  --radius:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  background:var(--bg);color:var(--text-1);line-height:1.6;transition:background .4s;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+.section{padding:76px 0}
+.section-head{text-align:center;max-width:640px;margin:0 auto 44px}
+.section-head .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--primary-deep);background:var(--primary-soft);padding:6px 14px;border-radius:99px;margin-bottom:14px}
+.section-head h2{font-size:32px;font-weight:800;letter-spacing:.5px}
+.section-head p{font-size:15px;color:var(--text-2);margin-top:10px}
+
+/* ===== 导航 ===== */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;gap:28px;height:64px}
+.nav .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
+.nav .logo .mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 6px 14px color-mix(in srgb,var(--primary) 35%,transparent)}
+.nav .links{display:flex;gap:22px;margin-left:auto;font-size:14px;color:var(--text-2)}
+.nav .links a:hover{color:var(--primary-deep)}
+.nav .cta{padding:9px 18px;border-radius:99px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:#fff;font-size:13px;font-weight:700;box-shadow:0 6px 16px color-mix(in srgb,var(--primary) 35%,transparent);transition:transform .15s}
+.nav .cta:hover{transform:translateY(-2px)}
+.accent-row{display:flex;align-items:center;gap:8px}
+.accent-row .sw{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s}
+.accent-row .sw:hover{transform:scale(1.18)}
+.accent-row .sw.active{border-color:#fff;box-shadow:0 0 0 2px var(--text-1)}
+
+/* ===== Hero ===== */
+.hero{padding:72px 0 60px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:560px;height:560px;border-radius:50%;background:color-mix(in srgb,var(--primary) 12%,transparent);top:-220px;right:-140px;z-index:0}
+.hero::after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,transparent);bottom:-160px;left:-120px;z-index:0}
+.hero-inner{position:relative;z-index:1;display:flex;align-items:center;gap:64px}
+.hero-left{flex:1;min-width:0}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--primary-deep);background:var(--primary-soft);padding:7px 14px;border-radius:99px;margin-bottom:20px}
+.hero-badge i{font-style:normal;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.hero h1{font-size:46px;line-height:1.24;font-weight:800;letter-spacing:.5px}
+.hero h1 .hl{position:relative;color:var(--primary-deep)}
+.hero h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:12px;background:color-mix(in srgb,var(--accent) 55%,transparent);z-index:-1;border-radius:4px}
+.hero-sub{font-size:16px;color:var(--text-2);margin-top:18px;max-width:480px}
+.hero-ctas{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:16px;font-size:15px;font-weight:800;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:#fff;box-shadow:0 12px 26px color-mix(in srgb,var(--primary) 40%,transparent)}
+.btn-ghost{background:var(--card);color:var(--primary-deep);border:2px solid var(--primary-soft);box-shadow:var(--shadow)}
+.hero-mini{display:flex;gap:22px;margin-top:34px;color:var(--text-3);font-size:12.5px}
+.hero-mini b{color:var(--text-1);font-size:18px;display:block}
+.hero-right{flex:1;display:flex;justify-content:center;position:relative;min-width:0}
+.phone-frame{width:280px;border-radius:44px;padding:12px;background:#101318;box-shadow:0 40px 90px rgba(10,20,26,.35);transform:rotate(2deg);transition:transform .4s}
+.phone-frame:hover{transform:rotate(0deg) translateY(-6px)}
+.phone-frame img{border-radius:34px;width:100%}
+.float-chip{position:absolute;background:var(--card);border-radius:16px;padding:11px 16px;font-size:12.5px;font-weight:700;box-shadow:var(--shadow);display:flex;align-items:center;gap:9px;animation:floatY 3.2s ease-in-out infinite}
+.float-chip .ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fc-1{top:64px;left:-54px}
+.fc-2{bottom:90px;right:-58px;animation-delay:1.2s}
+
+/* ===== 亮点条 ===== */
+.highlights{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.hl-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:transform .2s}
+.hl-card:hover{transform:translateY(-4px)}
+.hl-card .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:13px}
+.hl-card b{font-size:15.5px;display:block;margin-bottom:5px}
+.hl-card p{font-size:12.5px;color:var(--text-2)}
+
+/* ===== 功能卡片 ===== */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.feat-card{background:var(--card);border-radius:24px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .2s}
+.feat-card:hover{transform:translateY(-5px)}
+.feat-card .no{position:absolute;top:18px;right:22px;font-size:40px;font-weight:800;color:var(--line);line-height:1}
+.feat-card .ic{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+.feat-card h3{font-size:17px;font-weight:800;margin-bottom:8px}
+.feat-card p{font-size:13.5px;color:var(--text-2);line-height:1.75}
+.feat-card .tag{display:inline-block;margin-top:13px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:99px}
+
+/* ===== 页面预览 ===== */
+.shot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.shot-card{background:var(--card);border-radius:24px;padding:14px;box-shadow:var(--shadow);transition:transform .2s}
+.shot-card:hover{transform:translateY(-5px)}
+.shot-card img{border-radius:16px;width:100%;aspect-ratio:2960/2000;object-fit:cover}
+.shot-card .cap{display:flex;align-items:center;justify-content:space-between;padding:13px 6px 6px}
+.shot-card .cap b{font-size:14.5px}
+.shot-card .cap span{font-size:12px;color:var(--primary-deep);font-weight:700}
+
+/* ===== 主题 ===== */
+.theme-panel{background:var(--card);border-radius:28px;padding:40px;box-shadow:var(--shadow);display:flex;gap:48px;align-items:center;flex-wrap:wrap}
+.theme-panel .tp-text{flex:1;min-width:260px}
+.theme-panel h3{font-size:22px;font-weight:800;margin-bottom:10px}
+.theme-panel p{font-size:14px;color:var(--text-2)}
+.theme-swatches{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;min-width:280px}
+.theme-swatch{text-align:center}
+.theme-swatch .ball{width:56px;height:56px;border-radius:50%;margin:0 auto 8px;box-shadow:0 10px 22px rgba(0,0,0,.12);transition:transform .2s}
+.theme-swatch .ball:hover{transform:scale(1.12)}
+.theme-swatch span{font-size:12px;color:var(--text-2);font-weight:600}
+
+/* ===== CTA & 页脚 ===== */
+.cta-banner{background:linear-gradient(135deg,var(--primary),var(--primary-deep));border-radius:32px;padding:54px 40px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.cta-banner::before{content:"🎓";position:absolute;left:30px;top:-20px;font-size:110px;opacity:.2;transform:rotate(-14deg)}
+.cta-banner::after{content:"🚀";position:absolute;right:34px;bottom:-24px;font-size:110px;opacity:.2;transform:rotate(12deg)}
+.cta-banner h2{font-size:30px;font-weight:800;margin-bottom:12px}
+.cta-banner p{font-size:15px;opacity:.92;max-width:520px;margin:0 auto 26px}
+.cta-banner .btn{background:#fff;color:var(--primary-deep)}
+.cta-banner .btn.ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.65);box-shadow:none}
+.footer{padding:44px 0 56px;text-align:center;color:var(--text-3);font-size:12.5px}
+.footer .flinks{display:flex;justify-content:center;gap:22px;margin-bottom:16px;font-size:13px;color:var(--text-2)}
+.footer .flinks a:hover{color:var(--primary-deep)}
+
+@media (max-width:960px){
+  .hero-inner{flex-direction:column;gap:44px;text-align:center}
+  .hero-left{display:flex;flex-direction:column;align-items:center}
+  .hero-sub{max-width:none}
+  .hero-mini{justify-content:center;flex-wrap:wrap}
+  .hero-right{order:-1}
+  .highlights{grid-template-columns:repeat(2,1fr)}
+  .fc-1{left:-10px}.fc-2{right:-14px}
+  .nav .links{display:none}
+}
+@media (max-width:560px){
+  .hero h1{font-size:34px}
+  .section{padding:56px 0}
+  .highlights{grid-template-columns:1fr 1fr;gap:12px}
+  .theme-panel{padding:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo"><span class="mark">📒</span>校招记录本</div>
+    <div class="links">
+      <a href="#features">核心功能</a>
+      <a href="#preview">页面预览</a>
+      <a href="#theme">主题</a>
+      <a href="README.md" target="_blank" rel="noopener">说明文档</a>
+    </div>
+    <div class="accent-row" id="accentRow" title="切换主题色">
+      <button class="sw active" data-c="#2EC4B6" data-d="#189B90" style="background:#2EC4B6"></button>
+      <button class="sw" data-c="#4E9FF0" data-d="#2F7FD6" style="background:#4E9FF0"></button>
+      <button class="sw" data-c="#FF7A59" data-d="#EE5C36" style="background:#FF7A59"></button>
+      <button class="sw" data-c="#F5B342" data-d="#D99424" style="background:#F5B342"></button>
+      <button class="sw" data-c="#FF8FAB" data-d="#F06E8F" style="background:#FF8FAB"></button>
+      <button class="sw" data-c="#8B7CF6" data-d="#6F5EE0" style="background:#8B7CF6"></button>
+    </div>
+    <a class="cta" href="index.html">立即体验</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="container hero-inner">
+    <div class="hero-left">
+      <span class="hero-badge"><i>🔥</i> 2026 秋招 · 应届生必备</span>
+      <h1>把每一次投递，<br>都记成 <span class="hl">Offer 的样子</span></h1>
+      <p class="hero-sub">投递进度一目了然、AI 帮你整理投递截图、社区一起交流面经 —— 告别「我投到哪了？」的反复翻找。</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="index.html">🚀 立即体验 Demo</a>
+        <a class="btn btn-ghost" href="pages/page-home.html">📱 查看页面样式稿</a>
+      </div>
+      <div class="hero-mini">
+        <div><b>6</b>种投递状态</div>
+        <div><b>7</b>类快捷筛选</div>
+        <div><b>6</b>套主题色</div>
+        <div><b>100%</b>免费使用</div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="phone-frame"><img src="screens/01-首页-求职记录.png" alt="校招记录本首页截图"></div>
+      <div class="float-chip fc-1"><span class="ic" style="background:var(--primary-soft)">📊</span>已投 23 家 · 进度 26%</div>
+      <div class="float-chip fc-2"><span class="ic" style="background:var(--accent-soft)">🎉</span>拼多多 Offer +1</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 亮点条 ===== -->
+<div class="container">
+  <div class="highlights">
+    <div class="hl-card"><div class="ic" style="background:var(--primary-soft)">📊</div><b>全流程跟进</b><p>投递 → 笔试 → 面试 → Offer，每家公司进度一眼看清</p></div>
+    <div class="hl-card"><div class="ic" style="background:var(--sky-soft)">🤖</div><b>AI 截图识别</b><p>投递截图发给 AI，公司岗位时间自动填好</p></div>
+    <div class="hl-card"><div class="ic" style="background:var(--grape-soft)">💬</div><b>校招社区</b><p>面经、Offer 喜报、求助交流，一起上岸不孤单</p></div>
+    <div class="hl-card"><div class="ic" style="background:var(--coral-soft)">⏰</div><b>重要提醒</b><p>面试、笔试不遗漏，消息中心集中通知</p></div>
+  </div>
+</div>
+
+<!-- ===== 核心功能 ===== -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">CORE FEATURES</span>
+      <h2>五个核心功能，覆盖校招全流程</h2>
+      <p>从记录投递到准备面试，再到和校招伙伴交流，一个 App 就够了。</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span class="no">01</span>
+        <div class="ic" style="background:var(--primary-soft)">📒</div>
+        <h3>求职记录首页</h3>
+        <p>顶部统计已投递、面试中、挂了、已通过；下方按分类快速找到任意一家公司的投递进度。</p>
+        <span class="tag" style="background:var(--primary-soft);color:var(--primary-deep)">分类导航</span>
+      </div>
+      <div class="feat-card">
+        <span class="no">02</span>
+        <div class="ic" style="background:var(--sky-soft)">🤖</div>
+        <h3>AI 智能编辑</h3>
+        <p>手动录入几秒完成；把投递邮件 / 官网截图发给 AI，公司、岗位、阶段、时间一键自动填好。</p>
+        <span class="tag" style="background:var(--sky-soft);color:#2F7FD6">拍照识别</span>
+      </div>
+      <div class="feat-card">
+        <span class="no">03</span>
+        <div class="ic" style="background:var(--grape-soft)">💬</div>
+        <h3>校招社区</h3>
+        <p>面经、Offer 喜报、求职求助……和全国校招生一起交流，收藏干货、互相打气。</p>
+        <span class="tag" style="background:var(--grape-soft);color:#6F5EE0">一起上岸</span>
+      </div>
+      <div class="feat-card">
+        <span class="no">04</span>
+        <div class="ic" style="background:var(--coral-soft)">⏰</div>
+        <h3>消息中心</h3>
+        <p>面试提醒、笔试通知、进度更新、社区互动集中管理，重要节点绝不遗漏。</p>
+        <span class="tag" style="background:var(--coral-soft);color:#EE5C36">不遗漏</span>
+      </div>
+      <div class="feat-card">
+        <span class="no">05</span>
+        <div class="ic" style="background:var(--accent-soft)">🎨</div>
+        <h3>个性主题</h3>
+        <p>薄荷绿、天空蓝、珊瑚橙、奶油黄、淡粉、葡萄紫 6 套主题色 + 深色模式，换色也换心情。</p>
+        <span class="tag" style="background:var(--accent-soft);color:var(--accent-deep)">青春配色</span>
+      </div>
+      <div class="feat-card">
+        <span class="no">06</span>
+        <div class="ic" style="background:var(--pink-soft)">📤</div>
+        <h3>数据随时带走</h3>
+        <p>投递记录一键导出 TXT / CSV / Markdown 报告，复盘秋招、同步给朋友都方便。</p>
+        <span class="tag" style="background:var(--pink-soft);color:#E5496B">可导出</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页面预览 ===== -->
+<section class="section" id="preview" style="background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--primary) 6%,var(--bg)))">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">PAGE PREVIEW</span>
+      <h2>五大页面预览</h2>
+      <p>点击任意一张图，可查看该页面的完整单页样式稿（含设计说明）。</p>
+    </div>
+    <div class="shot-grid">
+      <a class="shot-card" href="pages/page-home.html"><img src="screens/spec-01-首页-求职记录.png" alt="首页预览"><div class="cap"><b>01 首页 · 求职记录</b><span>查看 ›</span></div></a>
+      <a class="shot-card" href="pages/page-edit.html"><img src="screens/spec-02-编辑页.png" alt="编辑页预览"><div class="cap"><b>02 编辑页 · 新增/编辑</b><span>查看 ›</span></div></a>
+      <a class="shot-card" href="pages/page-discover.html"><img src="screens/spec-03-发现页.png" alt="发现页预览"><div class="cap"><b>03 发现页 · 校招社区</b><span>查看 ›</span></div></a>
+      <a class="shot-card" href="pages/page-messages.html"><img src="screens/spec-04-消息页.png" alt="消息页预览"><div class="cap"><b>04 消息页 · 消息中心</b><span>查看 ›</span></div></a>
+      <a class="shot-card" href="pages/page-profile.html"><img src="screens/spec-05-个人页.png" alt="个人页预览"><div class="cap"><b>05 个人页 · 我的</b><span>查看 ›</span></div></a>
+      <a class="shot-card" href="index.html"><img src="screens/08-首页-深色模式.png" alt="深色模式预览"><div class="cap"><b>深色模式 · 一键切换</b><span>体验 ›</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 主题 ===== -->
+<section class="section" id="theme">
+  <div class="container">
+    <div class="theme-panel">
+      <div class="tp-text">
+        <h3>🎨 六种主题色，随心情切换</h3>
+        <p>薄荷绿、天空蓝、珊瑚橙、奶油黄、淡粉、葡萄紫，再加深色模式 —— 清新明亮，青春友好，熬夜投递也不刺眼。</p>
+        <p style="margin-top:10px;font-size:12.5px;color:var(--text-3)">（点击页面右上角的小圆点，可以实时预览主题色哦）</p>
+      </div>
+      <div class="theme-swatches">
+        <div class="theme-swatch"><div class="ball" style="background:#2EC4B6"></div><span>薄荷绿</span></div>
+        <div class="theme-swatch"><div class="ball" style="background:#4E9FF0"></div><span>天空蓝</span></div>
+        <div class="theme-swatch"><div class="ball" style="background:#FF7A59"></div><span>珊瑚橙</span></div>
+        <div class="theme-swatch"><div class="ball" style="background:#F5B342"></div><span>奶油黄</span></div>
+        <div class="theme-swatch"><div class="ball" style="background:#FF8FAB"></div><span>淡粉色</span></div>
+        <div class="theme-swatch"><div class="ball" style="background:#8B7CF6"></div><span>葡萄紫</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section" style="padding-top:20px">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>现在就开始记录你的校招进度</h2>
+      <p>小程序 / App 正在开发中。先打开交互 Demo，亲手体验一遍完整流程。</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a class="btn" href="index.html">🚀 立即体验 Demo</a>
+        <a class="btn ghost" href="README.md">📄 查看说明文档</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <div class="flinks">
+    <a href="#features">核心功能</a>
+    <a href="#preview">页面预览</a>
+    <a href="#theme">主题</a>
+    <a href="index.html">交互 Demo</a>
+  </div>
+  <p>校招记录本 · Offer Notebook &copy; 2026 ｜ 愿每一次记录，都有回响 ✨</p>
+  <p style="margin-top:6px">ICP 备案号：待上线时补充 ｜ 隐私政策：即将上线</p>
+</footer>
+
+<script>
+// 主题色切换（宣传页氛围）
+const accentRow = document.getElementById('accentRow');
+accentRow.addEventListener('click', e => {
+  const sw = e.target.closest('.sw');
+  if(!sw) return;
+  document.documentElement.style.setProperty('--primary', sw.dataset.c);
+  document.documentElement.style.setProperty('--primary-deep', sw.dataset.d);
+  accentRow.querySelectorAll('.sw').forEach(s => s.classList.toggle('active', s === sw));
+});
+</script>
+</body>
+</html>

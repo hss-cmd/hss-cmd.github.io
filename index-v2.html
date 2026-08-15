@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韩双穗 · 个人求职网站</title>
+<meta name="description" content="韩双穗的个人求职网站：厦门大学教育学硕士在读，数据分析 / 商业分析 / 产品运营方向，三段大厂实习。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --peach:#FFE8CC;
+  --blue:#C9E8FF;
+  --cream:#FFF9EF;
+  --lemon:#FFF3B0;
+  --ink:#1C1A17;
+  --red:#FF5A5F;
+  --royal:#2E6EFF;
+  --sun:#FFC928;
+  --mint:#4CC9A1;
+  --muted:#6B6255;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--peach);color:var(--ink);font-family:'Noto Sans SC','Baloo 2','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{max-width:1180px;margin:0 auto;padding:0 28px}
+.hand{font-family:'Ma Shan Zheng','Caveat','KaiTi','STKaiti','楷体',cursive;letter-spacing:.04em}
+
+/* ===== 鼠标像素尾迹 ===== */
+#trail{position:fixed;top:0;left:0;pointer-events:none;z-index:9999}`n#scrollbar{position:fixed;top:0;left:0;right:0;height:4px;z-index:9998;background:rgba(28,26,23,.12)}`n#scrollbar-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--red),var(--royal));transition:width .12s linear}
+
+/* ===== 封面页 welcome to my universe ===== */
+.welcome{position:sticky;top:0;height:100vh;z-index:5;background:linear-gradient(160deg,#FFE3E3 0%,#FFE0C4 34%,#FFF4D6 66%,#DDF2E9 100%);overflow:hidden;display:grid;place-items:center}
+.welcome-inner{position:relative;z-index:3;text-align:center;padding:0 22px;transition:opacity .25s ease,transform .25s ease;will-change:opacity,transform}
+.welcome-kicker{font-size:clamp(1.05rem,2.4vw,1.5rem);color:#0E7C7B;letter-spacing:.3em;margin-bottom:20px}
+.wt-line{display:flex;flex-wrap:wrap;justify-content:center;gap:.06em .14em;max-width:min(1120px,94vw)}
+.wt-wrap{display:inline-flex;transition:transform .22s ease-out;will-change:transform}
+.wt-word{display:inline-flex;animation:wordFloat 6s ease-in-out infinite}
+.wt-float{display:inline-block;animation:letterBob 4.8s ease-in-out infinite;animation-delay:var(--d,0s)}
+.wt-l{font-family:'Baloo 2','Caveat',sans-serif;font-size:clamp(2.8rem,9.5vw,8.5rem);font-weight:800;line-height:1.16;color:var(--c,#FFB7C5);display:inline-block;cursor:default;transition:color .2s,transform .2s,text-shadow .2s;text-shadow:1px 1px 0 var(--c2),2px 2px 0 var(--c2),3px 3px 0 var(--c2),5px 5px 0 var(--c2),8px 8px 0 var(--c2),12px 12px 0 var(--c2),0 16px 32px rgba(28,26,23,.15);transform:rotate(var(--r,0deg));user-select:none}
+.wt-l:hover{color:var(--c);transform:translateY(-22px) scale(1.24) rotate(var(--r,0deg));text-shadow:1px 1px 0 var(--c2),2px 2px 0 var(--c2),4px 4px 0 var(--c2),8px 8px 0 var(--c2),0 0 26px var(--c),0 0 60px var(--c)}
+@keyframes letterBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes wordFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(0,-12px)}}
+.welcome-sub{margin-top:36px;color:#6B6255;letter-spacing:.28em;font-size:.88rem;animation:subPulse 2.4s ease-in-out infinite}
+@keyframes subPulse{0%,100%{opacity:.45}50%{opacity:1}}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;color:#6B6255;font-size:1.5rem;animation:scrollBounce 1.8s ease-in-out infinite}
+@keyframes scrollBounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,10px)}}
+.planet{position:absolute;border-radius:50%;z-index:1;pointer-events:none}
+.planet.p1{width:150px;height:150px;top:15%;left:7%;background:radial-gradient(circle at 35% 30%,#FFE9C7,#F8C98F 55%,#E7A15C);box-shadow:0 0 40px rgba(242,153,74,.32);animation:drift 18s ease-in-out infinite;opacity:.85}
+.planet.p1::after{content:"";position:absolute;inset:-8px -32px;border:3px solid rgba(28,26,23,.22);border-radius:50%;transform:rotate(-14deg)}
+.planet.p2{width:84px;height:84px;bottom:20%;right:11%;background:radial-gradient(circle at 35% 30%,#CDF3EC,#7FDCCB 60%,#4ABBA7);box-shadow:0 0 30px rgba(34,184,160,.3);animation:drift 22s ease-in-out infinite reverse;opacity:.9}
+.planet.p3{width:28px;height:28px;top:22%;right:20%;background:radial-gradient(circle at 35% 30%,#FFE1EE,#F8A8C4);box-shadow:0 0 22px rgba(240,101,149,.35);animation:drift 14s ease-in-out infinite}
+.star-dot{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite;z-index:1;pointer-events:none}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-16px)}}/* ===== 漂浮几何 ===== */
+.shape{position:absolute;pointer-events:none;z-index:0}
+.shape .circle{border:3px solid var(--ink);border-radius:50%;background:var(--sun)}
+.shape .ring{border:3px solid var(--ink);border-radius:50%}
+.shape .tri{width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-bottom:28px solid var(--red)}
+.shape .sq{background:var(--royal);border:3px solid var(--ink);transform:rotate(12deg)}
+.shape .zig{width:70px;height:22px;background:repeating-linear-gradient(90deg,var(--ink) 0 6px,transparent 6px 12px);border-radius:4px}
+.shape .star{font-size:1.4rem;color:var(--sun);-webkit-text-stroke:2px var(--ink)}
+.floaty{animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(4deg)}}
+
+/* ===== 导航 ===== */
+.nav{position:sticky;top:14px;z-index:60;width:min(1120px,calc(100% - 32px));margin:14px auto 0;background:var(--cream);border:3px solid var(--ink);border-radius:999px;padding:10px 14px 10px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:5px 5px 0 var(--ink)}
+.brand{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:1.16rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand .blob{width:18px;height:18px;border-radius:50% 50% 50% 8px;background:var(--red);border:2.5px solid var(--ink);transform:rotate(-14deg)}
+.nav-links{display:flex;gap:4px;flex-wrap:wrap}
+.nav-links a{padding:6px 12px;border-radius:999px;font-weight:700;font-size:.86rem;border:2.5px solid transparent;transition:.15s}
+.nav-links a:hover{border-color:var(--ink);background:var(--sun)}
+.nav-side{display:flex;align-items:center;gap:10px}
+.clock-chip{padding:5px 12px;border-radius:999px;background:var(--blue);border:2.5px solid var(--ink);font-family:'Baloo 2';font-weight:800;font-size:.8rem;box-shadow:2px 2px 0 var(--ink)}
+.nav-cta{padding:7px 16px;border-radius:999px;background:var(--royal);color:#fff;font-weight:800;font-size:.84rem;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg);white-space:nowrap}
+.nav-cta:hover{transform:translate(-2px,-2px) rotate(-2deg);box-shadow:5px 5px 0 var(--ink)}
+
+/* ===== 跑马灯 ===== */
+.marquee-wrap{position:absolute;top:16px;left:0;right:0;z-index:8;overflow:hidden;margin:0}
+.marquee{background:var(--ink);color:var(--sun);transform:rotate(-1deg) scale(1.02);width:100%;overflow:hidden;padding:11px 0}
+.marquee-track{display:flex;white-space:nowrap;animation:scroll 22s linear infinite;width:max-content}
+.marquee-track .group{display:flex}
+.marquee-track span{font-weight:900;font-size:.96rem;letter-spacing:.12em;padding:0 16px}
+.marquee-track b{color:var(--red)}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ===== Hero ===== */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding:37vh 0 8vh;position:relative;z-index:10;overflow:hidden;background:linear-gradient(180deg,#FFFDF9 0%,#FFF5E6 30%,#FFE9CD 68%,var(--peach) 100%)}
+.hello-bg{position:absolute;top:26px;left:50%;transform:translateX(-50%);font-family:'Baloo 2';font-weight:800;font-size:clamp(7rem,20vw,17rem);line-height:1;color:transparent;-webkit-text-stroke:3px rgba(28,26,23,.18);letter-spacing:.02em;pointer-events:none;animation:helloFloat 9s ease-in-out infinite;white-space:nowrap;user-select:none}
+@keyframes helloFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-16px)}}
+.spotlight{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(560px circle at var(--mx,50%) var(--my,40%),rgba(255,255,255,.55),transparent 60%)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;position:relative;z-index:2}
+.kicker{display:inline-flex;align-items:center;gap:10px;background:var(--mint);border:2.5px solid var(--ink);border-radius:999px;padding:6px 18px;font-weight:800;font-size:.88rem;box-shadow:3px 3px 0 var(--ink);transform:rotate(-1.5deg)}
+h1.name{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:clamp(3.8rem,9.5vw,7rem);line-height:1.04;margin:10px 0 6px}
+h1.name .r{color:var(--red)} h1.name .b{color:var(--royal)} h1.name .y{color:var(--sun);-webkit-text-stroke:2px var(--ink)}
+.wavy{display:inline-block;position:relative}
+.wavy::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='10'%3E%3Cpath d='M0 5 Q7.5 0 15 5 T30 5 T45 5 T60 5' fill='none' stroke='%23FF5A5F' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;background-size:60px 10px}
+.dir-line{font-family:'Baloo 2','Noto Sans SC';font-size:clamp(1.2rem,2.2vw,1.6rem);font-weight:800;margin:10px 0 4px;display:flex;flex-wrap:wrap;gap:.5em;align-items:baseline}
+.dir-line .d-cn{color:var(--ink)}
+.dir-line .d-en{font-family:'Courier New',monospace;font-size:.58em;letter-spacing:.2em;color:var(--muted);font-weight:400;text-transform:uppercase}
+.intro-print{font-family:'Courier New',ui-monospace,'SFMono-Regular',Consolas,'Liberation Mono',monospace;font-size:.85rem;line-height:1.9;color:var(--muted);max-width:46ch;margin-top:4px;letter-spacing:.02em}
+.hero-stats{display:flex;gap:26px;margin:22px 0;flex-wrap:wrap}
+.hstat{position:relative}
+.hstat b{font-family:'Baloo 2';font-size:1.55rem;font-weight:800;display:block;line-height:1.1}
+.hstat span{font-size:.78rem;color:var(--muted);font-weight:700;letter-spacing:.04em}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+.tag{border:2.5px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.86rem;box-shadow:3px 3px 0 var(--ink);transition:.15s}
+.tag:hover{transform:translate(-2px,-2px) rotate(-2deg)}
+.tag.t1{background:var(--sun)} .tag.t2{background:var(--red);color:#fff} .tag.t3{background:var(--royal);color:#fff} .tag.t4{background:var(--mint)}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+.btn{border:2.5px solid var(--ink);border-radius:999px;padding:10px 20px;font-weight:800;font-size:.88rem;box-shadow:3px 3px 0 var(--ink);transition:.15s;display:inline-block}
+.btn:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--ink)}
+.btn-pink{background:var(--red);color:#fff}
+.btn-sun{background:var(--sun)}
+
+/* ===== 拍立得照片 ===== */
+.photo-wrap{position:relative;justify-self:center;z-index:2;padding:18px 14px 30px;animation:photoFloat 6s ease-in-out infinite}
+@keyframes photoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ===== 人物抠图 + 泡泡背景 ===== */
+.polaroid-frame{width:min(320px,76vw);background:var(--cream);border:3.5px solid var(--ink);border-radius:14px;padding:12px 12px 16px;box-shadow:11px 11px 0 var(--ink);position:relative;transform-style:preserve-3d;transition:transform .18s ease}
+.polaroid-frame .tape{position:absolute;top:-16px;left:50%;transform:translateX(-50%) rotate(-3deg);width:96px;height:26px;background:rgba(255,201,40,.92);border:2.5px solid var(--ink);border-radius:4px;z-index:2}
+.p-photo{aspect-ratio:4/5;border:2.5px solid var(--ink);border-radius:8px;overflow:hidden;background:var(--blue)}
+.p-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;transition:.3s}
+.polaroid-frame:hover .p-photo img{transform:scale(1.04)}
+.p-cap{text-align:center;padding-top:10px;font-size:1rem;font-weight:700;letter-spacing:.1em}
+
+/* ===== 照片翻转（整体拍立得一起翻转） ===== */
+.flip-scene{position:relative;width:min(320px,76vw);aspect-ratio:4/5.32;perspective:1200px;cursor:pointer;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
+.flip-tilt{transition:transform .18s ease;transform-style:preserve-3d;width:fit-content;margin:0 auto}
+.flip-scene:hover{transform:rotateY(180deg)}
+.flip-side{position:absolute;inset:0;display:flex;flex-direction:column;padding:12px 12px 16px;background:var(--cream);border:3.5px solid var(--ink);border-radius:14px;box-shadow:11px 11px 0 var(--ink);backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:preserve-3d}
+.flip-side .p-photo{flex:1;aspect-ratio:auto;min-height:0;border:2.5px solid var(--ink);border-radius:8px;overflow:hidden;background:var(--blue)}
+.flip-side .p-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;transition:.3s}
+.flip-side .p-cap{text-align:center;padding-top:10px;font-size:1rem;font-weight:700;letter-spacing:.1em}
+.flip-back{transform:rotateY(180deg)}
+.flip-back .p-photo img{filter:sepia(.15) saturate(.92)}
+.flip-side .tape{position:absolute;top:-16px;left:50%;transform:translateX(-50%) rotate(-3deg);width:96px;height:26px;background:rgba(255,201,40,.92);border:2.5px solid var(--ink);border-radius:4px;z-index:2}
+
+/* ===== 特点小标签 ===== */
+.mini-chip{position:absolute;z-index:5;border:2.5px solid var(--ink);border-radius:999px;padding:5px 13px;font-weight:800;font-size:.76rem;box-shadow:3px 3px 0 var(--ink);background:var(--cream);animation:miniFloat 5s ease-in-out infinite;white-space:nowrap}
+.mini-chip.mc1{top:-14px;left:-24px;background:var(--sun)}
+.mini-chip.mc2{top:22%;right:-40px;background:var(--mint)}
+.mini-chip.mc3{bottom:22%;left:-36px;background:var(--blue)}
+.mini-chip.mc4{bottom:-12px;right:-16px;background:var(--red);color:#fff}
+@keyframes miniFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(2deg)}}
+
+/* ===== 首页陆续出现 ===== */
+.hero-seq{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s ease}
+.hero-in .hero-seq{opacity:1;transform:none;transition-delay:var(--seq,0s)}
+
+/* ===== 区块通用 ===== */
+.section{padding:70px 0;position:relative}
+.band{background:linear-gradient(180deg,var(--peach) 0%,#E4F2F8 20%,var(--blue) 52%,#F0E7F7 82%,var(--peach) 100%)}
+.band2{background:linear-gradient(180deg,var(--peach) 0%,#FFF2CF 22%,var(--lemon) 55%,#F9EAD2 82%,var(--peach) 100%)}
+.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:38px;position:relative;z-index:1}
+.sec-icon{width:52px;height:52px;border-radius:16px;border:3px solid var(--ink);display:grid;place-items:center;font-size:1.5rem;background:var(--sun);box-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg);flex:none}
+.sec-icon.i2{background:var(--red)} .sec-icon.i3{background:var(--mint)} .sec-icon.i4{background:var(--royal)} .sec-icon.i5{background:var(--sun)}
+.sec-title{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:clamp(1.7rem,3.6vw,2.5rem)}
+.sec-title small{display:block;font-family:'Noto Sans SC';font-weight:500;font-size:.8rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+
+/* ===== 教育背景 ===== */
+.edu-list{display:grid;gap:26px}
+.edu-card{background:var(--cream);border:3px solid var(--ink);border-radius:26px;box-shadow:7px 7px 0 var(--ink);padding:28px 30px;display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:center;position:relative;transition:.2s}
+
+.edu-card[class*="reveal"]:hover{transform:rotate(-.5deg) translateY(-4px)}
+.school-head{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.school-head img{width:54px;height:54px;object-fit:contain;border:2.5px solid var(--ink);border-radius:14px;background:#fff;padding:5px;box-shadow:3px 3px 0 var(--ink)}
+.school-head h3{font-weight:900;font-size:1.28rem}
+.edu-meta{font-weight:700;color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.gpa{display:inline-flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.gpa span{border:2.5px solid var(--ink);border-radius:999px;padding:4px 14px;font-weight:800;font-size:.8rem;background:var(--lemon);box-shadow:2px 2px 0 var(--ink)}
+.gpa span.hl{background:var(--red);color:#fff}
+.edu-stamps{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.edu-stamps .stamp{background:var(--mint);border:2.5px solid var(--ink);border-radius:10px;padding:5px 12px;font-weight:900;font-size:.78rem;transform:rotate(-2deg);box-shadow:2px 2px 0 var(--ink)}
+.edu-photo{aspect-ratio:4/3;border:3px solid var(--ink);border-radius:18px;overflow:hidden;box-shadow:5px 5px 0 var(--ink);transform:rotate(2deg);position:relative}
+.edu-photo img{width:100%;height:100%;object-fit:cover;transition:.35s}
+.edu-card:hover .edu-photo img{transform:scale(1.05)}
+.edu-photo .cap{position:absolute;left:10px;bottom:8px;background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;font-size:.72rem;font-weight:800}
+.edu-carousel-wrap .car-track{display:flex;height:100%;transition:transform .7s ease}
+.edu-carousel-wrap .car-track img{min-width:100%;height:100%;object-fit:cover;flex:none}
+.edu-carousel-wrap .car-dots{position:absolute;right:10px;bottom:10px;display:flex;gap:5px;z-index:2}
+.edu-carousel-wrap .car-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid var(--ink);cursor:pointer;transition:.2s}
+.edu-carousel-wrap .car-dots i.on{background:var(--red);transform:scale(1.3)}
+
+/* ===== 实习经历 ===== */
+.exp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px}
+
+/* ===== 实习经历 · 竖向时间轴（两侧轮换） ===== */
+.exp-timeline{position:relative;margin-top:6px}
+.timeline-progress{position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:6px;z-index:1;pointer-events:none}
+.timeline-fill{position:absolute;left:50%;top:0;transform:translateX(-50%);width:6px;height:0;background:linear-gradient(180deg,var(--sun),var(--red) 55%,var(--royal));border-radius:3px;opacity:.9}
+.timeline-plane{position:absolute;left:50%;top:0;transform:translate(-50%,-50%) rotate(90deg);font-size:1.35rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));z-index:2}
+.exp-item{position:relative;display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;gap:0 22px;padding:26px 0}
+.exp-card{grid-column:1;grid-row:1;justify-self:end;background:var(--cream);border:3px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:18px 20px;width:100%;max-width:430px;position:relative;transition:.2s}
+.exp-item:nth-child(even) .exp-card{grid-column:3;justify-self:start}
+.exp-dot{grid-column:2;grid-row:1;justify-self:center;width:58px;height:58px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-size:1.4rem;background:var(--sun);box-shadow:4px 4px 0 var(--ink);position:relative;z-index:2}
+.exp-item:nth-child(2) .exp-dot{background:var(--mint)}
+.exp-item:nth-child(3) .exp-dot{background:var(--royal)}
+.exp-logo{grid-column:3;grid-row:1;justify-self:start;width:min(210px,47%);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
+.exp-item:nth-child(even) .exp-logo{grid-column:1;justify-self:end}
+.exp-logo img{max-width:94%;max-height:94%;object-fit:contain;filter:drop-shadow(0 10px 22px rgba(28,26,23,.18))}
+.exp-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.exp-date{background:var(--ink);color:var(--cream);border-radius:999px;padding:2px 12px;font-size:.72rem;font-weight:700}
+.exp-co{font-weight:700;color:var(--muted);font-size:.82rem}
+.exp-card{position:relative;transition:.2s;display:flex;flex-direction:column}
+
+
+.exp-card[class*="reveal"]:hover{transform:rotate(-1deg) translateY(-5px)}
+.exp-emoji{width:56px;height:56px;border-radius:16px;border:3px solid var(--ink);display:grid;place-items:center;font-size:1.6rem;margin-bottom:14px;box-shadow:3px 3px 0 var(--ink)}
+.exp-card:nth-child(1) .exp-emoji{background:var(--sun)}
+.exp-card:nth-child(2) .exp-emoji{background:var(--mint)}
+.exp-card:nth-child(3) .exp-emoji{background:var(--royal)}
+.exp-card h3{font-weight:900;font-size:1.1rem;line-height:1.4}
+.exp-card .co{font-weight:700;color:var(--muted);font-size:.86rem;margin:4px 0 2px}
+.exp-card .date{display:inline-block;background:var(--ink);color:var(--cream);border-radius:999px;padding:2px 12px;font-size:.73rem;font-weight:700;margin:8px 0 10px}
+.exp-card ul{list-style:none;margin-bottom:14px}
+.exp-card li{position:relative;padding-left:22px;font-size:.88rem;margin:5px 0;color:#4A443C}
+.exp-card li::before{content:"→";position:absolute;left:0;color:var(--red);font-weight:900}
+.exp-photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
+.exp-photos .ph{aspect-ratio:16/10;border:2.5px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--blue)}
+.exp-photos .ph img{width:100%;height:100%;object-fit:cover;transition:.3s}
+.exp-photos .ph:hover img{transform:scale(1.08)}
+
+/* ===== 校园经历 ===== */
+.campus-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.campus-card{background:var(--cream);border:3px solid var(--ink);border-radius:24px;box-shadow:7px 7px 0 var(--ink);padding:26px 26px 24px;position:relative;transition:.2s}
+
+
+
+.campus-card[class*="reveal"]:hover{transform:rotate(-1deg) translateY(-4px)}
+.campus-stamp{position:absolute;top:-15px;right:18px;background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px 14px;font-weight:900;font-size:.75rem;transform:rotate(4deg);box-shadow:3px 3px 0 var(--ink)}
+.campus-card .emo{font-size:1.6rem;margin-bottom:8px;display:inline-block}
+.campus-card h3{font-weight:900;font-size:1.1rem}
+.campus-card .where{color:var(--muted);font-weight:700;font-size:.84rem;margin:3px 0 10px}
+.campus-card p{font-size:.92rem;color:#4A443C}
+
+/* ===== 荣誉墙 ===== */
+.honor-note{margin:34px 0 18px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:1rem}
+.practice-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px}
+.practice-item{position:relative;border-radius:16px;overflow:hidden;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);aspect-ratio:4/3;background:var(--cream)}
+.practice-item img{width:100%;height:100%;object-fit:cover;transition:.35s}
+.practice-item:hover img{transform:scale(1.06)}
+.practice-item .pcap{position:absolute;left:10px;bottom:8px;background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;font-size:.72rem;font-weight:800}
+.honor-note::before,.honor-note::after{content:"";flex:1;height:3px;background:var(--ink);border-radius:2px}
+.award-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.award-item{position:relative;border-radius:16px;overflow:hidden;border:3px solid var(--ink);background:var(--cream);box-shadow:4px 4px 0 var(--ink);transition:.2s}
+.award-item[class*="reveal"]:hover{transform:translateY(-4px) rotate(-1deg)}
+.award-item img{aspect-ratio:4/3;object-fit:cover;width:100%;transition:.35s}
+.award-item:hover img{transform:scale(1.06)}
+.award-item .cap{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;background:linear-gradient(transparent,rgba(28,26,23,.78));color:#fff;font-size:.78rem;font-weight:700}
+
+/* 荣誉墙 · 胶片滚动播放 */
+.film-reel{display:grid;gap:34px;margin-top:38px}
+.film-row{min-width:0}
+.film-label{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.film-track{position:relative;background:#171310;border:3px solid var(--ink);border-radius:16px;padding:26px 0;overflow:hidden;box-shadow:7px 7px 0 var(--ink)}
+.film-track::before,.film-track::after{content:"";position:absolute;left:0;right:0;height:16px;background-image:radial-gradient(circle at 13px 8px,#E8E0CF 4px,transparent 5px);background-size:26px 16px;z-index:2;opacity:.9}
+.film-track::before{top:3px}.film-track::after{bottom:3px}
+.film-frames{display:flex;gap:22px;width:max-content;animation:filmScroll 42s linear infinite;padding:4px 12px}
+.film-row:nth-child(2) .film-frames{animation-duration:56s}
+.film-track:hover .film-frames{animation-play-state:paused}
+@keyframes filmScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.film-frame{flex:none;width:232px;background:#fff;border:7px solid #fff;border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.45);overflow:hidden}
+.film-frame img{width:100%;height:156px;object-fit:cover;display:block}
+.film-frame .cap{padding:7px 6px;font-size:.74rem;font-weight:800;color:#3A3129;text-align:center;background:#fff}
+
+/* ===== Vibecoding 作品（占位） ===== */
+.works-list{display:grid;gap:18px;max-width:960px;margin:0 auto}
+.work-row{display:grid;grid-template-columns:200px 1fr;gap:22px;align-items:center;background:var(--cream);border:3px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);padding:16px;transition:.2s}
+.work-row:hover{transform:translateY(-3px)}
+.work-row .wr-media .work-scroll{max-width:200px}
+.work-row .wr-body{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+.work-row .wr-body h3{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:1.2rem}
+.work-row .wr-body p{color:var(--muted);font-size:.9rem;line-height:1.75;margin:0}
+.work-row .wr-features{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.work-row .wr-features span{border:2px solid var(--ink);border-radius:999px;padding:2px 10px;font-size:.7rem;font-weight:700;background:var(--lemon)}
+.work-row .work-link{font-weight:900;font-size:.9rem;color:var(--royal);border-bottom:2px dashed var(--royal);margin-top:4px}
+.work-card{background:var(--cream);border:3px dashed var(--ink);border-radius:22px;padding:30px 24px;text-align:center;position:relative;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:.92}
+.work-card[class*="reveal"]:hover{transform:translateY(-5px);border-style:solid;background:var(--lemon)}
+.work-card .emo{font-size:2.6rem}
+.work-card h3{font-weight:900;font-size:1.05rem}
+.work-card p{font-size:.86rem;color:var(--muted)}
+.work-badge{background:var(--ink);color:var(--cream);border-radius:999px;padding:3px 14px;font-size:.72rem;font-weight:800;letter-spacing:.08em}
+.work-soon{margin-top:26px;text-align:center;font-weight:700;color:var(--muted);font-size:.92rem}
+
+/* ===== 作品卡 · 图文 ===== */
+.work-scroll{width:100%;aspect-ratio:4/5;border:3px solid var(--ink);border-radius:18px;overflow-y:auto;overflow-x:hidden;background:#fff;box-shadow:3px 3px 0 var(--ink);scrollbar-width:thin;position:relative}
+.work-scroll img{width:100%;height:auto;display:block}
+.work-link{font-weight:900;font-size:.9rem;color:var(--royal);border-bottom:2px dashed var(--royal);margin-top:4px}
+/* ===== 爱好技能 ===== */
+.hobby-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:54px}
+.polaroid{background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:10px 10px 14px;box-shadow:6px 6px 0 var(--ink);transition:.2s;position:relative}
+
+
+.polaroid[class*="reveal"]:hover{transform:rotate(0) translateY(-6px) scale(1.02)}
+.polaroid .pic{aspect-ratio:1/1;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--blue)}
+.polaroid .pic img{width:100%;height:100%;object-fit:cover;transition:.35s}
+.polaroid:hover .pic img{transform:scale(1.06)}
+.polaroid .cap{padding:10px 4px 2px;font-weight:800;font-size:.86rem;text-align:center}
+.polaroid .tape{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-3deg);width:74px;height:22px;background:rgba(255,201,40,.85);border:2px solid var(--ink);border-radius:4px;z-index:2}
+
+/* 生活碎片 · 翻卡 */
+.life-card{background:transparent;border:0;box-shadow:none;cursor:pointer;perspective:1100px}
+.life-inner{position:relative;width:100%;aspect-ratio:1/1.12;transition:transform .7s cubic-bezier(.4,.1,.2,1);transform-style:preserve-3d}
+.life-card.flipped .life-inner{transform:rotateY(180deg)}
+.life-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px}
+.life-back{background:linear-gradient(150deg,#FFF3D6,#F7E3B8 55%,#EACFA0);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:absolute}
+.life-back::before{content:"✦";position:absolute;top:12px;left:14px;color:var(--red);font-size:1rem}
+.life-back::after{content:"✦";position:absolute;bottom:12px;right:14px;color:var(--royal);font-size:1rem}
+.life-loc{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:1.35rem;letter-spacing:.06em}
+.life-emoji{font-size:2.2rem;filter:drop-shadow(0 3px 4px rgba(28,26,23,.22));animation:emojiBob 3s ease-in-out infinite}
+.life-deco{position:absolute;top:10px;left:12px;font-size:1rem;opacity:.85}
+.life-deco.d2{top:auto;left:auto;bottom:10px;right:12px}
+@keyframes emojiBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
+.life-tip{display:inline-block;border:2.5px solid var(--ink);border-radius:999px;padding:4px 16px;background:var(--red);color:#fff;font-weight:800;font-size:.82rem;box-shadow:3px 3px 0 var(--ink);animation:lifePulse 1.8s ease-in-out infinite}
+@keyframes lifePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.life-front{transform:rotateY(180deg);background:var(--cream);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:8px}
+.life-front .pic{width:100%;height:100%;border-radius:10px;overflow:hidden;background:var(--blue)}
+.life-front .pic img{width:100%;height:100%;object-fit:cover;transition:.3s}
+.life-card:hover .life-front .pic img{transform:scale(1.05)}
+
+.skills-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}
+.skills-chips span{border:3px solid var(--ink);border-radius:999px;padding:8px 18px;font-weight:800;font-size:.92rem;background:var(--cream);box-shadow:3px 3px 0 var(--ink);transition:.15s}
+.skills-chips span:hover{transform:translate(-2px,-2px) rotate(-2deg)}
+.skills-chips span.hl{background:var(--red);color:#fff}
+
+/* ===== 技能抽卡机 ===== */
+.gacha-panel{background:var(--cream);border:4px solid var(--ink);border-radius:30px;box-shadow:9px 9px 0 var(--ink);padding:40px 34px;position:relative;overflow:hidden}
+.gacha-panel::before{content:"";position:absolute;top:-90px;right:-90px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,40,.55),transparent 70%);pointer-events:none}
+.gacha-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+.gacha-head h3{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:1.5rem}
+.gacha-head .note{font-size:.82rem;color:var(--muted);font-weight:700}
+.gacha-flex{display:flex;align-items:flex-start;justify-content:center;gap:48px;flex-wrap:wrap;position:relative;z-index:1}
+/* 立体扭蛋机 */
+.gacha-machine{position:relative;flex:none;width:272px;padding-top:8px}
+.gm-dome{position:relative;width:228px;height:188px;margin:0 auto;background:linear-gradient(180deg,#F4FBFF,#C9E2F4 70%,#A9CBE4);border:3.5px solid var(--ink);border-radius:58% 58% 44% 44% / 74% 74% 34% 34%;overflow:hidden;box-shadow:inset 0 16px 26px rgba(255,255,255,.65),7px 9px 0 var(--ink);z-index:2}
+.gm-balls{position:absolute;inset:12px 10px 22px;display:flex;flex-wrap:wrap;gap:10px;align-content:center;justify-content:center}
+.mini-card{width:44px;height:62px;border-radius:7px;border:2px solid rgba(28,26,23,.85);background:linear-gradient(150deg,#FFF3D6,#E8C98F 60%,#C9A165);box-shadow:0 3px 6px rgba(28,26,23,.25);position:relative;transform:rotate(var(--r,0deg));animation:cardBob 3.2s ease-in-out infinite;animation-delay:var(--bd,0s);flex:none}
+.mini-card::before{content:"✦";position:absolute;inset:0;display:grid;place-items:center;color:#7A5B2E;font-size:1rem}
+@keyframes cardBob{0%,100%{transform:rotate(var(--r,0deg)) translateY(0)}50%{transform:rotate(var(--r,0deg)) translateY(-5px)}}
+.gm-glass{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.6),transparent 45%);pointer-events:none}
+.gm-body{position:relative;width:218px;margin:-16px auto 0;background:linear-gradient(180deg,#FF6B6F,#D9363E);border:3.5px solid var(--ink);border-radius:14px 14px 24px 24px;padding:20px 16px 16px;box-shadow:7px 9px 0 var(--ink);z-index:3}
+.gm-slot{display:block;width:60px;height:10px;margin:0 auto 12px;background:#171310;border-radius:4px;box-shadow:inset 0 2px 3px rgba(255,255,255,.3)}
+.gm-title{display:block;text-align:center;color:#fff;font-weight:900;font-size:.76rem;letter-spacing:.2em;margin-bottom:12px}
+.gacha-machine .draw-btn{width:100%;background:var(--sun);color:var(--ink)}
+.gm-coin{position:absolute;top:-8px;right:4px;width:36px;height:36px;border-radius:50%;background:var(--sun);border:3px solid var(--ink);display:grid;place-items:center;font-weight:900;font-size:.78rem;box-shadow:3px 3px 0 var(--ink);z-index:4;transform:rotate(14deg)}
+.draw-zone{display:flex;flex-direction:column;align-items:center;gap:18px}
+.draw-card{width:300px;min-width:300px;height:540px;min-height:540px;aspect-ratio:5/9;perspective:1300px;flex:none}
+.draw-card-inner{position:relative;width:300px;height:540px;transition:transform .6s cubic-bezier(.34,1.3,.5,1);transform-style:preserve-3d}
+.draw-card.flipped .draw-card-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;border:3.5px solid var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:22px;text-align:center;box-shadow:6px 6px 0 var(--ink);overflow:hidden}
+.face.cover{background:radial-gradient(circle at 50% 40%,#FFF3D6 0%,#F0DFB4 48%,#D3AC6A 100%);color:#6B4F2A;border:3.5px solid #6B4F2A;font-family:Georgia,'Times New Roman',serif;position:relative;overflow:hidden}
+.face.cover::before{content:"";position:absolute;inset:12px;border:2px solid rgba(107,79,42,.55);border-radius:16px;pointer-events:none}
+.face.cover::after{content:"";position:absolute;inset:24px;border:1px dashed rgba(107,79,42,.45);border-radius:12px;pointer-events:none}
+.face.cover .rays{position:absolute;inset:0;background:repeating-conic-gradient(rgba(107,79,42,.10) 0deg 12deg,transparent 12deg 24deg);border-radius:18px;pointer-events:none}
+.face.cover .q{font-size:3.4rem;line-height:1;margin-bottom:10px;filter:drop-shadow(0 2px 4px rgba(107,79,42,.35))}
+.face.cover .tt{font-size:1.05rem;letter-spacing:.24em;margin-top:8px}
+.face.front{background:radial-gradient(circle at 50% 34%,#FFF8E7 0%,#F3E4C2 55%,#D9B87E 100%);transform:rotateY(180deg);gap:6px;color:#4A3820;position:relative;overflow:hidden}
+.face.front::before{content:"";position:absolute;inset:10px;border:2px solid rgba(107,79,42,.5);border-radius:14px;pointer-events:none}
+.face.front::after{content:"";position:absolute;inset:20px;border:1px dashed rgba(107,79,42,.4);border-radius:10px;pointer-events:none}
+.face.front .skill-emo{width:108px;height:108px;border-radius:50%;border:2.5px solid rgba(107,79,42,.65);display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle,#FFF9EA,#F0D9A8);box-shadow:0 6px 16px rgba(107,79,42,.3);margin-bottom:6px}
+.face.front .skill-name{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:1.5rem;letter-spacing:.08em}
+.face.front .skill-desc{font-size:.9rem;color:#7A6140}
+.face.front .skill-emo{font-size:2.4rem}
+.face.front .skill-name{font-weight:900;font-size:1.25rem}
+.face.front .skill-desc{font-size:.82rem;color:var(--muted)}
+.level-track{width:82%;height:9px;background:#E5DCCB;border:2px solid var(--ink);border-radius:99px;margin-top:8px;overflow:hidden}
+.level-fill{height:100%;width:0;background:var(--sun);transition:width .7s cubic-bezier(.34,1.3,.5,1)}
+.rarity{display:inline-block;border:2.5px solid var(--ink);border-radius:999px;padding:2px 14px;font-weight:900;font-size:.74rem;letter-spacing:.1em;box-shadow:2px 2px 0 var(--ink)}
+.rarity.N{background:#D8D2C4}.rarity.R{background:var(--mint)}.rarity.SR{background:var(--royal);color:#fff}.rarity.SSR{background:var(--red);color:#fff;box-shadow:0 0 18px rgba(255,90,95,.75)}
+.draw-btn{border:3px solid var(--ink);border-radius:999px;padding:14px 30px;background:var(--red);color:#fff;font-weight:900;font-size:1.02rem;box-shadow:5px 5px 0 var(--ink);cursor:pointer;transition:.15s;font-family:inherit}
+.draw-btn:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--ink)}
+.draw-btn:disabled{opacity:.5;cursor:default;transform:none;box-shadow:5px 5px 0 var(--ink)}
+.deck-counter{font-family:'Baloo 2';font-weight:800;font-size:.9rem;color:var(--muted)}
+.gacha-tip{text-align:center;margin-top:26px;font-size:.85rem;color:var(--muted);font-weight:700}
+
+/* ===== 抽卡牌 v2（换卡式，无翻转，位置恒定） ===== */
+.draw-card{position:relative;width:300px;min-width:300px;height:540px;min-height:540px;flex:none}
+.draw-card-inner{display:none}
+.card-face{position:absolute;inset:0;border-radius:20px;border:3.5px solid #6B4F2A;box-shadow:7px 7px 0 var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;overflow:hidden;transition:opacity .5s ease,transform .5s ease}
+.card-back{background:radial-gradient(circle at 50% 40%,#FFF3D6 0%,#F0DFB4 48%,#D3AC6A 100%);color:#6B4F2A;z-index:2}
+.card-back::before{content:"";position:absolute;inset:12px;border:2px solid rgba(107,79,42,.55);border-radius:14px;pointer-events:none}
+.card-back::after{content:"";position:absolute;inset:24px;border:1px dashed rgba(107,79,42,.45);border-radius:10px;pointer-events:none}
+.card-back .rays{position:absolute;inset:0;background:repeating-conic-gradient(rgba(107,79,42,.10) 0deg 12deg,transparent 12deg 24deg);border-radius:20px;pointer-events:none}
+.card-back .q{font-size:3.4rem;line-height:1;margin-bottom:10px;filter:drop-shadow(0 2px 4px rgba(107,79,42,.35))}
+.card-back .tt{font-size:1.05rem;letter-spacing:.24em}
+.card-front{background:radial-gradient(circle at 50% 34%,#FFF8E7 0%,#F3E4C2 55%,#D9B87E 100%);color:#4A3820;z-index:1;opacity:0;transform:scale(.82)}
+.card-front::before{content:"";position:absolute;inset:10px;border:2px solid rgba(107,79,42,.5);border-radius:14px;pointer-events:none}
+.card-front::after{content:"";position:absolute;inset:20px;border:1px dashed rgba(107,79,42,.4);border-radius:10px;pointer-events:none}
+.card-front .skill-emo{width:116px;height:116px;border-radius:50%;border:2.5px solid rgba(107,79,42,.65);display:grid;place-items:center;font-size:3.2rem;background:radial-gradient(circle,#FFF9EA,#F0D9A8);box-shadow:0 6px 16px rgba(107,79,42,.3);margin-bottom:8px}
+.card-front .skill-name{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:1.6rem;letter-spacing:.08em}
+.card-front .skill-desc{font-size:.95rem;color:#7A6140;max-width:22ch;margin-top:2px}
+.draw-card.revealed .card-back{opacity:0;transform:scale(1.12)}
+.draw-card.revealed .card-front{opacity:1;transform:scale(1)}
+
+/* ===== 塔罗抽牌 · 档案卡（参考设计） ===== */
+.gacha-panel{background:linear-gradient(150deg,#FFF1E0 0%,#FFE9F0 36%,#E8F4FF 72%,#E2F6EE 100%)}
+.gacha-head{text-align:center;margin-bottom:36px}
+.gacha-no{display:inline-block;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.gacha-head h3{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:clamp(1.6rem,3.2vw,2.2rem);margin:4px 0 6px}
+.gacha-head .note{font-size:.88rem;color:var(--muted);font-weight:700}
+.td-deck{flex:none;width:230px;text-align:center;padding-top:8px}
+.deck-stack{position:relative;width:190px;height:286px;margin:0 auto 20px;cursor:pointer}
+.ds-card{position:absolute;inset:0;border-radius:18px;border:3px solid var(--ink);box-shadow:6px 8px 0 var(--ink)}
+.ds-card.c1{transform:rotate(-9deg) translate(-9px,7px);background:linear-gradient(150deg,#8B5CF6,#D946EF);opacity:.85}
+.ds-card.c2{transform:rotate(6deg) translate(9px,5px);background:linear-gradient(150deg,#A78BFA,#F0ABFC);opacity:.92}
+.ds-card.c3{background:linear-gradient(150deg,#7C3AED,#DB2777);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;transition:transform .25s}
+.ds-card.c3::before{content:"";position:absolute;inset:10px;border:1.5px solid rgba(255,255,255,.55);border-radius:12px}
+.deck-stack:hover .ds-card.c3{transform:translateY(-6px) scale(1.03)}
+.ds-sparkle{font-size:1.7rem;animation:sparkle 2s ease-in-out infinite;position:relative;z-index:2}
+.ds-card.c3 b{font-family:'Baloo 2';font-weight:800;font-size:1rem;letter-spacing:.14em;position:relative;z-index:2}
+.ds-card.c3 i{font-style:normal;font-size:.72rem;letter-spacing:.22em;opacity:.9;position:relative;z-index:2}
+@keyframes sparkle{0%,100%{opacity:.45;transform:scale(.85) rotate(-6deg)}50%{opacity:1;transform:scale(1.15) rotate(6deg)}}
+.deck-info{font-size:.92rem;font-weight:800}
+.deck-info b{font-size:1.2rem;color:var(--red)}
+.deck-sub{font-size:.8rem;color:var(--muted);margin:2px 0 18px}
+.td-deck .draw-btn{border:3px solid var(--ink);border-radius:999px;padding:12px 24px;background:var(--ink);color:#fff;font-weight:900;font-size:.95rem;box-shadow:4px 4px 0 var(--ink);cursor:pointer;transition:.15s;font-family:inherit}
+.td-deck .draw-btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.td-result{display:none;flex:none;text-align:center}
+.gacha-flex.drawn .td-result{display:block;animation:cardIn .7s cubic-bezier(.2,.8,.3,1.1) both}
+@keyframes cardIn{from{opacity:0;transform:translateX(-190px) rotate(-6deg) scale(.75)}to{opacity:1;transform:none}}
+.td-result .draw-card{position:relative;width:270px;min-width:270px;height:480px;min-height:480px;margin:0 auto;transition:transform .6s cubic-bezier(.2,.8,.3,1.2),opacity .4s}
+.td-result .draw-card.dealing{transform:translateX(-430px) translateY(50px) rotate(-10deg) scale(.5);opacity:.15}
+.td-face{position:absolute;inset:0;border-radius:20px;border:3.5px solid #6B4F2A;box-shadow:7px 7px 0 var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;overflow:hidden;transition:opacity .5s ease,transform .5s ease;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.td-front{background:radial-gradient(circle at 50% 32%,#FFF8E7 0%,#F3E4C2 55%,#D9B87E 100%);color:#4A3820;z-index:2}
+.td-front::before{content:"";position:absolute;inset:10px;border:2px solid rgba(107,79,42,.5);border-radius:14px;pointer-events:none}
+.td-front::after{content:"";position:absolute;inset:20px;border:1px dashed rgba(107,79,42,.4);border-radius:10px;pointer-events:none}
+.td-front .skill-emo{width:112px;height:112px;border-radius:50%;border:2.5px solid rgba(107,79,42,.65);display:grid;place-items:center;font-size:3.2rem;background:radial-gradient(circle,#FFF9EA,#F0D9A8);box-shadow:0 6px 16px rgba(107,79,42,.3);margin-bottom:10px}
+.td-front .skill-name{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:1.6rem;letter-spacing:.08em}
+.td-front .rarity{margin-top:10px}
+.td-corner{position:absolute;font-size:.68rem;letter-spacing:.14em;color:#6B5233;font-weight:700}
+.td-corner.tl{top:16px;left:20px}
+.td-corner.tr{top:16px;right:20px}
+.flip-hint{position:absolute;bottom:16px;left:0;right:0;font-size:.72rem;letter-spacing:.22em;color:#8A6A3F;animation:sparkle 2.4s ease-in-out infinite}
+.td-back{background:linear-gradient(160deg,#FFF6E3,#F7E7C2 60%,#EBD9AC);color:#4A3820;z-index:1;opacity:0;transform:scale(.86)}
+.td-back::before{content:"";position:absolute;inset:10px;border:2px solid rgba(107,79,42,.45);border-radius:14px;pointer-events:none}
+.tb-label{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:#8A6A3F;margin-bottom:14px}
+.tb-desc{font-size:.98rem;color:#6B5233;max-width:22ch;line-height:1.9}
+.td-back .level-track{width:78%;height:10px;background:#E7D7B5;border:2px solid #6B4F2A;border-radius:99px;margin-top:16px;overflow:hidden}
+.td-back .level-fill{height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--red));border-radius:99px;transition:width .7s ease}
+.tb-level{font-size:.82rem;color:#7A6140;margin-top:8px;letter-spacing:.1em}
+.draw-card.flipped .td-front{opacity:0;transform:scale(1.08)}
+.draw-card.flipped .td-back{opacity:1;transform:scale(1)}
+.td-result .deck-counter{margin-top:20px;font-family:'Baloo 2';font-weight:800;font-size:.9rem;color:var(--muted)}
+.td-result .draw-card{width:220px;min-width:220px;height:392px;min-height:392px}
+.td-front .skill-emo{width:86px;height:86px;font-size:2.4rem;margin-bottom:8px}
+.td-front .skill-name{font-size:1.22rem}
+.td-corner{font-size:.62rem}
+.flip-hint{font-size:.66rem}
+.td-back .tb-desc{font-size:.86rem;line-height:1.8;max-width:20ch}
+.td-back .level-track{margin-top:14px;height:9px}
+.tb-label{font-size:.64rem;margin-bottom:12px}
+.td-face{padding:18px}
+
+/* ===== 联系 · 电影感结尾 ===== */
+.contact-card{background:linear-gradient(160deg,#211D18 0%,#2B241C 48%,#171310 100%);border:3px solid var(--ink);border-radius:34px;box-shadow:10px 10px 0 var(--ink);padding:96px 44px 74px;text-align:center;position:relative;overflow:hidden;color:#F3E9DB}
+.contact-card .film-grain{position:absolute;inset:0;opacity:.08;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E")}
+.contact-kicker{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:#C9B48E;margin-bottom:14px;position:relative;z-index:2}
+.contact-huge{font-family:'Baloo 2','Noto Sans SC';font-weight:800;font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:1.32;position:relative;z-index:2}
+.contact-huge .r{color:#E8B87A}
+.contact-btns{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:46px;position:relative;z-index:2}
+.contact-btns a{border:3px solid var(--ink);border-radius:999px;padding:13px 24px;font-weight:900;box-shadow:4px 4px 0 var(--ink);transition:.15s;background:var(--sun);color:var(--ink)}
+.contact-btns a:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.contact-btns a.mail{background:var(--red);color:#fff}
+.contact-rows{max-width:560px;margin:54px auto 0;border-top:1px solid rgba(243,233,219,.25);position:relative;z-index:2}
+.contact-row{display:flex;justify-content:space-between;gap:20px;padding:16px 4px;border-bottom:1px solid rgba(243,233,219,.18);font-size:.98rem;text-align:left}
+.contact-row .l{font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:#C9B48E}
+
+/* ===== 页脚 ===== */
+footer{background:var(--ink);color:var(--cream);padding:30px 0;margin-top:78px;border-top:4px solid var(--ink)}
+.foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.86rem}
+.foot-inner b{color:var(--sun)}
+
+/* ===== 滚动渐显 ===== */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-46px);transition:opacity .7s ease,transform .7s ease}
+.reveal-right{opacity:0;transform:translateX(46px);transition:opacity .7s ease,transform .7s ease}
+.reveal-scale{opacity:0;transform:scale(.92);transition:opacity .7s ease,transform .7s ease}
+.reveal-left.in,.reveal-right.in,.reveal-scale.in{opacity:1;transform:none}
+.reveal-clip{opacity:0;transform:scaleY(0);transform-origin:50% 0%;transition:opacity .7s ease,transform .7s ease}
+.reveal-clip.in{opacity:1;transform:scaleY(1)}
+.reveal-blur{opacity:0;transform:translateY(26px);filter:blur(10px);transition:opacity .8s ease,transform .8s ease,filter .8s ease}
+.reveal-blur.in{opacity:1;transform:none;filter:blur(0)}
+.reveal-rotate{opacity:0;transform:perspective(900px) rotateX(-16deg) scale(.94);transform-origin:50% 0%;transition:opacity .8s ease,transform .8s ease}
+.reveal-rotate.in{opacity:1;transform:none}
+section[id],.edu-card[id],.exp-card[id]{scroll-margin-top:130px}
+.kw{color:var(--royal);border-bottom:2px dashed var(--royal);cursor:pointer;padding:0 2px;transition:.15s}
+.kw:hover{background:var(--sun);color:var(--ink);border-bottom-style:solid}
+.hstat{position:relative;display:block}
+.hstat:hover b{color:var(--red)}
+
+/* ===== 响应式 ===== */
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr;gap:56px}
+  .edu-card{grid-template-columns:1fr}
+  .edu-photo{max-width:420px}
+  .exp-grid{grid-template-columns:1fr}`n  .exp-item{grid-template-columns:54px 1fr;gap:14px;padding:20px 0}`n  .exp-item .exp-dot{grid-column:1;grid-row:1;width:50px;height:50px}`n  .exp-item .exp-card{grid-column:2;grid-row:1;justify-self:stretch}`n  .exp-item .exp-logo{grid-column:2;grid-row:2;width:100%;aspect-ratio:16/9}`n  .timeline-progress{left:27px}
+  .campus-grid{grid-template-columns:1fr}
+  .work-row{grid-template-columns:1fr}`n  .work-row .wr-media .work-scroll{max-width:100%}
+  .hobby-grid{grid-template-columns:1fr 1fr}`n  .practice-row{grid-template-columns:1fr 1fr}`n  .film-frame{width:186px}
+  .nav-links{display:none}
+  .gacha-flex{gap:30px}
+}
+@media(max-width:560px){
+  .hobby-grid{grid-template-columns:1fr}
+  .clock-chip{display:none}
+  .sticker.s3{right:-12px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001s!important;transition-duration:.001s!important}
+  .reveal{opacity:1;transform:none}
+  .marquee-track{animation:none}
+  #trail{display:none}
+}
+</style>
+</head>
+<body>
+<div id="scrollbar"><span id="scrollbar-fill"></span></div>
+
+<!-- ======================= 封面：welcome to my universe ======================= -->
+<section class="welcome" id="welcome">
+  <div class="planet p1" data-para="-0.05"></div>
+  <div class="planet p2" data-para="0.07"></div>
+  <div class="planet p3" data-para="-0.04"></div>
+  <div class="welcome-inner">
+    <p class="welcome-kicker">嗨，欢迎来到我的小宇宙 ✨</p>
+    <div class="wt-line" id="wtLine"></div>
+    <p class="welcome-sub">往下滑，进入我的世界</p>
+  </div>
+  <div class="scroll-hint">↓</div>
+</section>
+
+<!-- ======================= 导航 ======================= -->
+<nav class="nav">
+  <a class="brand" href="#home"><span class="blob"></span>SHUANGSUI!</a>
+  <div class="nav-links">
+    <a href="#home">首页</a>
+    <a href="#edu">教育背景</a>
+    <a href="#exp">实习经历</a>
+    <a href="#campus">校园经历</a>
+    <a href="#works">vibe coding 作品</a>
+    <a href="#skills">技能与爱好</a>
+    <a href="#contact">联系</a>
+  </div>
+  <div class="nav-side">
+    <span class="clock-chip" id="clock">GMT+8 --:--:--</span>
+    <a class="nav-cta" href="assets/resume.pdf" download>⬇ 下载简历</a>
+  </div>
+</nav>
+
+<!-- ======================= 首页 ======================= -->
+<section class="hero" id="home">
+<!-- ======================= 跑马灯 ======================= -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <div class="marquee-track">
+      <div class="group">
+        <span>HI，很高兴认识你</span><span><b>✦</b> 求职中 <b>✦</b></span><span>厦门大学硕士在读</span><span><b>✦</b> 数据分析 · 商业分析 · 产品运营 <b>✦</b></span><span>用数据讲清业务故事</span><span><b>✦</b></span>
+      </div>
+      <div class="group">
+        <span>HI，很高兴认识你</span><span><b>✦</b> 求职中 <b>✦</b></span><span>厦门大学硕士在读</span><span><b>✦</b> 数据分析 · 商业分析 · 产品运营 <b>✦</b></span><span>用数据讲清业务故事</span><span><b>✦</b></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="container hero-grid">
+    <div class="hero-col">
+      <span class="kicker hero-seq" style="--seq:.05s"><span style="display:inline-block;animation:wave 2.4s ease-in-out infinite;transform-origin:70% 70%">👋</span> 你好呀，我是</span>
+      <h1 class="name hero-seq" style="--seq:.15s">韩<span class="r">双</span><span class="b">穗</span><span class="y">.</span><span class="wavy" style="color:var(--mint)">!</span></h1>
+      <p class="dir-line hero-seq" style="--seq:.25s"><span class="d-cn">商业分析</span><span class="d-en">Business Analyst</span></p>
+      <p class="intro-print hero-seq" style="--seq:.35s">喜欢通过数据去定位问题并输出解决方案，<br>对于新事物有强烈的好奇心，正在用 Vibe Coding 把灵感变成小产品。</p>      <div class="tags hero-seq" style="--seq:.45s">
+        <a class="tag t1" href="#exp-meituan">商业分析</a>
+        <a class="tag t2" href="#exp-midea">电商运营</a>
+        <a class="tag t3" href="#exp-iflytek">产品运营</a>
+        <a class="tag t4" href="#skills">SQL · Python</a>
+      </div>
+      <div class="cta-row hero-seq" style="--seq:.55s">
+        <a class="btn btn-pink" href="assets/resume.pdf" download>⬇ 下载简历</a>
+        <a class="btn btn-sun" href="#contact">联系我</a>
+      </div>
+    </div>
+
+    <div class="photo-wrap hero-seq" style="--seq:.2s">
+      <span class="mini-chip mc1">想象力</span>
+      <span class="mini-chip mc2">好奇心</span>
+      <span class="mini-chip mc3">内驱力</span>
+      <span class="mini-chip mc4">执行力</span>
+      <div class="flip-tilt">
+      <div class="flip-scene">
+        <div class="flip-side flip-front">
+          <span class="tape"></span>
+          <div class="p-photo"><img src="assets/hero.jpg" alt="韩双穗个人照片"></div>
+          <div class="p-cap">韩双穗 · 2026</div>
+        </div>
+        <div class="flip-side flip-back">
+          <div class="p-photo"><img src="assets/hero-flip.jpg" alt="另一面的我"></div>
+          <div class="p-cap">另一面的我 ✦</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ======================= 教育背景 ======================= -->
+<section class="section" id="edu">
+  <div class="container">
+    <div class="sec-head reveal-clip">
+      <span class="sec-icon">🎓</span>
+      <h2 class="sec-title">教育背景<small>我的学习坐标</small></h2>
+    </div>
+    <div class="edu-list">
+      <div class="edu-card reveal-clip" id="edu-xmu">
+        <div>
+          <div class="school-head">
+            <img src="assets/xmu-badge.png" alt="厦门大学校徽">
+            <h3>厦门大学（985）· 在读</h3>
+          </div>
+          <div class="edu-meta">教育学硕士 · 高等教育学 | 2024.09 – 2027.07</div>
+          <div class="gpa">
+            <span class="hl">GPA 3.71 / 5.00</span>
+            <span>专业前 20%</span>
+            <span>参与福建省高等教育改革与研究重大项目</span>
+          </div>
+          <div class="edu-stamps">
+            <span class="stamp">学业奖学金 ×2</span>
+            <span class="stamp">宣传中心副部长</span>
+          </div>
+        </div>
+        <div class="edu-photo edu-carousel-wrap">
+          <div class="car-track">
+            <img src="assets/edu-xmu/xmu-1.jpg" alt="厦门大学" loading="lazy">
+            <img src="assets/edu-xmu/xmu-2.jpg" alt="厦门大学" loading="lazy">
+            <img src="assets/edu-xmu/xmu-3.jpg" alt="厦门大学" loading="lazy">
+            <img src="assets/edu-xmu/xmu-4.jpg" alt="厦门大学" loading="lazy">
+            <img src="assets/edu-xmu/xmu-5.jpg" alt="厦门大学" loading="lazy">
+            <img src="assets/edu-xmu/xmu-6.jpg" alt="厦门大学" loading="lazy">
+          </div>
+          <span class="cap">厦门大学</span>
+          <div class="car-dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <div class="edu-card reveal-blur" id="edu-ahu">
+        <div>
+          <div class="school-head">
+            <img src="assets/ahu-badge.png" alt="安徽大学校徽">
+            <h3>安徽大学（211）</h3>
+          </div>
+          <div class="edu-meta">管理学学士 · 电子商务 | 2020.09 – 2024.07</div>
+          <div class="gpa">
+            <span class="hl">GPA 4.01 / 5.00</span>
+            <span>专业前 5%</span>
+            <span>主修：电商数据分析与应用（97）/ 统计学（94）/ 概率论与数理统计（96）</span>
+          </div>
+          <div class="edu-stamps">
+            <span class="stamp">安徽省优秀毕业生</span>
+            <span class="stamp">优秀学生奖学金</span>
+            <span class="stamp">三好学生</span>
+          </div>
+        </div>
+        <div class="edu-photo edu-carousel-wrap">
+          <div class="car-track">
+            <img src="assets/edu-ahu/ahu-1.jpg" alt="安徽大学" loading="lazy">
+            <img src="assets/edu-ahu/ahu-2.jpg" alt="安徽大学" loading="lazy">
+            <img src="assets/edu-ahu/ahu-3.jpg" alt="安徽大学" loading="lazy">
+            <img src="assets/edu-ahu/ahu-4.jpg" alt="安徽大学" loading="lazy">
+            <img src="assets/edu-ahu/ahu-5.jpg" alt="安徽大学" loading="lazy">
+            <img src="assets/edu-ahu/ahu-6.jpg" alt="安徽大学" loading="lazy">
+          </div>
+          <span class="cap">安徽大学</span>
+          <div class="car-dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 实习经历 ======================= -->
+<section class="section band" id="exp">
+  <div class="container">
+    <div class="sec-head reveal-blur">
+      <span class="sec-icon i2">💼</span>
+      <h2 class="sec-title">实习经历<small>我在真实现场做过什么</small></h2>
+    </div>
+    <div class="exp-timeline">
+      <div class="timeline-progress"><span class="timeline-fill"></span><span class="timeline-plane">✈️</span></div>
+      <div class="exp-item reveal-clip" id="exp-meituan">
+        <div class="exp-card">
+          <div class="exp-top"><span class="exp-date">2026.03 – 2026.06</span><span class="exp-co">美团 · 酒旅-交通业务部</span></div>
+          <h3>商业分析实习生</h3>
+          <ul>
+            <li>SQL 日均处理数据 1w+ 条，输出 60+ 取数脚本、10+ 动态仪表盘</li>
+            <li>完成 13 份周报 + 3 份月报，拆解规模/流量/供给/ROI 归因</li>
+            <li>搭建 3 个 AI 工作流 Skill，效率提升 50%+</li>
+          </ul>
+        </div>
+        <div class="exp-dot">🛵</div>
+        <div class="exp-logo"><img src="assets/logo-meituan.png" alt="美团" loading="lazy"></div>
+      </div>
+      <div class="exp-item reveal-scale" id="exp-midea">
+        <div class="exp-card">
+          <div class="exp-top"><span class="exp-date">2024.02 – 2024.05</span><span class="exp-co">美的股份集团 · 线上业务部</span></div>
+          <h3>电商数据运营实习生</h3>
+          <ul>
+            <li>搭建日度销售明细、TOP200 产品结构等核心数据集</li>
+            <li>用 Excel / SQL / Python 取数，Tableau / Power BI 做可视化看板</li>
+            <li>输出销售进度通报、门体占比权重分析等业务报表</li>
+          </ul>
+        </div>
+        <div class="exp-dot">❄️</div>
+        <div class="exp-logo"><img src="assets/logo-midea.png" alt="美的" loading="lazy"></div>
+      </div>
+      <div class="exp-item reveal-right" id="exp-iflytek">
+        <div class="exp-card">
+          <div class="exp-top"><span class="exp-date">2023.09 – 2023.11</span><span class="exp-co">科大讯飞 · 运营商事业部</span></div>
+          <h3>产品运营实习生</h3>
+          <ul>
+            <li>完成 5 台 AI 智能外呼机器人的方案策划、配置与上线</li>
+            <li>搭建稳定率 / 转化率监控，定位并解决 100+ 运行问题</li>
+            <li>跨部门协同推进交付，累计带来 10w+ 营收</li>
+          </ul>
+        </div>
+        <div class="exp-dot">🤖</div>
+        <div class="exp-logo"><img src="assets/logo-iflytek.png" alt="科大讯飞" loading="lazy"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 校园经历 ======================= -->
+<section class="section" id="campus">
+  <div class="container">
+    <div class="sec-head reveal-rotate">
+      <span class="sec-icon i3">🏆</span>
+      <h2 class="sec-title">校园经历<small>课堂之外的成长</small></h2>
+    </div>
+    <div class="campus-grid">
+      <div class="campus-card reveal-left">
+        <span class="campus-stamp">校特等奖</span>
+        <span class="emo">🏆</span>
+        <h3>全国大学生电子商务“三创”赛 · 队长</h3>
+        <div class="where">国家 A 类赛事 · 2022.10 – 2023.06</div>
+        <p>组建 5 人跨专业团队，打造女性成长 IP 品牌，新媒体矩阵粉丝 1w+、总阅读量超 50W+，获校级特等奖、省级二等奖。</p>
+      </div>
+      <div class="campus-card reveal-right">
+        <span class="campus-stamp">国际二等奖</span>
+        <span class="emo">🧮</span>
+        <h3>美国大学生数学建模竞赛 · 核心成员</h3>
+        <div class="where">2023.02 – 2023.06</div>
+        <p>负责文献查阅、数据可视化与英文论文撰写，用 Matlab / Stata 建模拆解光污染问题，完成英文研究论文并获国际二等奖。</p>
+      </div>
+      <div class="campus-card reveal-scale">
+        <span class="campus-stamp">副部长</span>
+        <span class="emo">📣</span>
+        <h3>厦门大学教育研究院宣传中心 · 副部长</h3>
+        <div class="where">2024.10 – 至今</div>
+        <p>负责学院官方公众号 / 视频号运营，编辑推文 50+ 篇、宣传视频 20+ 个；策划执行近 10 场大型活动，设计海报 10+ 幅。</p>
+      </div>
+      <div class="campus-card reveal-left">
+        <span class="campus-stamp">支教志愿者</span>
+        <span class="emo">🌳</span>
+        <h3>“榕树厦”暑期社会实践支教 · 志愿者</h3>
+        <div class="where">思明区“青春合伙人”项目 · 2025.05 – 2025.07</div>
+        <p>策划并教授山海融合手工课程 17 场次；带队赴龙岩开展红色文化实地调研，参与课程开发与社区协调。</p>
+      </div>
+    </div>
+
+    <div class="practice-row reveal">
+      <div class="practice-item reveal-left"><img src="assets/practice/practice-1.jpg" alt="社会实践" loading="lazy"><span class="pcap">社会实践</span></div>
+      <div class="practice-item reveal-scale"><img src="assets/practice/practice-2.jpg" alt="支教课堂" loading="lazy"><span class="pcap">支教课堂</span></div>
+      <div class="practice-item reveal-right"><img src="assets/practice/practice-3.jpg" alt="红色调研" loading="lazy"><span class="pcap">红色调研</span></div>
+      <div class="practice-item reveal-clip"><img src="assets/practice/practice-4.jpg" alt="活动掠影" loading="lazy"><span class="pcap">活动掠影</span></div>
+    </div>
+
+    <div class="honor-note reveal-blur">荣誉墙 · 一点一点攒起来的 ✨</div>
+    <div class="film-reel reveal-clip">
+      <div class="film-row">
+        <div class="film-label">🎓 奖学金 · Scholarships</div>
+        <div class="film-track"><div class="film-frames" id="filmA"></div></div>
+      </div>
+      <div class="film-row">
+        <div class="film-label">🏆 竞赛获奖 · Awards</div>
+        <div class="film-track"><div class="film-frames" id="filmB"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= Vibecoding 作品（占位） ======================= -->
+<section class="section band2" id="works">
+  <div class="container">
+    <div class="sec-head reveal-clip">
+      <span class="sec-icon i4">🚀</span>
+      <h2 class="sec-title">Vibecoding 作品<small>用 AI 把灵感变成产品</small></h2>
+    </div>
+    <div class="works-list">
+      <div class="work-row reveal-clip">
+        <div class="wr-media"><div class="work-scroll"><img src="assets/work-offer-home.png" alt="校招记录本 App 首页 demo" loading="lazy"></div></div>
+        <div class="wr-body">
+          <span class="work-badge">Vibe Coding 第 1 号作品 · demo</span>
+          <h3>校招记录本 App · Offer Notebook</h3>
+          <p>应届生的校招投递管家：投递记录、流程进度、关键日期一页看清；AI 自动识别投递信息，五大页面覆盖校招全流程。</p>
+          <div class="wr-features"><span>AI 识别</span><span>本地存储</span><span>五大页面</span><span>珊瑚橙 &amp; 深色模式</span></div>
+          <a class="work-link" href="vibe-offer-notebook/promo.html#preview" target="_blank">查看 Demo →</a>
+        </div>
+      </div>
+      <div class="work-row reveal-blur">
+        <div class="wr-media"><div class="work-scroll"><img src="assets/work-cloudnest-cover.png" alt="云端小窝 CloudNest 封面" loading="lazy"></div></div>
+        <div class="wr-body">
+          <span class="work-badge">Vibe Coding 第 2 号作品 · demo</span>
+          <h3>云端小窝 CloudNest · 像素云养宠</h3>
+          <p>治愈系像素云养宠小游戏：7 种宠物自由选择，喂食、抚摸、玩耍、睡觉，陪它从幼年到长大；离线也会时间结算——就算再忙，也有人在云端等你回家。</p>
+          <div class="wr-features"><span>7 种宠物</span><span>成长进化</span><span>离线结算</span><span>4 个小游戏</span><span>房间装修</span></div>
+          <a class="work-link" href="vibe-cloudnest/index.html" target="_blank">开始游玩 →</a>
+        </div>
+      </div>
+    </div>
+    <p class="work-soon reveal">🚀 两个 demo 已经上线啦 —— 更多 Vibe Coding 作品正在孵化中，敬请期待！</p>
+  </div>
+</section>
+
+<!-- ======================= 爱好技能 ======================= -->
+<section class="section" id="skills">
+  <div class="container">
+    <div class="sec-head reveal-blur">
+      <span class="sec-icon i5">🌈</span>
+      <h2 class="sec-title">爱好 &amp; 技能<small>会工作，也会生活</small></h2>
+    </div>
+
+    <h3 class="honor-note" style="margin:0 0 22px">我的生活碎片 🧩</h3>
+    <div class="hobby-grid">
+      <div class="life-card reveal-left"><div class="life-inner"><div class="life-face life-back"><span class="life-deco">🍡</span><span class="life-emoji">🏮</span><span class="life-loc">在泉州</span><span class="life-tip">点我 ✨</span><span class="life-deco d2">🌸</span></div><div class="life-face life-front"><div class="pic"><img src="assets/life-1.jpg" alt="生活照" loading="lazy"></div></div></div></div>
+      <div class="life-card reveal-scale"><div class="life-inner"><div class="life-face life-back"><span class="life-deco">⛰️</span><span class="life-emoji">🏔️</span><span class="life-loc">在峨眉</span><span class="life-tip">点我 ✨</span><span class="life-deco d2">☁️</span></div><div class="life-face life-front"><div class="pic"><img src="assets/life-2.jpg" alt="生活照" loading="lazy"></div></div></div></div>
+      <div class="life-card reveal-right"><div class="life-inner"><div class="life-face life-back"><span class="life-deco">🌺</span><span class="life-emoji">🐘</span><span class="life-loc">在云南</span><span class="life-tip">点我 ✨</span><span class="life-deco d2">🌈</span></div><div class="life-face life-front"><div class="pic"><img src="assets/life-3.jpg" alt="生活照" loading="lazy"></div></div></div></div>
+      <div class="life-card reveal-left"><div class="life-inner"><div class="life-face life-back"><span class="life-deco">🍂</span><span class="life-emoji">🍁</span><span class="life-loc">在江西</span><span class="life-tip">点我 ✨</span><span class="life-deco d2">🌾</span></div><div class="life-face life-front"><div class="pic"><img src="assets/life-4.jpg" alt="生活照" loading="lazy"></div></div></div></div>
+      <div class="life-card reveal-scale"><div class="life-inner"><div class="life-face life-back"><span class="life-deco">🐚</span><span class="life-emoji">🌊</span><span class="life-loc">在厦门</span><span class="life-tip">点我 ✨</span><span class="life-deco d2">⛵</span></div><div class="life-face life-front"><div class="pic"><img src="assets/life-5.jpg" alt="生活照" loading="lazy"></div></div></div></div>
+      <div class="life-card reveal-right"><div class="life-inner"><div class="life-face life-back"><span class="life-deco">🀄</span><span class="life-emoji">🏯</span><span class="life-loc">在北京</span><span class="life-tip">点我 ✨</span><span class="life-deco d2">🎆</span></div><div class="life-face life-front"><div class="pic"><img src="assets/life-6.jpg" alt="生活照" loading="lazy"></div></div></div></div>
+    </div>
+
+    <h3 class="honor-note" style="margin:0 0 22px">我的档案卡 · 技能卡池 🎴</h3>
+    <div class="skills-chips reveal">
+      <span class="hl">数据分析</span>
+      <span>商业分析</span>
+      <span>产品运营</span>
+      <span>电商运营</span>
+      <span>新媒体运营</span>
+      <span>SQL</span>
+      <span>Python</span>
+      <span>Tableau / Power BI</span>
+      <span>Excel</span>
+      <span>PS / 图文</span>
+    </div>
+
+    <div class="gacha-panel reveal-rotate">
+      <div class="gacha-head">
+        <span class="gacha-no">04 / SKILLS &amp; LIFE</span>
+        <h3>随机抽取一张我的档案卡</h3>
+        <p class="note">技能与生活兴趣，混在同一副牌里。抽一张，再翻面认识我。</p>
+      </div>
+      <div class="gacha-flex">
+        <div class="td-deck">
+          <div class="deck-stack" id="deckStack">
+            <span class="ds-card c1"></span>
+            <span class="ds-card c2"></span>
+            <span class="ds-card c3"><span class="ds-sparkle">✨</span><b>MY FILES</b><i>SKILLS × LIFE</i></span>
+          </div>
+          <p class="deck-info">牌堆里共有 <b>10</b> 张卡片</p>
+          <p class="deck-sub">全部为技能档案 · 抽一张看看</p>
+          <button class="draw-btn" id="drawBtn">随机抽一张 ➕</button>
+        </div>
+        <div class="td-result">
+          <div class="draw-card" id="skillCard">
+            <div class="td-face td-front">
+              <span class="td-corner tl">档案卡</span>
+              <span class="td-corner tr">技能</span>
+              <span class="skill-emo"></span>
+              <span class="skill-name"></span>
+              <span class="rarity"></span>
+              <span class="flip-hint">点击翻面查看</span>
+            </div>
+            <div class="td-face td-back">
+              <span class="tb-label">DRAWN FILE</span>
+              <span class="tb-desc"></span>
+              <div class="level-track"><div class="level-fill"></div></div>
+              <span class="tb-level"></span>
+              <span class="flip-hint">点击翻回正面</span>
+            </div>
+          </div>
+          <div class="deck-counter" id="deckCounter">已抽 0 / 10</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 联系 ======================= -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-card reveal-rotate">
+      <span class="film-grain"></span>
+      <p class="contact-kicker">保持联系 · Keep in Touch</p>
+      <h2 class="contact-huge">下一段经历，<br>也许可以<span class="r">一起创造</span>。</h2>
+      <div class="contact-btns">
+        <a class="mail" href="mailto:2644742014@qq.com">✉ 发邮件</a>
+        <a href="tel:13023009506">☎ 打电话</a>
+        <a href="assets/resume.pdf" download>⬇ 下载简历</a>
+      </div>
+      <div class="contact-rows">
+        <div class="contact-row"><span class="l">Email</span><span>2644742014@qq.com</span></div>
+        <div class="contact-row"><span class="l">Phone</span><span>130 2300 9506</span></div>
+        <div class="contact-row"><span class="l">Location</span><span>厦门 · 27 届在校生</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot-inner">
+    <span>© 2026 <b>韩双穗</b> · 个人求职网站 · <b>v18</b></span>
+    <span>Made with <b>Vibe Coding</b> &amp; lots of ☕ ✨</span>
+  </div>
+</footer><script>
+// ===== 滚动进度条 =====
+(function(){
+  var bar = document.getElementById('scrollbar-fill');
+  if(!bar) return;
+  function u(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h * 100) : 0) + '%';
+  }
+  window.addEventListener('scroll', u, {passive:true});
+  u();
+})();
+
+// ===== 时钟 =====
+function tick(){
+  var s = new Date().toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false});
+  document.getElementById('clock').textContent = 'GMT+8 ' + s;
+}
+tick(); setInterval(tick, 1000);
+
+// ===== 滚动渐显 =====
+var staggerGrids = ['.edu-list','.exp-timeline','.campus-grid','.work-grid','.hobby-grid','.practice-row'];
+var io = new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if(e.isIntersecting){
+      var el = e.target;
+      var par = el.parentElement;
+      if(par && staggerGrids.some(function(s){ return par.matches(s); })){
+        var idx = Array.prototype.indexOf.call(par.children, el);
+        el.style.transitionDelay = (idx*0.08) + 's';
+        setTimeout(function(){ el.style.transitionDelay = ''; }, 1400);
+      }
+      el.classList.add('in');
+      io.unobserve(el);
+    }
+  });
+},{threshold:.12});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.reveal-clip,.reveal-blur,.reveal-rotate').forEach(function(el){ io.observe(el); });
+
+// ===== 首页聚光灯跟随鼠标 =====
+(function(){
+  var hero = document.querySelector('.hero');
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tx=.5, ty=.4, cx=.5, cy=.4;
+  hero.addEventListener('mousemove', function(e){
+    var r = hero.getBoundingClientRect();
+    tx = (e.clientX - r.left) / r.width;
+    ty = (e.clientY - r.top) / r.height;
+  });
+  hero.addEventListener('mouseleave', function(){ tx=.5; ty=.4; });
+  (function raf(){
+    cx += (tx-cx)*.08; cy += (ty-cy)*.08;
+    hero.style.setProperty('--mx', (cx*100)+'%');
+    hero.style.setProperty('--my', (cy*100)+'%');
+    requestAnimationFrame(raf);
+  })();
+})();
+
+// ===== 封面：welcome to my universe =====
+(function(){
+  var welcome = document.getElementById('welcome');
+  if(!welcome) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 生成星星
+  var starBox = '';
+  for(var i=0;i<42;i++){
+    var x = Math.random()*100, y = Math.random()*100;
+    var s = (Math.random()*2.4 + 1).toFixed(1);
+    var d = (Math.random()*3).toFixed(2);
+    var col = ['#FF5A5F','#FFC928','#2E6EFF','#4CC9A1','#F2994A'][Math.floor(Math.random()*5)];
+    starBox += '<span class="star-dot" style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;background:'+col+';animation-delay:'+d+'s"></span>';
+  }
+  welcome.insertAdjacentHTML('afterbegin', starBox);
+
+  // 生成悬浮字母
+  var line = document.getElementById('wtLine');
+  var words = ['welcome','to','my','universe'];
+  var cols = [
+    {c:'#FFB7C5', d:'#E8849C'},{c:'#A7EBD9', d:'#5FC4AB'},{c:'#A9D9FF', d:'#66AFE8'},
+    {c:'#FFE08A', d:'#E9BC4B'},{c:'#D9C8FF', d:'#9F84E0'},{c:'#FFCFA8', d:'#E89B62'}
+  ];
+  var html = '';
+  words.forEach(function(w, wi){
+    var letters = '';
+    for(var j=0;j<w.length;j++){
+      var col = cols[(wi*3+j) % cols.length];
+      var d = (Math.random()*2.2).toFixed(2);
+      var r = (Math.random()*6 - 3).toFixed(1);
+      letters += '<span class="wt-float" style="--d:'+d+'s"><span class="wt-l" style="--c:'+col.c+';--c2:'+col.d+';--r:'+r+'deg">'+w.charAt(j)+'</span></span>';
+    }
+    var depth = 0.25 + wi*0.18;
+    html += '<span class="wt-wrap" data-depth="'+depth.toFixed(2)+'"><span class="wt-word">'+letters+'</span></span>';
+    if(wi < words.length-1) html += '<span class="wt-wrap" data-depth="0.15" style="width:.18em"></span>';
+  });
+  line.innerHTML = html;
+
+  // 鼠标悬浮视差
+  if(!reduce){
+    var wraps = line.querySelectorAll('.wt-wrap');
+    welcome.addEventListener('mousemove', function(e){
+      var rx = (e.clientX / window.innerWidth - 0.5);
+      var ry = (e.clientY / window.innerHeight - 0.5);
+      wraps.forEach(function(wp){
+        var dep = parseFloat(wp.getAttribute('data-depth')) || 0.4;
+        wp.style.transform = 'translate('+(rx*dep*70)+'px,'+(ry*dep*50)+'px)';
+      });
+    });
+    welcome.addEventListener('mouseleave', function(){
+      wraps.forEach(function(wp){ wp.style.transform = 'translate(0,0)'; });
+    });
+  }
+
+  // 下拉渐隐（背景由 hero 的渐变接管）
+  var inner = welcome.querySelector('.welcome-inner');
+  function onScroll(){
+    var p = Math.min(1, window.scrollY / window.innerHeight);
+    inner.style.opacity = Math.max(0, 1 - p*1.6);
+    inner.style.transform = 'translateY('+(-p*70)+'px)';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+
+
+// ===== 绿色像素鼠标尾迹 =====
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var c = document.createElement('canvas');
+  c.id = 'trail';
+  document.body.appendChild(c);
+  var ctx = c.getContext('2d');
+  function resize(){ c.width = window.innerWidth; c.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  var pts = [];
+  var last = 0;
+  document.addEventListener('mousemove', function(e){
+    var now = Date.now();
+    if(now - last < 12) return;
+    last = now;
+    pts.push({x:e.clientX, y:e.clientY, vx:(Math.random()-.5)*.7, vy:(Math.random()-.5)*.7, life:1});
+    if(pts.length > 90) pts.shift();
+  });
+  (function loop(){
+    ctx.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<pts.length;i++){
+      var p = pts[i];
+      p.x += p.vx; p.y += p.vy; p.life -= 0.022;
+      ctx.shadowColor = 'rgba(60,247,150,.9)';
+      ctx.shadowBlur = 6;
+      ctx.fillStyle = 'rgba(60,247,150,'+Math.max(0,p.life)+')';
+      ctx.fillRect(p.x-2, p.y-2, 4, 4);
+    }
+    ctx.shadowBlur = 0;
+    pts = pts.filter(function(p){ return p.life > 0; });
+    requestAnimationFrame(loop);
+  })();
+})();
+
+// ===== 照片 3D 倾斜互动 =====
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var frame = document.querySelector('.flip-tilt');
+  var wrap = document.querySelector('.photo-wrap');
+  if(!frame || !wrap) return;
+  wrap.addEventListener('mousemove', function(e){
+    var r = wrap.getBoundingClientRect();
+    var px = (e.clientX - r.left) / r.width - .5;
+    var py = (e.clientY - r.top) / r.height - .5;
+    frame.style.transform = 'rotateY(' + (px*14).toFixed(2) + 'deg) rotateX(' + (-py*12).toFixed(2) + 'deg)';
+  });
+  wrap.addEventListener('mouseleave', function(){ frame.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
+})();
+
+// ===== 滚动视差 =====
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var items = [].slice.call(document.querySelectorAll('[data-para]')).map(function(el){
+    var cs = getComputedStyle(el);
+    var top = parseFloat(cs.top), bottom = parseFloat(cs.bottom);
+    var useBottom = isNaN(top) && !isNaN(bottom);
+    return { el: el, sp: parseFloat(el.getAttribute('data-para')) || 0, useBottom: useBottom, base: !isNaN(top) ? top : bottom };
+  });
+  function update(){
+    var sy = window.scrollY;
+    items.forEach(function(it){
+      it.el.style[it.useBottom ? 'bottom' : 'top'] = (it.base + (it.useBottom ? -sy*it.sp : sy*it.sp)) + 'px';
+    });
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  update();
+})();
+
+// ===== 首页元素陆续出现 =====
+(function(){
+  var heroSec = document.getElementById('home');
+  if(!heroSec) return;
+  var hio = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ heroSec.classList.add('hero-in'); hio.unobserve(heroSec); } });
+  },{threshold:.35});
+  hio.observe(heroSec);
+})();
+
+// ===== 教育照片轮播 =====
+(function(){
+  document.querySelectorAll('.edu-carousel-wrap').forEach(function(wrap){
+    var track = wrap.querySelector('.car-track');
+    if(!track) return;
+    var slides = track.querySelectorAll('img');
+    var dots = wrap.querySelectorAll('.car-dots i');
+    var idx = 0;
+    function go(i){
+      idx = (i + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (idx*100) + '%)';
+      dots.forEach(function(d, k){ d.classList.toggle('on', k === idx); });
+    }
+    var timer = setInterval(function(){ go(idx+1); }, 2600);
+    function restart(){ clearInterval(timer); timer = setInterval(function(){ go(idx+1); }, 2600); }
+    dots.forEach(function(d, k){ d.addEventListener('click', function(){ go(k); restart(); }); });
+    wrap.addEventListener('mouseenter', function(){ clearInterval(timer); });
+    wrap.addEventListener('mouseleave', restart);
+  });
+})();
+
+// ===== 时间轴飞机进度（彩色直线随滚动延伸，领先鼠标） =====
+(function(){
+  var tl = document.querySelector('.exp-timeline');
+  var plane = document.querySelector('.timeline-plane');
+  var fill = document.querySelector('.timeline-fill');
+  if(!tl || !plane || !fill) return;
+  var cur = 0;
+  function target(){
+    var r = tl.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var start = vh * 0.72;
+    var end = r.height + vh * 0.28;
+    var p = Math.min(1, Math.max(0, (vh - r.top - start) / (end - start)));
+    return Math.min(1, p + 0.10);
+  }
+  function raf(){
+    var t = target();
+    cur += (t - cur) * 0.12;
+    var p = Math.min(1, Math.max(0, cur));
+    plane.style.top = (p * 100) + '%';
+    fill.style.height = (p * 100) + '%';
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+})();
+
+// ===== 荣誉墙 · 胶片滚动 =====
+(function(){
+  var awards = [
+    {f:'国家励志奖学金.jpg', c:'国家励志奖学金'},
+    {f:'省优毕.jpg', c:'安徽省优秀毕业生'},
+    {f:'优秀学生奖学金.jpg', c:'优秀学生奖学金'},
+    {f:'三好学生.jpg', c:'三好学生'},
+    {f:'学习优秀奖学金.jpg', c:'学习优秀奖学金'},
+    {f:'社会实践奖学金.jpg', c:'社会实践奖学金'},
+    {f:'校优毕.jpg', c:'校级优秀毕业生'},
+    {f:'美赛.jpg', c:'美赛 · 国际二等奖'},
+    {f:'三创.jpg', c:'三创赛 · 省级二等奖'},
+    {f:'三创校赛.jpg', c:'三创赛 · 校级特等奖'},
+    {f:'市调省赛.png', c:'市调大赛 · 省赛'},
+    {f:'市调校赛.jpg', c:'市调大赛 · 校赛'},
+    {f:'服创省赛.png', c:'服创大赛 · 省赛'},
+    {f:'服创校赛.jpg', c:'服创大赛 · 校赛'},
+    {f:'国贸省赛.jpg', c:'国贸大赛 · 省赛'},
+    {f:'国贸校赛.jpg', c:'国贸大赛 · 校赛'},
+    {f:'互联网+.jpg', c:'互联网+ 创新创业大赛'},
+    {f:'ican.jpg', c:'iCAN 创新创业大赛'},
+    {f:'大学生创新创业训练计划项目.png', c:'大学生创新创业训练计划项目'}
+  ];
+  var rows = { filmA: awards.slice(0, 7), filmB: awards.slice(7) };
+  function frameHtml(a){
+    return '<div class="film-frame"><img src="assets/awards/' + a.f + '" alt="' + a.c + '" loading="lazy"><span class="cap">' + a.c + '</span></div>';
+  }
+  ['filmA','filmB'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var once = rows[id].map(frameHtml).join('');
+    el.innerHTML = once + once;
+  });
+})();
+
+// ===== 生活碎片翻卡 =====
+(function(){
+  document.querySelectorAll('.life-card').forEach(function(card){
+    card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  });
+})();
+
+// ===== 抽卡机内部小卡牌 =====
+(function(){
+  var wrap = document.getElementById('gmBalls');
+  if(!wrap) return;
+  var html = '';
+  for(var i=0;i<9;i++){
+    var r = (Math.random()*24-12).toFixed(1);
+    var d = (-i*0.3).toFixed(2);
+    html += '<span class="mini-card" style="--r:' + r + 'deg;--bd:' + d + 's"></span>';
+  }
+  wrap.innerHTML = html;
+})();
+
+// ===== 技能抽卡机 =====
+(function(){
+  var pool = [
+    {emo:'🔍', name:'SQL', desc:'复杂查询与窗口函数，日均处理 1w+ 条业务数据，输出 60+ 取数脚本', level:90, rarity:'SSR'},
+    {emo:'📊', name:'Excel', desc:'数据透视、函数建模与自动化报表，搭建日度销售通报', level:92, rarity:'SR'},
+    {emo:'🐍', name:'Python', desc:'Pandas 数据清洗与分析，SPSS 辅助问卷数据处理', level:80, rarity:'SR'},
+    {emo:'📈', name:'Tableau / Power BI', desc:'动态仪表盘与商品看板，量化销售趋势与产品表现', level:85, rarity:'SSR'},
+    {emo:'🧠', name:'商业分析', desc:'经营复盘与归因：拆解规模/流量/供给/ROI，输出可落地策略', level:88, rarity:'SSR'},
+    {emo:'🛒', name:'电商运营', desc:'商品全链路运营：上架、主图、详情页与爆款笔记', level:88, rarity:'SR'},
+    {emo:'🤖', name:'AI', desc:'正在探索 Vibe Coding 和用 AI 提效', level:80, rarity:'SR'},
+    {emo:'📱', name:'新媒体运营', desc:'内容策略与爆款方法论，单篇最高曝光 23w+', level:82, rarity:'R'},
+    {emo:'🎨', name:'PS / 图文', desc:'PS / Canva 主图优化与详情页设计，累计宣传海报 10+ 幅', level:75, rarity:'R'},
+    {emo:'📐', name:'Matlab / Stata', desc:'数学建模与统计分析，美赛国际二等奖', level:72, rarity:'N'}
+  ];
+  var idx = -1;
+  var flipToken = 0;
+  var card = document.getElementById('skillCard');
+  var btn = document.getElementById('drawBtn');
+  var counter = document.getElementById('deckCounter');
+  var gachaFlex = document.querySelector('.gacha-flex');
+  var drawnOnce = false;
+
+  function render(it){
+    card.querySelector('.skill-emo').textContent = it.emo;
+    card.querySelector('.skill-name').textContent = it.name;
+    card.querySelector('.tb-desc').textContent = it.desc;
+    card.querySelector('.level-fill').style.width = it.level + '%';
+    card.querySelector('.tb-level').textContent = '熟练度 ' + it.level + '%';
+    var r = card.querySelector('.rarity');
+    r.textContent = '【' + it.rarity + '】';
+    r.className = 'rarity ' + it.rarity;
+  }
+  function draw(){
+    if(idx >= pool.length - 1){
+      flipToken++;
+      idx = -1;
+      drawnOnce = false;
+      if(gachaFlex){ gachaFlex.classList.remove('drawn'); }
+      card.classList.remove('flipped');
+      counter.textContent = '已抽 0 / ' + pool.length;
+      btn.textContent = '再来一轮 ♻';
+      btn.disabled = false;
+      setTimeout(function(){ btn.textContent = '随机抽一张 ➕'; }, 1200);
+      return;
+    }
+    idx++;
+    flipToken++;
+    var tk = flipToken;
+    if(!drawnOnce){ drawnOnce = true; if(gachaFlex){ gachaFlex.classList.add('drawn'); } }
+    setTimeout(function(){
+      render(pool[idx]);
+      card.classList.remove('flipped');
+      setTimeout(function(){ if(tk === flipToken){ card.classList.add('flipped'); } }, 3500);
+    }, 120);
+    counter.textContent = '已抽 ' + (idx+1) + ' / ' + pool.length;
+    btn.textContent = (idx >= pool.length - 1) ? '抽完啦 ♻ 再玩一轮' : '随机抽一张 ➕';
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  btn.addEventListener('click', draw);
+  render(pool[0]);
+  counter.textContent = '已抽 0 / ' + pool.length;
+  btn.textContent = '随机抽一张 ➕';
+})();
+</script>
+</body>
+</html>
