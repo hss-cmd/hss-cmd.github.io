@@ -31,6 +31,11 @@ img{max-width:100%;display:block}
 
 /* ===== 鼠标像素尾迹 ===== */
 #trail{position:fixed;top:0;left:0;pointer-events:none;z-index:9999}`n#scrollbar{position:fixed;top:0;left:0;right:0;height:4px;z-index:9998;background:rgba(28,26,23,.12)}`n#scrollbar-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--red),var(--royal));transition:width .12s linear}
+.bgm-toggle{position:fixed;right:22px;bottom:22px;z-index:950;width:54px;height:54px;border-radius:50%;border:3px solid var(--ink);background:var(--mint);color:var(--ink);font-size:1.5rem;line-height:1;box-shadow:4px 4px 0 var(--ink);cursor:pointer;transition:transform .15s,box-shadow .15s;display:grid;place-items:center;user-select:none}
+.bgm-toggle:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.bgm-toggle.playing{animation:bgmPulse 2.4s ease-in-out infinite}
+@keyframes bgmPulse{0%,100%{box-shadow:4px 4px 0 var(--ink)}50%{box-shadow:4px 4px 0 var(--ink),0 0 24px rgba(76,201,161,.8)}}
+@media(max-width:640px){.bgm-toggle{right:14px;bottom:14px;width:48px;height:48px;font-size:1.3rem}}
 
 /* ===== 封面页 welcome to my universe ===== */
 .welcome{position:sticky;top:0;height:100vh;z-index:5;background:linear-gradient(160deg,#FFE3E3 0%,#FFE0C4 34%,#FFF4D6 66%,#DDF2E9 100%);overflow:hidden;display:grid;place-items:center}
@@ -1297,6 +1302,25 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.rev
   render(pool[0]);
   counter.textContent = '已抽 0 / ' + pool.length;
   btn.textContent = '随机抽一张 ➕';
+})();
+</script>
+<button id="bgmToggle" class="bgm-toggle" title="播放背景音乐" aria-label="背景音乐">&#9834;</button>
+<audio id="bgm" loop preload="none" src="assets/bgm-site.wav"></audio>
+<script>
+(function(){
+  var btn=document.getElementById('bgmToggle');
+  var bgm=document.getElementById('bgm');
+  if(!btn||!bgm)return;
+  bgm.volume=0.55;
+  var on=false;try{on=localStorage.getItem('site-bgm')==='1';}catch(e){}
+  function ui(){btn.textContent=on?'&#9834;':'&#9837;';btn.classList.toggle('playing',on);btn.title=on?'关闭背景音乐':'播放背景音乐';}
+  function apply(){
+    if(on){var p=bgm.play();if(p&&p.catch)p.catch(function(){on=false;ui();});}
+    else{bgm.pause();}
+    ui();
+  }
+  btn.addEventListener('click',function(){on=!on;try{localStorage.setItem('site-bgm',on?'1':'0');}catch(e){}apply();});
+  ui();
 })();
 </script>
 </body>

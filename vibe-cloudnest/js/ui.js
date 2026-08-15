@@ -48,6 +48,31 @@
   };
   global.SFX = SFX;
 
+  /* ---------------- BGM ---------------- */
+  const BGM = {
+    el: null,
+    start() {
+      if (!this.el) this.el = $('bgm');
+      if (!this.el) return;
+      const st = state();
+      if (st.bgm === false || SFX.muted) return;
+      this.el.volume = 0.45;
+      const p = this.el.play();
+      if (p && p.catch) p.catch(function(){});
+    },
+    stop() {
+      if (this.el) { this.el.pause(); this.el.currentTime = 0; }
+    },
+    toggle() {
+      const st = state();
+      st.bgm = !(st.bgm !== false);
+      localStorage.setItem(Game.SAVE_KEY, JSON.stringify(st));
+      if (st.bgm && !SFX.muted) { this.start(); } else { this.stop(); }
+      UI.renderSettings();
+    }
+  };
+  global.BGM = BGM;
+
   /* ---------------- 工具 ---------------- */
   function fmtTime(ts) {
     const d = new Date(ts);
@@ -744,6 +769,8 @@
   UI.renderSettings = function () {
     const st = state();
     $('btnSound').textContent = st.sound ? '开' : '关';
+    const bgmBtn = $('btnBgm');
+    if (bgmBtn) bgmBtn.textContent = (st.bgm !== false) ? '开' : '关';
     document.querySelectorAll('[data-warp]').forEach(b => {
       b.classList.toggle('active', String(st.timeWarp) === b.dataset.warp);
     });
@@ -783,6 +810,7 @@
     // 启动
     $('btnStart').addEventListener('click', () => {
       SFX.init();
+      BGM.start();
       let st = null;
       try { st = JSON.parse(localStorage.getItem(Game.SAVE_KEY) || 'null'); } catch (e) {}
       if (st && st.pets && st.pets.length) { UI.toast('欢迎回来，小伙伴们在等你～'); UI.go('home'); return; }
@@ -791,6 +819,7 @@
     });
     $('btnContinue').addEventListener('click', () => {
       SFX.init();
+      BGM.start();
       let st = null;
       try { st = JSON.parse(localStorage.getItem(Game.SAVE_KEY) || 'null'); } catch (e) {}
       if (st && st.pets && st.pets.length) { UI.go('home'); return; }
@@ -846,7 +875,9 @@
       localStorage.setItem(Game.SAVE_KEY, JSON.stringify(st));
       SFX.muted = !st.sound;
       UI.renderSettings();
+      if (st.sound) { BGM.start(); } else { BGM.stop(); }
     });
+    $('btnBgm').addEventListener('click', () => BGM.toggle());
     document.querySelectorAll('[data-warp]').forEach(b => {
       b.addEventListener('click', () => {
         const st = JSON.parse(localStorage.getItem(Game.SAVE_KEY));

@@ -86,6 +86,7 @@
       lastSeen: Date.now(),
       coins: 120,
       sound: true,
+      bgm: true,
       timeWarp: 1,
       theme: 'minimal',
       ownedThemes: ['minimal'],
