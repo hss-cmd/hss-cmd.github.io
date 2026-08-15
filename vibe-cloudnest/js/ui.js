@@ -215,7 +215,7 @@
   UI.renderHome = function () {
     const st = state();
     $('homeCoins').textContent = fmtCoins(st.coins);
-    $('homeDay').textContent = '第 ' + Math.max(1, st.streak) + ' 天';
+    $('homeDay').textContent = '第 ' + (Math.floor(st.gameDays || 0) + 1) + ' 天';
     const p = Game.activePet();
     if (p) {
       $('homePetName').textContent = p.name;
@@ -458,6 +458,10 @@
         const pp = state().pets.find(x => x.id === ev.petId);
         UI.toast('💨 ' + (pp ? pp.name : '小可爱') + ' 偷偷跑出去玩啦！快去商店买定位器找它！');
         SFX.play('sick');
+      }
+      if (ev.type === 'newday') {
+        UI.toast('🌞 第 ' + ev.day + ' 天到了，微风掏来 3 金币');
+        SFX.play('coin');
       }
       if (ev.type === 'sick') {
         const p = Game.activePet && Game.activePet();

@@ -7,22 +7,23 @@
   const SAVE_KEY = 'cloudnest_save_v1';
   const VERSION = 2;
   const MAX_PETS = 4;
+  const DAY_MINUTES = 5;   // 游戏内 5 分钟 = 1 天
 
   const STAGES = ['幼年体', '青年体', '成年体'];
   const STAGE_XP = [120, 360];      // 达到即进化
 
   const FOODS = {
-    fish:  { label: '小鱼干',   icon: 'fish',    price: 20, hunger: 42, xp: 16, aff: 5,  desc: '最经典的美味' },
-    milk:  { label: '牛奶',     icon: 'milk',    price: 25, hunger: 35, xp: 14, aff: 4,  desc: '补钙长高高' },
-    berry: { label: '草莓',     icon: 'berry',   price: 15, hunger: 28, xp: 18, aff: 3,  desc: '甜甜的维生素' },
-    cake:  { label: '奶油蛋糕', icon: 'cake',    price: 40, hunger: 55, xp: 22, aff: 7,  desc: '节日小奢侈' },
-    carrot: { label: '胡萝卜',   icon: 'carrot',  price: 18, hunger: 26, xp: 12, aff: 3,  desc: '脆脆的维A' },
-    apple:  { label: '红苹果',   icon: 'apple',   price: 22, hunger: 30, xp: 15, aff: 4,  desc: '一天一苹果' }
+    fish:  { label: '小鱼干',   icon: 'fish',    price: 20, hunger: 44, xp: 16, aff: 5,  desc: '最经典的美味，饱食 +44' },
+    milk:  { label: '牛奶',     icon: 'milk',    price: 25, hunger: 38, xp: 14, aff: 4,  desc: '补钙长高高，饱食 +38' },
+    berry: { label: '草莓',     icon: 'berry',   price: 15, hunger: 32, xp: 18, aff: 3,  desc: '甜甜的维生素，饱食 +32' },
+    cake:  { label: '奶油蛋糕', icon: 'cake',    price: 40, hunger: 60, xp: 22, aff: 7,  desc: '节日小奢侈，饱食 +60' },
+    carrot: { label: '胡萝卜',   icon: 'carrot',  price: 18, hunger: 30, xp: 12, aff: 3,  desc: '脆脆的维A，饱食 +30' },
+    apple:  { label: '红苹果',   icon: 'apple',   price: 22, hunger: 34, xp: 15, aff: 4,  desc: '一天一苹果，饱食 +34' }
   };
   const TOYS = {
-    ball:    { label: '毛线球', icon: 'ball',    price: 30, xp: 28, aff: 10, desc: '玩一次就停不下来' },
-    wand:    { label: '逗猫棒', icon: 'wand',    price: 45, xp: 36, aff: 13, desc: '专治各种不开心' },
-    cushion: { label: '软软垫', icon: 'cushion', price: 60, xp: 20, aff: 8,  energy: 35, desc: '睡在云朵上' }
+    ball:    { label: '毛线球', icon: 'ball',    price: 30, xp: 18, aff: 8, desc: '玩一次就停不下来，好感 +8' },
+    wand:    { label: '逗猫棒', icon: 'wand',    price: 45, xp: 24, aff: 12, desc: '专治各种不开心，好感 +12' },
+    cushion: { label: '软软垫', icon: 'cushion', price: 60, xp: 12, aff: 7,  energy: 35, desc: '睡在云朵上，好感 +7' }
   };
   const MEDS = {
     syrup: { label: '感冒药', icon: 'syrup', price: 50, cures: true,  desc: '治好转的小感冒' },
@@ -100,6 +101,8 @@
       wardrobe: { bow: false, hat: false, crown: false, scarf: false, glasses: false },
       houses: { cloud: false, cabin: false, pod: false },
       stats: { feed: 0, play: 0, pet: 0, sleep: 0, games: 0, coinsEarned: 0, bestRain: 0, bestBubble: 0, bestFishing: 0, bestMemory: 0, bestMath: 0, bestRiddle: 0, meds: 0, houses: 0 },
+      gameDays: 0,
+      lastGameDay: 0,
       streak: 0,
       lastDayKey: '',
       log: [],
@@ -187,13 +190,13 @@
     const events = [];
     if (min <= 0.5) return events;
 
-    const days = min / 1440;
+    const days = min / DAY_MINUTES;
     state.pets.forEach(p => {
       if (!p.alive) return;
-      const hungerDecay = min * 4.6 / 60;   // 每小时 -2.2 饱食
-      const energyDecay = min * 3.2 / 60;   // 每小时 -1.5 精力
-      let affDecay = min * 0.7 / 60;       // 每小时 -0.35 好感
-      if (p.hunger <= 0) affDecay += min * 2.2 / 60;
+      const hungerDecay = days * 50;   // 每游戏日 -50 饱食（约一天掉一半）
+      const energyDecay = days * 45;   // 每游戏日 -45 精力
+      let affDecay = days * 15;        // 每游戏日 -15 好感
+      if (p.hunger <= 0) affDecay += days * 25;
       p.hunger = clamp(p.hunger - hungerDecay, 0, 100);
       p.energy = clamp(p.energy - energyDecay, 0, 100);
       p.affection = clamp(p.affection - affDecay, 0, 100);
@@ -239,8 +242,8 @@
           pushLog('💨 ' + p.name + ' 趁你不注意偷偷跑出去玩啦！快去买个定位器（500金币）把它找回来！');
         }
       }
-      if (days >= 0.5) {
-        pushLog(p.name + ' 在窗边等了你 ' + (days >= 1 ? Math.floor(days) + ' 天' : '一整天') + '…饱食 -' + Math.round(hungerDecay) + '，好感 -' + Math.round(affDecay) + '。看到你回来，它眼睛一下子亮了。');
+      if (days >= 1) {
+        pushLog(p.name + ' 在窗边等了你 ' + (days >= 1 ? Math.floor(days) + ' 天' : '大半天') + '…饱食 -' + Math.round(hungerDecay) + '，好感 -' + Math.round(affDecay) + '。看到你回来，它眼睛一下子亮了。');
       }
     });
 
@@ -254,6 +257,16 @@
       const who = p && p.alive ? p.name : '小家伙';
       pushLog('今天 ' + who + ' 对你说：' + dailyLine(p));
       events.push({ type: 'daily' });
+    }
+    // 游戏内天数：每 5 分钟过一天
+    state.gameDays += days;
+    const newDayCount = Math.floor(state.gameDays);
+    if (newDayCount > state.lastGameDay) {
+      const gained = newDayCount - state.lastGameDay;
+      state.lastGameDay = newDayCount;
+      state.coins += 3 * gained;
+      pushLog('🌞 第 ' + (newDayCount + 1) + ' 天到了，微风掏来 ' + (3 * gained) + ' 金币。');
+      events.push({ type: 'newday', day: newDayCount + 1 });
     }
     return events;
   }
@@ -407,15 +420,15 @@
       res.speech = say(p, 'feed');
     } else if (name === 'play') {
       const toyId = firstInventory('toy');
-      let gainXp = 20, gainAff = 6, extra = '';
+      let gainXp = 12, gainAff = 5, extra = '';
       if (toyId) {
         state.inventory[toyId]--;
         const toy = TOYS[toyId];
         gainXp += toy.xp; gainAff += toy.aff;
         extra = '（' + toy.label + '加成）';
       }
-      p.energy = clamp(p.energy - 8, 0, 100);
-      p.hunger = clamp(p.hunger - 6, 0, 100);
+      p.energy = clamp(p.energy - 14, 0, 100);
+      p.hunger = clamp(p.hunger - 10, 0, 100);
       p.xp += gainXp;
       p.affection = clamp(p.affection + gainAff, 0, 100);
       res.msg = '开心玩耍 +' + gainAff + ' 好感' + extra;
