@@ -195,9 +195,9 @@
 
   /* ---------------- 钓鱼大师 ---------------- */
   const FISH_TIERS = [
-    { label: '普通鱼', value: 5,  max: 100, decay: 28, gain: 30, speed: 1.6, scale: 7,  icon: 'fish',     weight: 0.62 },
-    { label: '大鱼',   value: 10, max: 120, decay: 36, gain: 27, speed: 2.2, scale: 9,  icon: 'fish',     weight: 0.28 },
-    { label: '鱼王',   value: 20, max: 140, decay: 44, gain: 24, speed: 2.8, scale: 11, icon: 'goldfish', weight: 0.10 }
+    { label: '普通鱼', value: 5,  clicks: 3, window: 1800, speed: 1.6, scale: 7,  icon: 'fish',     weight: 0.62 },
+    { label: '大鱼',   value: 10, clicks: 5, window: 1600, speed: 2.2, scale: 9,  icon: 'fish',     weight: 0.28 },
+    { label: '鱼王',   value: 20, clicks: 8, window: 1400, speed: 2.8, scale: 11, icon: 'goldfish', weight: 0.10 }
   ];
   function startFishing(canvas, ctx, hud, onDone) {
     const W = canvas.width, H = canvas.height;
@@ -221,18 +221,16 @@
         x: Math.random() < 0.5 ? 20 : W - 20,
         y: 215 + Math.random() * 115,
         state: 'swim',
-        energy: 0,
-        lastFrame: 0,
-        lastReaction: 0
+        clicks: 0,
+        biteStart: 0
       });
       nextFishAt = now + 500 + Math.random() * 900;
     }
     function catchBite() {
       if (!running || !biting || biting.state !== 'bite') return;
-      biting.energy = Math.min(biting.tier.max, biting.energy + biting.tier.gain);
-      biting.lastReaction = Date.now();
+      biting.clicks++;
       SFX.play('click');
-      if (biting.energy >= biting.tier.max) {
+      if (biting.clicks >= biting.tier.clicks) {
         const t = biting.tier;
         biting.state = 'caught';
         score += t.value;
@@ -259,23 +257,15 @@
           f.x += f.dir * f.tier.speed;
           if (!biting && Math.abs(f.x - bobber.x) < 26 && Math.abs(f.y - bobber.y) < 40) {
             f.state = 'bite';
-            f.energy = 0;
-            f.lastFrame = now;
-            f.lastReaction = now;
+            f.biteStart = now;
+            f.clicks = 0;
             biting = f;
             SFX.play('sick');
           } else if (f.x < 4 || f.x > W - 4) {
             fishes.splice(i, 1);
           }
         } else if (f.state === 'bite') {
-          const dt = Math.min(120, now - f.lastFrame);
-          f.lastFrame = now;
-          // 1.5 秒内没点击才开始掉能量，连续点击就越充越满
-          if (now - f.lastReaction > 1500) {
-            f.energy -= f.tier.decay * dt / 1000;
-          }
-          // 能量掉光，或者 5 秒没有任何反应，鱼就跑
-          if (f.energy <= 0 || now - f.lastReaction > 5000) {
+          if (now - f.biteStart > f.tier.window) {
             fishes.splice(i, 1);
             if (biting === f) biting = null;
           }
@@ -315,27 +305,13 @@
         ctx.restore();
       });
       if (biting && biting.state === 'bite') {
-        const prog = Math.max(0, Math.min(1, biting.energy / biting.tier.max));
-        const ringColor = prog > 0.66 ? '#3cb371' : prog > 0.33 ? '#f0c33c' : '#e5484d';
-        ctx.lineWidth = 6;
-        ctx.strokeStyle = 'rgba(255,255,255,.5)';
-        ctx.beginPath();
-        ctx.arc(bobber.x, bobber.y, 24, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.strokeStyle = ringColor;
-        ctx.beginPath();
-        ctx.arc(bobber.x, bobber.y, 24, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2);
-        ctx.stroke();
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 14px "Microsoft YaHei"';
-        ctx.fillText(Math.ceil(prog * 100) + '%', bobber.x - 15, bobber.y + 5);
         ctx.fillStyle = '#ff6a4a';
         ctx.font = 'bold 15px "Microsoft YaHei"';
-        ctx.fillText('快点！能量在流失！', bobber.x - 58, bobber.y - 30);
+        ctx.fillText('连点收竿 ' + biting.clicks + '/' + biting.tier.clicks + ' ！', bobber.x - 55, bobber.y - 16);
       }
       ctx.fillStyle = 'rgba(255,255,255,.85)';
       ctx.font = 'bold 13px "Microsoft YaHei"';
-      ctx.fillText('鱼咬钩后狂点鼠标充满能量环，慢了鱼就跑了！', 16, 26);
+      ctx.fillText('鱼咬钩后连点鼠标收竿，鱼越稀有越难钓！', 16, 26);
       hud.innerHTML = '<span>得分 ' + score + '</span><span>时间 ' + Math.ceil(remain) + '</span><span>钓起 ' + bites + '</span>';
       requestAnimationFrame(frame);
     }
