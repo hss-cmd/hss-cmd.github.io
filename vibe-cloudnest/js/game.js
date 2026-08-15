@@ -154,6 +154,7 @@
             if (p.runaway === undefined) p.runaway = false;
             if (p.runawaySince === undefined) p.runawaySince = 0;
           });
+          state.lastSeen = Date.now(); // 离开时间暂停，回来从零计算
           return true;
         }
       }
@@ -420,13 +421,10 @@
       res.speech = say(p, 'feed');
     } else if (name === 'play') {
       const toyId = firstInventory('toy');
-      let gainXp = 12, gainAff = 5, extra = '';
-      if (toyId) {
-        state.inventory[toyId]--;
-        const toy = TOYS[toyId];
-        gainXp += toy.xp; gainAff += toy.aff;
-        extra = '（' + toy.label + '加成）';
-      }
+      if (!toyId) return { ok: false, msg: '没有玩具啦！去小卖部买一个吧', goto: 'shop' };
+      state.inventory[toyId]--;
+      const toy = TOYS[toyId];
+      let gainXp = 12 + toy.xp, gainAff = 5 + toy.aff, extra = '（' + toy.label + '加成）';
       p.energy = clamp(p.energy - 14, 0, 100);
       p.hunger = clamp(p.hunger - 10, 0, 100);
       p.xp += gainXp;

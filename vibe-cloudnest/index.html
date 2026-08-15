@@ -32,6 +32,7 @@
     <p class="hint">建议戴耳机体验 · 点击画面有音效</p>
     <nav class="bottom-nav splash-nav">
       <button class="btn nav-btn" data-nav="journal">📖<span>图鉴</span></button>
+      <button class="btn nav-btn" data-nav="inventory">📦<span>仓库</span></button>
       <button class="btn nav-btn" data-nav="pets">🏆<span>成就</span></button>
       <button class="btn nav-btn" data-nav="games">✅<span>任务</span></button>
       <button class="btn nav-btn" data-nav="settings">⚙️<span>设置</span></button>
@@ -120,6 +121,7 @@
       <button class="btn nav-btn" data-nav="shop">🛒<span>商店</span></button>
       <button class="btn nav-btn" data-nav="games">🎮<span>小游戏</span></button>
       <button class="btn nav-btn" data-nav="room">🛋<span>装修</span></button>
+      <button class="btn nav-btn" data-nav="inventory">📦<span>仓库</span></button>
       <button class="btn nav-btn" data-nav="pets">🐾<span>伙伴</span></button>
     </nav>
   </section>
@@ -189,6 +191,17 @@
       <button class="btn shop-tab" data-tab="achieve">成就</button>
     </div>
     <div id="journalList" class="journal-list"></div>
+  </section>
+
+  <!-- ============ 仓库 ============ -->
+  <section id="screen-inventory" class="screen">
+    <header class="screen-head">
+      <button class="btn btn-icon" data-nav="home">←</button>
+      <h2>仓库</h2>
+      <span class="head-space"></span>
+    </header>
+    <p class="screen-sub">看看你的库存：食物、玩具、药品和工具都在这里</p>
+    <div id="inventoryList" class="shop-list"></div>
   </section>
 
   <!-- ============ 设置 ============ -->

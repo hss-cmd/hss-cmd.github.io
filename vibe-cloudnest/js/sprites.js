@@ -322,7 +322,7 @@
           else if (pattern === 'stripe') on = ((x + y) % Math.max(8, step * 4) < step) && (h1 % 3 === 0);
           else if (pattern === 'two') on = y > cv.height * 0.52;
           if (on) {
-            c.globalAlpha = 0.68;
+            c.globalAlpha = 1;
             c.fillStyle = baseColor.pattern;
             c.fillRect(x, y, step, step);
           }

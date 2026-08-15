@@ -195,9 +195,9 @@
 
   /* ---------------- 钓鱼大师 ---------------- */
   const FISH_TIERS = [
-    { label: '普通鱼', value: 5,  max: 100, decay: 34, gain: 26, speed: 1.6, scale: 7,  icon: 'fish',     weight: 0.62 },
-    { label: '大鱼',   value: 10, max: 120, decay: 42, gain: 24, speed: 2.2, scale: 9,  icon: 'fish',     weight: 0.28 },
-    { label: '鱼王',   value: 20, max: 140, decay: 50, gain: 22, speed: 2.8, scale: 11, icon: 'goldfish', weight: 0.10 }
+    { label: '普通鱼', value: 5,  max: 100, decay: 28, gain: 30, speed: 1.6, scale: 7,  icon: 'fish',     weight: 0.62 },
+    { label: '大鱼',   value: 10, max: 120, decay: 36, gain: 27, speed: 2.2, scale: 9,  icon: 'fish',     weight: 0.28 },
+    { label: '鱼王',   value: 20, max: 140, decay: 44, gain: 24, speed: 2.8, scale: 11, icon: 'goldfish', weight: 0.10 }
   ];
   function startFishing(canvas, ctx, hud, onDone) {
     const W = canvas.width, H = canvas.height;
@@ -222,13 +222,15 @@
         y: 215 + Math.random() * 115,
         state: 'swim',
         energy: 0,
-        lastFrame: 0
+        lastFrame: 0,
+        lastReaction: 0
       });
       nextFishAt = now + 500 + Math.random() * 900;
     }
     function catchBite() {
       if (!running || !biting || biting.state !== 'bite') return;
       biting.energy = Math.min(biting.tier.max, biting.energy + biting.tier.gain);
+      biting.lastReaction = Date.now();
       SFX.play('click');
       if (biting.energy >= biting.tier.max) {
         const t = biting.tier;
@@ -259,6 +261,7 @@
             f.state = 'bite';
             f.energy = 0;
             f.lastFrame = now;
+            f.lastReaction = now;
             biting = f;
             SFX.play('sick');
           } else if (f.x < 4 || f.x > W - 4) {
@@ -267,8 +270,12 @@
         } else if (f.state === 'bite') {
           const dt = Math.min(120, now - f.lastFrame);
           f.lastFrame = now;
-          f.energy -= f.tier.decay * dt / 1000;
-          if (f.energy <= 0) {
+          // 1.5 秒内没点击才开始掉能量，连续点击就越充越满
+          if (now - f.lastReaction > 1500) {
+            f.energy -= f.tier.decay * dt / 1000;
+          }
+          // 能量掉光，或者 5 秒没有任何反应，鱼就跑
+          if (f.energy <= 0 || now - f.lastReaction > 5000) {
             fishes.splice(i, 1);
             if (biting === f) biting = null;
           }

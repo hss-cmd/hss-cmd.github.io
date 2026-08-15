@@ -123,6 +123,7 @@
     if (name === 'pets') { UI.renderPets(); }
     if (name === 'journal') { UI.renderJournal('log'); }
     if (name === 'settings') { UI.renderSettings(); }
+    if (name === 'inventory') { UI.renderInventory(); }
     if (name === 'type') { UI.renderType(); }
     if (name === 'color') { UI.renderColor(); }
     if (name === 'splash') { UI.renderSplash(); }
@@ -284,6 +285,7 @@
   const homeFx = []; // {type,x,y,vy,t,life}
   let bubbleText = null, bubbleUntil = 0;
   let lastTick = 0;
+  let lastComplainAt = 0;
 
   function addFx(type, x, y) {
     homeFx.push({ type, x, y, vy: type === 'heart' ? -0.8 : -0.5, t: 0, life: 70 });
@@ -376,8 +378,13 @@
       ctx.fillRect(petX + 4, floorY, pw - 8, 6);
       // 生病特效
       if (p.sick) {
-        ctx.fillStyle = 'rgba(140,180,150,.25)';
-        ctx.fillRect(petX, y, pw, ph);
+        ctx.fillStyle = 'rgba(120,170,130,.28)';
+        ctx.beginPath();
+        ctx.ellipse(petX + pw / 2, floorY - 4, pw / 2 + 10, 16, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#3b3a36';
+        ctx.font = 'bold 18px "Microsoft YaHei"';
+        ctx.fillText('🤒', petX + pw / 2 + 12, y + 2);
       }
       SPRITES.drawPetToCanvas(ctx, p, petX, y + bob, {});
       // 配饰
@@ -478,6 +485,16 @@
         SFX.play('dead');
       }
     });
+    // 数值低时宠物抱怨
+    const pp = Game.activePet && Game.activePet();
+    const nw = Date.now();
+    if (pp && pp.alive && !pp.runaway && nw - lastComplainAt > 20000) {
+      let cmp = null;
+      if (pp.hunger < 25) cmp = { raw: '咕噜噜～', trans: '我好饿呀…想吃点东西…' };
+      else if (pp.energy < 20) cmp = { raw: '哈欠～', trans: '好困呀…想睡觉…' };
+      else if (pp.affection < 25) cmp = { raw: '呜…', trans: '你都不理我，我好孤单…' };
+      if (cmp) { lastComplainAt = nw; UI.sayBubble(cmp); }
+    }
   }
 
   /* ---------------- 互动按钮 ---------------- */
@@ -842,6 +859,41 @@
     if (bgmBtn) bgmBtn.textContent = (st.bgm !== false) ? '开' : '关';
     document.querySelectorAll('[data-warp]').forEach(b => {
       b.classList.toggle('active', String(st.timeWarp) === b.dataset.warp);
+    });
+  };
+
+  /* ---------------- 仓库 ---------------- */
+  UI.renderInventory = function () {
+    const st = state();
+    const list = $('inventoryList');
+    list.innerHTML = '';
+    const groups = [
+      { label: '食物', table: Game.FOODS },
+      { label: '玩具', table: Game.TOYS },
+      { label: '药品', table: Game.MEDS },
+      { label: '工具', table: Game.TRACKERS }
+    ];
+    groups.forEach(grp => {
+      const head = document.createElement('div');
+      head.className = 'inv-group';
+      head.textContent = grp.label;
+      list.appendChild(head);
+      Object.keys(grp.table).forEach(id => {
+        const item = grp.table[id];
+        const count = st.inventory[id] || 0;
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+        card.appendChild(drawIconCanvas(item.icon, 48));
+        const info = document.createElement('div');
+        info.className = 'info';
+        info.innerHTML = '<div class="t">' + item.label + '</div><div class="d">' + item.desc + '</div>';
+        card.appendChild(info);
+        const btn = document.createElement('button');
+        btn.className = 'btn buy' + (count > 0 ? '' : ' btn-gray');
+        btn.textContent = '×' + count;
+        card.appendChild(btn);
+        list.appendChild(card);
+      });
     });
   };
 
