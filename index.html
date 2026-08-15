@@ -1313,7 +1313,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.rev
   if(!btn||!bgm)return;
   bgm.volume=0.55;
   var on=false;try{on=localStorage.getItem('site-bgm')==='1';}catch(e){}
-  function ui(){btn.textContent=on?'&#9834;':'&#9837;';btn.classList.toggle('playing',on);btn.title=on?'关闭背景音乐':'播放背景音乐';}
+  function ui(){btn.textContent=on?'♪':'♩';btn.classList.toggle('playing',on);btn.title=on?'关闭背景音乐':'播放背景音乐';}
   function apply(){
     if(on){var p=bgm.play();if(p&&p.catch)p.catch(function(){on=false;ui();});}
     else{bgm.pause();}
