@@ -559,7 +559,7 @@
     const games = [
       { id: 'rain', icon: '🌧🍩', label: '零食雨', desc: '左右移动小碗，接住落下的零食赚金币！', best: st.stats.bestRain },
       { id: 'bubble', icon: '🫧', label: '泡泡乐', desc: '戳破泡泡收集金币，小心黑色的泡泡哦！', best: st.stats.bestBubble },
-      { id: 'fishing', icon: '🎣', label: '钓鱼大师', desc: '盯住浮漂，出现「!」时点一下收竿！', best: st.stats.bestFishing },
+      { id: 'fishing', icon: '🎣', label: '钓鱼大师', desc: '鱼咬钩后连点鼠标收竿，鱼越稀有越难钓！', best: st.stats.bestFishing },
       { id: 'memory', icon: '🃏', label: '记忆翻翻乐', desc: '翻开两张相同的小图标，全部配对得分！', best: st.stats.bestMemory },
       { id: 'math', icon: '🔢', img: 'math', label: '算术速算', desc: '60 秒速算挑战，答对越多赚得越多！', best: st.stats.bestMath },
       { id: 'riddle', icon: '❓', img: 'riddle', label: '猜字谜', desc: '8 道经典字谜，全对还有额外奖励！', best: st.stats.bestRiddle }];

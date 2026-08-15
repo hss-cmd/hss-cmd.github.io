@@ -62,7 +62,7 @@
     const items = [];
     let score = 0, misses = 0, running = true, lastSpawn = 0, startT = performance.now();
     const bowl = { x: W / 2 - 32, w: 64 };
-    hud.innerHTML = '<span>得分 0</span><span>时间 40</span><span>漏接 0/3</span>';
+    hud.innerHTML = '<span>得分 0</span><span>时间 40</span><span>漏接 0/5</span>';
 
     function move(e) {
       const r = canvas.getBoundingClientRect();
@@ -86,22 +86,27 @@
         const roll = Math.random();
         const it = roll < 0.62 ? RAIN_ITEMS[Math.floor(Math.random() * 4)]
                   : roll < 0.78 ? RAIN_ITEMS[4] : RAIN_ITEMS[5];
-        items.push({ ...it, x: 12 + Math.random() * (W - 36), y: -12, vy: 1.6 + Math.random() * 1.4 });
+        items.push({ ...it, x: 12 + Math.random() * (W - 44), y: -12, py: -12, vy: 1.6 + Math.random() * 1.4 });
       }
       for (let i = items.length - 1; i >= 0; i--) {
         const it = items[i];
+        it.py = it.y;
         it.y += it.vy;
         const catchY = H - 46;
-        if (it.y + 12 >= catchY && it.x + 10 > bowl.x && it.x < bowl.x + bowl.w) {
+        const itemH = 36, itemW = 40;
+        const bPrev = it.py + itemH;
+        const bNow = it.y + itemH;
+        const over = it.x + itemW > bowl.x - 4 && it.x < bowl.x + bowl.w + 4;
+        if (over && ((bPrev < catchY && bNow >= catchY) || (bNow >= catchY && bNow <= catchY + 30))) {
           if (it.type === 'bad') { misses++; SFX.play('error'); }
           else { score += it.val; SFX.play('coin'); }
           items.splice(i, 1);
-        } else if (it.y > H) {
+        } else if (bNow > catchY + 34) {
           if (it.type !== 'bad') misses++;
           items.splice(i, 1);
         }
       }
-      if (misses >= 3 || remain <= 0) { running = false; end(); return; }
+      if (misses >= 5 || remain <= 0) { running = false; end(); return; }
 
       drawSky(ctx, W, H);
       ctx.fillStyle = 'rgba(255,255,255,.85)';
@@ -112,7 +117,7 @@
         else SPRITES.drawIcon(ctx, it.icon, it.x, it.y, 5);
       });
       drawBowl(ctx, bowl.x, H - 40, bowl.w);
-      hud.innerHTML = '<span>得分 ' + score + '</span><span>时间 ' + Math.ceil(remain) + '</span><span>漏接 ' + misses + '/3</span>';
+      hud.innerHTML = '<span>得分 ' + score + '</span><span>时间 ' + Math.ceil(remain) + '</span><span>漏接 ' + misses + '/5</span>';
       requestAnimationFrame(frame);
     }
     function end() {
@@ -189,21 +194,51 @@
   }
 
   /* ---------------- 钓鱼大师 ---------------- */
+  const FISH_TIERS = [
+    { label: '普通鱼', value: 5,  clicks: 2, window: 1700, speed: 1.6, scale: 7,  icon: 'fish',     weight: 0.62 },
+    { label: '大鱼',   value: 10, clicks: 4, window: 1450, speed: 2.2, scale: 9,  icon: 'fish',     weight: 0.28 },
+    { label: '鱼王',   value: 20, clicks: 7, window: 1150, speed: 2.8, scale: 11, icon: 'goldfish', weight: 0.10 }
+  ];
   function startFishing(canvas, ctx, hud, onDone) {
     const W = canvas.width, H = canvas.height;
     const waterY = 170;
     const bobber = { x: W / 2, y: 300 };
     let score = 0, running = true, startT = performance.now();
-    let fish = null; // {dir, x, y, state, t, golden, value}
-    let nextFishAt = 0, bites = 0;
-    hud.innerHTML = '<span>得分 0</span><span>时间 45</span><span>咬钩 0</span>';
+    const fishes = [];
+    let bites = 0, nextFishAt = 0, biting = null;
+    hud.innerHTML = '<span>得分 0</span><span>时间 45</span><span>钓起 0</span>';
 
-    function catchBite(e) {
-      if (!running || !fish || fish.state !== 'bite') return;
-      fish.state = 'caught';
-      score += fish.value;
-      bites++;
-      SFX.play('coin');
+    function spawnFish(now) {
+      let roll = Math.random();
+      let tier = FISH_TIERS[0];
+      for (const t of FISH_TIERS) {
+        if (roll < t.weight) { tier = t; break; }
+        roll -= t.weight;
+      }
+      fishes.push({
+        tier,
+        dir: Math.random() < 0.5 ? 1 : -1,
+        x: Math.random() < 0.5 ? 20 : W - 20,
+        y: 215 + Math.random() * 115,
+        state: 'swim',
+        clicks: 0,
+        biteStart: 0
+      });
+      nextFishAt = now + 500 + Math.random() * 900;
+    }
+    function catchBite() {
+      if (!running || !biting || biting.state !== 'bite') return;
+      biting.clicks++;
+      if (biting.clicks >= biting.tier.clicks) {
+        const t = biting.tier;
+        biting.state = 'caught';
+        score += t.value;
+        bites++;
+        SFX.play('coin');
+        biting = null;
+      } else {
+        SFX.play('click');
+      }
     }
     canvas.addEventListener('pointerdown', catchBite);
     function key(e) {
@@ -215,89 +250,70 @@
       if (!running) return;
       const t = (now - startT) / 1000;
       const remain = Math.max(0, 45 - t);
+      if (fishes.length < 4 && now >= nextFishAt) spawnFish(now);
 
-      if (!fish && now >= nextFishAt) {
-        const golden = Math.random() < 0.16;
-        fish = {
-          dir: Math.random() < 0.5 ? 1 : -1,
-          x: Math.random() < 0.5 ? 24 : W - 24,
-          y: 220 + Math.random() * 110,
-          state: 'swim',
-          t: 0,
-          golden,
-          value: golden ? 8 : (2 + Math.floor(Math.random() * 3))
-        };
-      }
-      if (fish) {
-        fish.t++;
-        if (fish.state === 'swim') {
-          fish.x += fish.dir * 1.8;
-          // 靠近浮漂后进入咬钩窗口
-          if (Math.abs(fish.x - bobber.x) < 26 && Math.abs(fish.y - bobber.y) < 36) {
-            fish.state = 'bite';
-            fish.t = 0;
+      for (let i = fishes.length - 1; i >= 0; i--) {
+        const f = fishes[i];
+        if (f.state === 'swim') {
+          f.x += f.dir * f.tier.speed;
+          if (!biting && Math.abs(f.x - bobber.x) < 26 && Math.abs(f.y - bobber.y) < 40) {
+            f.state = 'bite';
+            f.biteStart = now;
+            f.clicks = 0;
+            biting = f;
             SFX.play('sick');
-          } else if (fish.x < 8 || fish.x > W - 8) {
-            fish = null; // 游走了
+          } else if (f.x < 4 || f.x > W - 4) {
+            fishes.splice(i, 1);
           }
-        } else if (fish.state === 'bite') {
-          if (fish.t > 34) { fish = null; } // 咬钩超时
-        } else if (fish.state === 'caught') {
-          fish.y -= 4; fish.x += (bobber.x - fish.x) * 0.06;
-          if (fish.y < 40) fish = null;
+        } else if (f.state === 'bite') {
+          if (now - f.biteStart > f.tier.window) {
+            fishes.splice(i, 1);
+            if (biting === f) biting = null;
+          }
+        } else if (f.state === 'caught') {
+          f.y -= 4;
+          f.x += (bobber.x - f.x) * 0.06;
+          if (f.y < 40) fishes.splice(i, 1);
         }
-      }
-      if (!fish && now >= nextFishAt && Math.random() < 0.02) {
-        nextFishAt = now + 900 + Math.random() * 1600;
       }
       if (remain <= 0) { running = false; end(); return; }
 
-      // 场景
       drawSky(ctx, W, H, waterY);
       const water = ['#5aa7d8', '#4a97c8', '#3f87b5', '#3577a5'];
       water.forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect(0, waterY + i * 14, W, 14); });
       ctx.fillStyle = '#2f6a95';
       ctx.fillRect(0, waterY + 56, W, H - waterY - 56);
-      // 太阳 + 云
       ctx.fillStyle = '#ffd77a';
       for (let i = 0; i < 3; i++) ctx.fillRect(296 - i * 2, 34 - i * 2, 24 + i * 4, 24 + i * 4);
       ctx.fillStyle = '#ffe9a8'; ctx.fillRect(296, 34, 18, 18);
       ctx.fillStyle = 'rgba(255,255,255,.9)';
       ctx.fillRect(30, 52, 40, 10); ctx.fillRect(42, 44, 20, 14);
       ctx.fillRect(150, 30, 30, 8); ctx.fillRect(160, 26, 16, 10);
-      // 钓竿 + 鱼线
       ctx.fillStyle = '#8a5a3a';
       ctx.fillRect(66, 40, 5, 130);
       ctx.fillRect(56, 150, 25, 5);
       ctx.fillStyle = '#4a4a55';
       ctx.fillRect(70, 170, 1, bobber.y - 170);
-      // 浮漂
       ctx.fillStyle = '#e84f4f'; ctx.fillRect(bobber.x - 3, bobber.y - 5, 6, 5);
       ctx.fillStyle = '#ffffff'; ctx.fillRect(bobber.x - 3, bobber.y, 6, 5);
       ctx.fillStyle = '#c22'; ctx.fillRect(bobber.x - 1, bobber.y - 3, 2, 6);
-      // 鱼
-      if (fish && fish.state !== 'caught') {
-        if (fish.state === 'bite') {
-          ctx.fillStyle = '#ff6a4a';
-          ctx.font = 'bold 16px "Microsoft YaHei"';
-          ctx.fillText('!', bobber.x + 10, bobber.y - 12);
-        }
+
+      fishes.forEach(f => {
         ctx.save();
-        ctx.translate(fish.x, fish.y);
-        ctx.scale(fish.dir, 1);
-        SPRITES.drawIcon(ctx, fish.golden ? 'goldfish' : 'fish', -20, -16, 8);
+        ctx.translate(f.x, f.y);
+        ctx.scale(f.dir, 1);
+        SPRITES.drawIcon(ctx, f.tier.icon, -f.tier.scale * 2.5, -f.tier.scale * 2, f.tier.scale);
         ctx.restore();
-      } else if (fish && fish.state === 'caught') {
-        ctx.save();
-        ctx.translate(fish.x, fish.y);
-        ctx.scale(fish.dir, 1);
-        SPRITES.drawIcon(ctx, fish.golden ? 'goldfish' : 'fish', -16, -13, 7);
-        ctx.restore();
+      });
+      if (biting && biting.state === 'bite') {
+        ctx.fillStyle = '#ff6a4a';
+        ctx.font = 'bold 15px "Microsoft YaHei"';
+        ctx.fillText('连点收竿 ' + biting.clicks + '/' + biting.tier.clicks + ' ！', bobber.x - 55, bobber.y - 16);
       }
       ctx.fillStyle = 'rgba(255,255,255,.85)';
       ctx.font = 'bold 13px "Microsoft YaHei"';
-      ctx.fillText('出现 ! 时点击收竿！', 16, 26);
-      hud.innerHTML = '<span>得分 ' + score + '</span><span>时间 ' + Math.ceil(remain) + '</span><span>咬钩 ' + bites + '</span>';
+      ctx.fillText('鱼咬钩后连点鼠标收竿，鱼越稀有越难钓！', 16, 26);
+      hud.innerHTML = '<span>得分 ' + score + '</span><span>时间 ' + Math.ceil(remain) + '</span><span>钓起 ' + bites + '</span>';
       requestAnimationFrame(frame);
     }
     function end() {
@@ -306,6 +322,8 @@
       hideOverlay();
       onDone(score);
     }
+    spawnFish(0);
+    spawnFish(0);
     requestAnimationFrame(frame);
   }
 
@@ -516,7 +534,7 @@
   }
   function startRiddle(canvas, ctx, hud, onDone) {
     const W = canvas.width, H = canvas.height;
-    let idx = 0, score = 0, running = true;
+    let idx = 0, score = 0, running = true, locked = false, feedback = null;
     let q = null;
     function renderHud() {
       hud.innerHTML = '';
@@ -530,16 +548,23 @@
         b.textContent = v;
         b.addEventListener('click', () => {
           SFX.init();
-          if (!running) return;
-          if (v === q.ans) { score += 4; SFX.play('coin'); }
+          if (!running || locked) return;
+          const ok = v === q.a;
+          if (ok) { score += 4; SFX.play('coin'); }
           else { SFX.play('error'); }
-          idx++;
-          if (idx < RIDDLES.length) { nextQ(); }
-          else {
-            running = false;
-            if (score === RIDDLES.length * 4) score += 4;
-            end();
-          }
+          locked = true;
+          feedback = { ok: ok, until: Date.now() + 700 };
+          setTimeout(() => {
+            locked = false;
+            feedback = null;
+            idx++;
+            if (idx < RIDDLES.length) { nextQ(); }
+            else {
+              running = false;
+              if (score === RIDDLES.length * 4) score += 4;
+              end();
+            }
+          }, 700);
         });
         hud.appendChild(b);
       });
@@ -566,6 +591,13 @@
       ctx.fillStyle = 'rgba(255,255,255,.95)';
       ctx.font = 'bold 14px "Microsoft YaHei"';
       ctx.fillText('答对 +4，全对额外 +4！', 16, 282);
+      if (feedback && Date.now() < feedback.until) {
+        ctx.font = 'bold 64px "Microsoft YaHei"';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = feedback.ok ? '#2ea44f' : '#e5484d';
+        ctx.fillText(feedback.ok ? '✅' : '❌', W / 2, 268);
+        ctx.textAlign = 'left';
+      }
       requestAnimationFrame(frame);
     }
     function end() {
