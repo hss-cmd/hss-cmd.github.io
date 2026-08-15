@@ -381,7 +381,7 @@
     Object.keys(ANIMALS).forEach(a => { ['0','1','2'].forEach(s => { colorList.forEach(col => keys.push(a + '-' + s + '-' + col)); }); });
     ['minimal', 'cute', 'retro', 'forest', 'beach'].forEach(t => keys.push('room-' + t));
     keys.push('splash-bg');
-    ['fish', 'milk', 'berry', 'cake', 'ball', 'wand', 'cushion', 'carrot', 'apple', 'goldfish'].forEach(i => keys.push('icon-' + i));
+    ['fish', 'milk', 'berry', 'cake', 'ball', 'wand', 'cushion', 'carrot', 'apple', 'goldfish', 'tracker', 'math', 'riddle'].forEach(i => keys.push('icon-' + i));
     // 先探测一张，不存在则说明还没生成 AI 资源，跳过避免大量报错
     const probe = new Image();
     probe.onload = function () { loadAll(keys); };
@@ -614,9 +614,53 @@
       ".dffd..dffdd.....",
       "..dd....dd.......",
       "................."
+    ],
+    tracker: [
+      "..dddddddd..",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      "..dddddddd..",
+      "....dddd....",
+      "....d..d....",
+      "....d..d....",
+      "....dddd...."
+    ],
+    math: [
+      "..dddddddd..",
+      ".dffffffffd.",
+      ".dffddddffd.",
+      ".dffddddffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      "..dddddddd.."
+    ],
+    riddle: [
+      "..dddddddd..",
+      ".dffffffffd.",
+      ".dffffffffd.",
+      ".ddddffffff.",
+      "....ddddff..",
+      ".....dddd...",
+      "....dddd....",
+      "...dddd.....",
+      "...dddd.....",
+      "............",
+      "...dddd.....",
+      "...dddd....."
     ]
   };
+
   const ITEM_PAL = {
+    tracker: { f: '#8fd0ef', d: '#2f4a66' },
+    math: { f: '#ffd97a', d: '#5a4632' },
+    riddle: { f: '#ff9db1', d: '#7a3346' },
     fish: { f: '#8fc7e8', d: '#2f4a66' },
     milk: { f: '#ffffff', d: '#4a5a7a' },
     berry: { f: '#f06a6a', d: '#5a2333' },

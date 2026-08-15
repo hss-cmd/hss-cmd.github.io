@@ -219,7 +219,7 @@
     const p = Game.activePet();
     if (p) {
       $('homePetName').textContent = p.name;
-      $('homeStage').textContent = (p.alive ? '' : '💫 ') + Game.STAGES[p.stage] + (p.sick ? ' · 生病了' : '');
+      $('homeStage').textContent = (p.alive ? '' : '💫 ') + Game.STAGES[p.stage] + (p.sick ? ' · 生病了' : '') + (p.runaway ? ' · 跑出去啦' : '');
       $('barAffection').style.width = p.affection + '%';
       $('numAffection').textContent = Math.round(p.affection);
       $('barHunger').style.width = p.hunger + '%';
@@ -229,6 +229,21 @@
       updateActionButtons(p);
       const banner = $('sickBanner');
       if (banner) banner.classList.toggle('hidden', !(p.alive && p.sick));
+      const rbanner = $('runawayBanner');
+      if (rbanner) rbanner.classList.toggle('hidden', !(p.alive && p.runaway));
+      const findBtn = $('btnFindPet');
+      if (findBtn) {
+        findBtn.onclick = () => {
+          SFX.init();
+          const r = Game.findPet(p.id);
+          if (r.ok) { SFX.play('adopt'); UI.toast('📍 ' + r.pet.name + ' 回来啦！'); UI.renderHome(); UI.renderPets(); }
+          else {
+            SFX.play('error');
+            if (r.goto) UI.confirm('提示', r.msg, '去小卖部', () => UI.go(r.goto), '知道了');
+            else UI.toast(r.msg);
+          }
+        };
+      }
     } else {
       Game.save();
       UI.go('splash');
@@ -243,6 +258,13 @@
     Object.keys(Game.ACTIONS).forEach(name => {
       const btn = document.querySelector('[data-action="' + name + '"]');
       if (!btn) return;
+      if (p.runaway) {
+        btn.classList.add('cool');
+        let cdEl = btn.querySelector('.cd');
+        if (!cdEl) { btn.innerHTML = btn.innerHTML + '<span class="cd"></span>'; cdEl = btn.querySelector('.cd'); }
+        cdEl.textContent = '它跑啦';
+        return;
+      }
       const cfg = Game.ACTIONS[name];
       const lastKey = 'last' + name[0].toUpperCase() + name.slice(1);
       const remain = (p[lastKey] + cfg.cd * 60000 - now) / 60000;
@@ -325,7 +347,7 @@
     const night = h >= 19 || h < 6;
     ROOMS.draw(ctx, c.width, c.height, theme, night);
 
-    if (p) {
+    if (p && !p.runaway) {
       const floorY = 232;
       const stage = p.stage || 0;
       let pw, ph;
@@ -381,6 +403,19 @@
       }
     }
 
+    if (p && p.runaway && p.alive) {
+      ctx.fillStyle = 'rgba(70,60,50,.55)';
+      for (let i = 0; i < 4; i++) {
+        const fx2 = 104 + i * 26, fy2 = 236 - (i % 2) * 5;
+        ctx.fillRect(fx2 - 6, fy2 - 8, 4, 5);
+        ctx.fillRect(fx2 + 2, fy2 - 8, 4, 5);
+        ctx.fillRect(fx2 - 7, fy2 - 2, 5, 4);
+        ctx.fillRect(fx2 + 2, fy2 - 2, 5, 4);
+      }
+      ctx.fillStyle = 'rgba(255,255,255,.95)';
+      ctx.font = 'bold 13px "Microsoft YaHei"';
+      ctx.fillText('它偷偷跑出去玩啦！', 92, 264);
+    }
     // 粒子特效
     for (let i = homeFx.length - 1; i >= 0; i--) {
       const f = homeFx[i];
@@ -418,6 +453,11 @@
       if (ev.type === 'daily') {
         UI.toast('每日暖心留言已写入日记，+20 金币 💛');
         SFX.play('coin');
+      }
+      if (ev.type === 'runaway') {
+        const pp = state().pets.find(x => x.id === ev.petId);
+        UI.toast('💨 ' + (pp ? pp.name : '小可爱') + ' 偷偷跑出去玩啦！快去商店买定位器找它！');
+        SFX.play('sick');
       }
       if (ev.type === 'sick') {
         const p = Game.activePet && Game.activePet();
@@ -460,7 +500,7 @@
     }
     if (res.stageup) {
       setTimeout(() => {
-        UI.confirm('🎉 ' + p.name + ' 长大啦！', '现在是' + Game.STAGES[res.stageup.stage] + '！奖励 ' + res.stageup.bonus + ' 金币' + (res.stageup.stage === 2 ? '。成年之后就可以领养新伙伴啦！' : '。'), '太好啦', () => {});
+        UI.confirm('🎉 ' + p.name + ' 长大啦！', '现在是' + Game.STAGES[res.stageup.stage] + '！奖励 ' + res.stageup.bonus + ' 金币' + (res.stageup.stage === 2 ? '。再攒 3000 金币就可以领养新伙伴啦！' : '。'), '太好啦', () => {});
         SFX.play('levelup');
       }, 350);
     }
@@ -476,7 +516,7 @@
     const list = $('shopList');
     list.innerHTML = '';
     const st2 = state();
-    const table = tab === 'food' ? Game.FOODS : tab === 'toy' ? Game.TOYS : tab === 'med' ? Game.MEDS : tab === 'gear' ? Game.GEAR : Game.HOUSES;
+    const table = tab === 'food' ? Game.FOODS : tab === 'toy' ? Game.TOYS : tab === 'med' ? Game.MEDS : tab === 'gear' ? Game.GEAR : tab === 'tool' ? Game.TRACKERS : Game.HOUSES;
     Object.keys(table).forEach(id => {
       const item = table[id];
       const card = document.createElement('div');
@@ -520,13 +560,19 @@
       { id: 'rain', icon: '🌧🍩', label: '零食雨', desc: '左右移动小碗，接住落下的零食赚金币！', best: st.stats.bestRain },
       { id: 'bubble', icon: '🫧', label: '泡泡乐', desc: '戳破泡泡收集金币，小心黑色的泡泡哦！', best: st.stats.bestBubble },
       { id: 'fishing', icon: '🎣', label: '钓鱼大师', desc: '盯住浮漂，出现「!」时点一下收竿！', best: st.stats.bestFishing },
-      { id: 'memory', icon: '🃏', label: '记忆翻翻乐', desc: '翻开两张相同的小图标，全部配对得分！', best: st.stats.bestMemory }
-    ];
+      { id: 'memory', icon: '🃏', label: '记忆翻翻乐', desc: '翻开两张相同的小图标，全部配对得分！', best: st.stats.bestMemory },
+      { id: 'math', icon: '🔢', img: 'math', label: '算术速算', desc: '60 秒速算挑战，答对越多赚得越多！', best: st.stats.bestMath },
+      { id: 'riddle', icon: '❓', img: 'riddle', label: '猜字谜', desc: '8 道经典字谜，全对还有额外奖励！', best: st.stats.bestRiddle }];
     games.forEach(g => {
       const card = document.createElement('div');
       card.className = 'shop-card';
-      const icon = document.createElement('span');
-      icon.className = 'icon'; icon.textContent = g.icon;
+      let icon;
+      if (g.img) {
+        icon = drawIconCanvas(g.img, 48);
+      } else {
+        icon = document.createElement('span');
+        icon.className = 'icon'; icon.textContent = g.icon;
+      }
       card.appendChild(icon);
       const info = document.createElement('div');
       info.className = 'info';
@@ -608,11 +654,27 @@
       card.appendChild(drawPetAvatar(p, 64));
       const info = document.createElement('div');
       info.className = 'info';
-      const status = !p.alive ? '💫 去了星星上' : (p.sick ? '🤒 生病了' : '☀️ 健康');
+      const status = !p.alive ? '💫 去了星星上' : (p.sick ? '🤒 生病了' : (p.runaway ? '💨 跑出去玩了' : '☀️ 健康'));
       info.innerHTML = '<div class="t">' + p.name + ' <span class="badge">' + Game.STAGES[p.stage] + '</span></div>' +
         '<div class="d">' + SPRITES.ANIMALS[p.type].label + ' · ' + status + '</div>' +
         '<div class="mini-stats"><span>♥' + Math.round(p.affection) + '</span><span>🍖' + Math.round(p.hunger) + '</span><span>⚡' + Math.round(p.energy) + '</span></div>';
       card.appendChild(info);
+      if (p.runaway && p.alive) {
+        const fbtn = document.createElement('button');
+        fbtn.className = 'btn buy';
+        fbtn.textContent = '📍 定位找回';
+        fbtn.addEventListener('click', () => {
+          SFX.init();
+          const r = Game.findPet(p.id);
+          if (r.ok) { SFX.play('adopt'); UI.toast('📍 ' + p.name + ' 回来啦！'); UI.renderPets(); UI.renderHome(); }
+          else {
+            SFX.play('error');
+            if (r.goto) UI.confirm('提示', r.msg, '去小卖部', () => UI.go(r.goto), '知道了');
+            else UI.toast(r.msg);
+          }
+        });
+        card.appendChild(fbtn);
+      }
       if (p.id !== st.activePetId && p.alive) {
         const btn = document.createElement('button');
         btn.className = 'btn buy';
@@ -652,14 +714,17 @@
       }
       list.appendChild(card);
     });
-    const hasAdult = st.pets.some(p => p.alive && p.stage >= 2);
     const btn = $('btnAdoptNew');
-    btn.disabled = !(hasAdult && st.pets.length < Game.MAX_PETS);
-    btn.textContent = hasAdult && st.pets.length < Game.MAX_PETS
-      ? '领养新伙伴（300 金币）'
-      : (st.pets.length >= Game.MAX_PETS ? '小窝已经住满啦' : '领养新伙伴（第一只成年后开放）');
+    const canAdopt = st.pets.length < Game.MAX_PETS;
+    btn.disabled = !canAdopt || st.coins < 3000;
+    btn.textContent = !canAdopt
+      ? '小窝已经住满啦'
+      : '领养新伙伴（3000 金币）';
     btn.onclick = () => {
-      if (btn.disabled) { UI.toast('需要先有一只成年伙伴才能领养新伙伴哦'); return; }
+      if (st.coins < 3000) {
+        UI.confirm('金币不够', '需要 3000 金币才能领养新伙伴，先玩小游戏赚点吧', '去游乐场', () => UI.go('games'), '知道了');
+        return;
+      }
       adoptMode = 'second';
       UI.go('type');
     };

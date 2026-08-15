@@ -420,6 +420,163 @@
     requestAnimationFrame(frame);
   }
 
+
+  /* ---------------- 算术速算 ---------------- */
+  function startMath(canvas, ctx, hud, onDone) {
+    const W = canvas.width, H = canvas.height;
+    let score = 0, qIndex = 0, running = true, startT = performance.now();
+    let q = null;
+    function makeQ() {
+      const type = Math.floor(Math.random() * 3);
+      let a, b, ans, op;
+      if (type === 0) { a = 10 + Math.floor(Math.random() * 80); b = 10 + Math.floor(Math.random() * 80); op = '+'; ans = a + b; }
+      else if (type === 1) { a = 30 + Math.floor(Math.random() * 70); b = 5 + Math.floor(Math.random() * 25); op = '-'; ans = a - b; }
+      else { a = 2 + Math.floor(Math.random() * 8); b = 2 + Math.floor(Math.random() * 8); op = '×'; ans = a * b; }
+      const opts = [ans];
+      let guard = 0;
+      while (opts.length < 4 && guard++ < 40) {
+        const d = 1 + Math.floor(Math.random() * 9);
+        const cand = Math.max(0, ans + (Math.random() < 0.5 ? -d : d));
+        if (opts.indexOf(cand) < 0) opts.push(cand);
+      }
+      for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = opts[i]; opts[i] = opts[j]; opts[j] = t; }
+      q = { text: a + ' ' + op + ' ' + b + ' = ?', ans: ans, opts: opts };
+    }
+    function renderHud() {
+      hud.innerHTML = '';
+      hud.style.display = 'flex';
+      hud.style.flexWrap = 'wrap';
+      hud.style.gap = '8px';
+      hud.style.justifyContent = 'center';
+      q.opts.forEach(v => {
+        const b = document.createElement('button');
+        b.className = 'btn btn-small';
+        b.textContent = v;
+        b.addEventListener('click', () => {
+          SFX.init();
+          if (!running) return;
+          if (v === q.ans) { score += 3; SFX.play('coin'); }
+          else { score = Math.max(0, score - 1); SFX.play('error'); }
+          qIndex++;
+          if (qIndex < 12) { makeQ(); renderHud(); }
+          else { running = false; end(); }
+        });
+        hud.appendChild(b);
+      });
+    }
+    function frame(now) {
+      if (!running) return;
+      const t = (now - startT) / 1000;
+      const remain = Math.max(0, 45 - t);
+      if (remain <= 0 || qIndex >= 12) { running = false; end(); return; }
+      drawSky(ctx, W, H);
+      ctx.fillStyle = 'rgba(255,255,255,.9)';
+      ctx.font = 'bold 14px "Microsoft YaHei"';
+      ctx.fillText('第 ' + (qIndex + 1) + ' / 12 题  ·  残余 ' + Math.ceil(remain) + 's', 16, 28);
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.fillRect(14, 130, W - 28, 120);
+      ctx.fillStyle = '#3b3a36';
+      ctx.font = 'bold 40px "Microsoft YaHei"';
+      ctx.fillText(q.text, 28, 205);
+      ctx.fillStyle = 'rgba(255,255,255,.95)';
+      ctx.font = 'bold 14px "Microsoft YaHei"';
+      ctx.fillText('答对 +3 ，答错 -1，加油！', 16, 268);
+      requestAnimationFrame(frame);
+    }
+    function end() {
+      hud.innerHTML = '';
+      hideOverlay();
+      onDone(score);
+    }
+    makeQ();
+    renderHud();
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------------- 猜字谜 ---------------- */
+  const RIDDLES = [
+    { q: '一口咬掉牛尾巴', a: '告', o: ['牛', '口', '名'] },
+    { q: '山上还有山', a: '出', o: ['山', '凹', '凸'] },
+    { q: '十张口，一颗心', a: '思', o: ['想', '念', '田'] },
+    { q: '一加一', a: '王', o: ['二', '三', '丰'] },
+    { q: '人有他则变大', a: '一', o: ['人', '大', '天'] },
+    { q: '丢了一撇', a: '找', o: ['我', '持', '技'] },
+    { q: '一只黑狗，不叫不吼', a: '默', o: ['狗', '黑', '吠'] },
+    { q: '千字头，木字腰，太阳出来从下照', a: '香', o: ['季', '禾', '秋'] }
+  ];
+  function wrapText(ctx, text, maxW) {
+    const lines = [];
+    let cur = '';
+    for (const ch of text) {
+      if (ctx.measureText(cur + ch).width > maxW && cur) { lines.push(cur); cur = ch; }
+      else cur += ch;
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+  function startRiddle(canvas, ctx, hud, onDone) {
+    const W = canvas.width, H = canvas.height;
+    let idx = 0, score = 0, running = true;
+    let q = null;
+    function renderHud() {
+      hud.innerHTML = '';
+      hud.style.display = 'flex';
+      hud.style.flexWrap = 'wrap';
+      hud.style.gap = '8px';
+      hud.style.justifyContent = 'center';
+      q.opts.forEach(v => {
+        const b = document.createElement('button');
+        b.className = 'btn btn-small';
+        b.textContent = v;
+        b.addEventListener('click', () => {
+          SFX.init();
+          if (!running) return;
+          if (v === q.ans) { score += 4; SFX.play('coin'); }
+          else { SFX.play('error'); }
+          idx++;
+          if (idx < RIDDLES.length) { nextQ(); }
+          else {
+            running = false;
+            if (score === RIDDLES.length * 4) score += 4;
+            end();
+          }
+        });
+        hud.appendChild(b);
+      });
+    }
+    function nextQ() {
+      q = RIDDLES[idx];
+      const opts = [q.a].concat(q.o);
+      for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = opts[i]; opts[i] = opts[j]; opts[j] = t; }
+      q.opts = opts;
+      renderHud();
+    }
+    function frame() {
+      if (!running) return;
+      drawSky(ctx, W, H);
+      ctx.fillStyle = 'rgba(255,255,255,.9)';
+      ctx.font = 'bold 14px "Microsoft YaHei"';
+      ctx.fillText('猜字谜 · 第 ' + (idx + 1) + ' / ' + RIDDLES.length + ' 题 · 得分 ' + score, 16, 28);
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.fillRect(14, 130, W - 28, 130);
+      ctx.fillStyle = '#3b3a36';
+      ctx.font = 'bold 24px "Microsoft YaHei"';
+      const lines = wrapText(ctx, '谜面：' + q.q, W - 60);
+      lines.forEach((line, i) => ctx.fillText(line, 30, 185 + i * 34));
+      ctx.fillStyle = 'rgba(255,255,255,.95)';
+      ctx.font = 'bold 14px "Microsoft YaHei"';
+      ctx.fillText('答对 +4，全对额外 +4！', 16, 282);
+      requestAnimationFrame(frame);
+    }
+    function end() {
+      hud.innerHTML = '';
+      hideOverlay();
+      onDone(score);
+    }
+    nextQ();
+    requestAnimationFrame(frame);
+  }
+
   MiniGames.launch = function (id, onDone) {
     showOverlay();
     const canvas = $('miniCanvas');
@@ -429,6 +586,8 @@
     else if (id === 'bubble') startBubble(canvas, ctx, hud, onDone);
     else if (id === 'fishing') startFishing(canvas, ctx, hud, onDone);
     else if (id === 'memory') startMemory(canvas, ctx, hud, onDone);
+    else if (id === 'math') startMath(canvas, ctx, hud, onDone);
+    else if (id === 'riddle') startRiddle(canvas, ctx, hud, onDone);
   };
 
   global.MiniGames = MiniGames;

@@ -36,6 +36,10 @@
     scarf:   { label: '小围巾', icon: 'scarf',   price: 40,  slot: 'neck', desc: '温暖又时髦' },
     glasses: { label: '圆眼镜', icon: 'glasses', price: 50,  slot: 'face', desc: '学识渊博的样子' }
   };
+  const TRACKERS = {
+    tracker: { label: '定位器', icon: 'tracker', price: 500, desc: '找到偷偷跑出去的宠物' }
+  };
+
   const HOUSES = {
     cloud: { label: '云朵床', icon: 'house_cloud', price: 80,  sleep: 15, petAff: 0, desc: '睡觉精力 +15' },
     cabin: { label: '原木小屋', icon: 'house_cabin', price: 120, sleep: 0,  petAff: 2, desc: '抚摸好感 +2' },
@@ -60,7 +64,7 @@
     { id: 'grown',      icon: '🌟', name: '长大啦',     desc: '养大第一只成年伙伴',       cond: s => s.pets.some(p => p.stage >= 2) },
     { id: 'family',     icon: '🏡', name: '家人团聚',   desc: '拥有 2 只伙伴',            cond: s => s.pets.length >= 2 },
     { id: 'rich',       icon: '💰', name: '小富翁',     desc: '累计赚到 1000 金币',       cond: s => s.stats.coinsEarned >= 1000 },
-    { id: 'gamer',      icon: '🎮', name: '游戏达人',   desc: '小游戏单次得分 50+',       cond: s => s.stats.bestRain >= 50 || s.stats.bestBubble >= 50 || s.stats.bestFishing >= 50 || s.stats.bestMemory >= 50 },
+    { id: 'gamer',      icon: '🎮', name: '游戏达人',   desc: '小游戏单次得分 50+',       cond: s => s.stats.bestRain >= 50 || s.stats.bestBubble >= 50 || s.stats.bestFishing >= 50 || s.stats.bestMemory >= 50 || s.stats.bestMath >= 50 || s.stats.bestRiddle >= 50 },
     { id: 'streak7',    icon: '📅', name: '坚持 7 天',  desc: '连续 7 天来看它',          cond: s => s.streak >= 7 },
     { id: 'dressed',    icon: '🎀', name: '装扮大师',   desc: '戴上第一件配饰',          cond: s => s.pets.some(p => p.gear && (p.gear.head || p.gear.neck || p.gear.face)) },
     { id: 'doctor',     icon: '💊', name: '白衣天使',   desc: '治好一次生病',            cond: s => s.stats.meds >= 1 },
@@ -92,10 +96,10 @@
       ownedThemes: ['minimal'],
       activePetId: null,
       pets: [],
-      inventory: { fish: 2, milk: 1, berry: 3, cake: 0, carrot: 1, apple: 1, ball: 1, wand: 0, cushion: 0, syrup: 0, tonic: 0, elixir: 0 },
+      inventory: { fish: 2, milk: 1, berry: 3, cake: 0, carrot: 1, apple: 1, ball: 1, wand: 0, cushion: 0, syrup: 0, tonic: 0, elixir: 0, tracker: 0 },
       wardrobe: { bow: false, hat: false, crown: false, scarf: false, glasses: false },
       houses: { cloud: false, cabin: false, pod: false },
-      stats: { feed: 0, play: 0, pet: 0, sleep: 0, games: 0, coinsEarned: 0, bestRain: 0, bestBubble: 0, bestFishing: 0, bestMemory: 0, meds: 0, houses: 0 },
+      stats: { feed: 0, play: 0, pet: 0, sleep: 0, games: 0, coinsEarned: 0, bestRain: 0, bestBubble: 0, bestFishing: 0, bestMemory: 0, bestMath: 0, bestRiddle: 0, meds: 0, houses: 0 },
       streak: 0,
       lastDayKey: '',
       log: [],
@@ -112,7 +116,7 @@
       type, color, pattern, name,
       stage: 0, xp: 0,
       affection: 70, hunger: 80, energy: 90,
-      alive: true, sick: false,
+      alive: true, sick: false, runaway: false, runawaySince: 0,
       bornAt: Date.now(),
       lastFeed: 0, lastPlay: 0, lastPet: 0, lastSleep: 0, lastTouched: Date.now(),
       sickSince: 0, lowAffSince: 0, sickAt: 0, sickRandom: false,
@@ -144,6 +148,8 @@
             if (p.house === undefined) p.house = null;
             if (p.sickRandom === undefined) p.sickRandom = false;
             if (p.sickAt === undefined) p.sickAt = 0;
+            if (p.runaway === undefined) p.runaway = false;
+            if (p.runawaySince === undefined) p.runawaySince = 0;
           });
           return true;
         }
@@ -184,10 +190,10 @@
     const days = min / 1440;
     state.pets.forEach(p => {
       if (!p.alive) return;
-      const hungerDecay = min * 2.2 / 60;   // 每小时 -2.2 饱食
-      const energyDecay = min * 1.5 / 60;   // 每小时 -1.5 精力
-      let affDecay = min * 0.35 / 60;       // 每小时 -0.35 好感
-      if (p.hunger <= 0) affDecay += min * 1.2 / 60;
+      const hungerDecay = min * 4.6 / 60;   // 每小时 -2.2 饱食
+      const energyDecay = min * 3.2 / 60;   // 每小时 -1.5 精力
+      let affDecay = min * 0.7 / 60;       // 每小时 -0.35 好感
+      if (p.hunger <= 0) affDecay += min * 2.2 / 60;
       p.hunger = clamp(p.hunger - hungerDecay, 0, 100);
       p.energy = clamp(p.energy - energyDecay, 0, 100);
       p.affection = clamp(p.affection - affDecay, 0, 100);
@@ -211,7 +217,7 @@
       // 随机生病（与饥饿无关的小概率事件）
       if (p.alive && !p.sick && p.hunger > 10 && p.affection > 5) {
         const hours = min / 60;
-        if (hours > 0 && Math.random() < hours * 0.012) {
+        if (hours > 0 && Math.random() < hours * 0.028) {
           p.sick = true; p.sickRandom = true; p.sickAt = now;
           events.push({ type: 'sick', petId: p.id, random: true });
           pushLog(p.name + ' 好像有点不舒服…去小卖部买点感冒药吧。');
@@ -223,6 +229,16 @@
         pushLog(p.name + ' 自己慢慢好起来了，但还是多注意它呀。');
       }
 
+      // 突发：偷偷跑出去玩
+      if (p.alive && !p.sick && !p.runaway && p.hunger > 5) {
+        const hours = min / 60;
+        if (hours > 0 && Math.random() < hours * 0.006) {
+          p.runaway = true;
+          p.runawaySince = now;
+          events.push({ type: 'runaway', petId: p.id });
+          pushLog('💨 ' + p.name + ' 趁你不注意偷偷跑出去玩啦！快去买个定位器（500金币）把它找回来！');
+        }
+      }
       if (days >= 0.5) {
         pushLog(p.name + ' 在窗边等了你 ' + (days >= 1 ? Math.floor(days) + ' 天' : '一整天') + '…饱食 -' + Math.round(hungerDecay) + '，好感 -' + Math.round(affDecay) + '。看到你回来，它眼睛一下子亮了。');
       }
@@ -341,11 +357,9 @@
   }
 
   function adoptNew(type, color, pattern, name) {
-    const hasAdult = state.pets.some(p => p.alive && p.stage >= 2);
-    if (!hasAdult) return { ok: false, msg: '先让第一位伙伴长大成青年/成年体，再领养新伙伴吧' };
     if (state.pets.length >= MAX_PETS) return { ok: false, msg: '小窝已经住满啦（最多 ' + MAX_PETS + ' 只）' };
-    if (state.coins < 300) return { ok: false, msg: '领养新伙伴需要 300 金币，先玩小游戏赚点吧' };
-    state.coins -= 300;
+    if (state.coins < 3000) return { ok: false, msg: '领养新伙伴需要 3000 金币，先玩小游戏赚点吧', goto: 'games' };
+    state.coins -= 3000;
     const p = adopt(type, color, pattern, name);
     pushLog('小窝迎来了新成员：' + p.name + '！它好奇地闻了闻周围的一切。');
     save();
@@ -371,6 +385,7 @@
     const p = activePet();
     if (!p) return { ok: false, msg: '还没有伙伴哦' };
     if (!p.alive) return { ok: false, msg: p.name + ' 还在星星上…先去伙伴列表看看它吧' };
+    if (p.runaway) return { ok: false, msg: '它偷偷跑出去啦，先去商店买定位器找它回来吧', goto: 'shop' };
     const cfg = ACTIONS[name];
     if (!cfg) return { ok: false, msg: '未知操作' };
     const lastKey = 'last' + name[0].toUpperCase() + name.slice(1);
@@ -451,7 +466,7 @@
       p.stage = newStage;
       const bonus = newStage === 1 ? 30 : 60;
       state.coins += bonus;
-      pushLog('🎉 ' + p.name + ' 长大啦！现在是' + STAGES[newStage] + '，奖励 ' + bonus + ' 金币。' + (newStage === 2 ? '它已经可以照顾弟弟妹妹了，可以去领养新伙伴啦！' : ''));
+      pushLog('🎉 ' + p.name + ' 长大啦！现在是' + STAGES[newStage] + '，奖励 ' + bonus + ' 金币。' + (newStage === 2 ? '再攒 3000 金币就可以领养新伙伴啦！' : ''));
       return { stage: newStage, bonus };
     }
     return null;
@@ -503,7 +518,10 @@
     if (gameId === 'bubble') state.stats.bestBubble = Math.max(state.stats.bestBubble, score);
     if (gameId === 'fishing') state.stats.bestFishing = Math.max(state.stats.bestFishing, score);
     if (gameId === 'memory') state.stats.bestMemory = Math.max(state.stats.bestMemory, score);
-    if (score > 0) pushLog('在「' + (gameId === 'rain' ? '零食雨' : '泡泡乐') + '」中赚到 ' + score + ' 金币！');
+    if (gameId === 'math') state.stats.bestMath = Math.max(state.stats.bestMath, score);
+    if (gameId === 'riddle') state.stats.bestRiddle = Math.max(state.stats.bestRiddle, score);
+    const gname = { rain: '零嘴雨', bubble: '泡泡乐', fishing: '钓鱼大师', memory: '记忆翻翻乐', math: '算术速算', riddle: '猜字谜' }[gameId] || '小游戏';
+    if (score > 0) pushLog('在「' + gname + '」中赚到 ' + score + ' 金币');
     const ach = checkAchievements();
     save();
     return { coins: score, achievements: ach };
@@ -559,6 +577,23 @@
     return { ok: true, med: med, achievements: ach };
   }
 
+  /* ---------------- 寻回跑出去的宠物 ---------------- */
+  function findPet(petId) {
+    const p = state.pets.find(x => x.id === petId);
+    if (!p) return { ok: false, msg: '找不到这只伙伴' };
+    if (!p.runaway) return { ok: false, msg: '它就在家里乖乖待着呢' };
+    if (!state.inventory.tracker || state.inventory.tracker <= 0) return { ok: false, msg: '需要定位器才能找到它，去商店买一个吧（500金币）', goto: 'shop' };
+    state.inventory.tracker--;
+    p.runaway = false;
+    p.runawaySince = 0;
+    p.hunger = clamp(p.hunger - 12, 0, 100);
+    p.energy = clamp(p.energy - 10, 0, 100);
+    p.affection = clamp(p.affection - 3, 0, 100);
+    pushLog('📍 你用定位器找到了 ' + p.name + '，它委屈巴巴地跟你回了家，饿了也累了。');
+    save();
+    return { ok: true, pet: p };
+  }
+
   function equipGear(petId, slot, itemId) {
     const p = state.pets.find(x => x.id === petId);
     if (!p) return { ok: false, msg: '找不到伙伴' };
@@ -583,8 +618,8 @@
   }
 
   const api = {
-    SAVE_KEY, STAGES, STAGE_XP, FOODS, TOYS, MEDS, GEAR, HOUSES, ACTIONS, ACHIEVEMENTS, MAX_PETS,
-    defaultState, load, save, reset, simulate, action, adopt, adoptNew, switchPet,
+    SAVE_KEY, STAGES, STAGE_XP, FOODS, TOYS, MEDS, GEAR, TRACKERS, HOUSES, ACTIONS, ACHIEVEMENTS, MAX_PETS,
+    defaultState, load, save, reset, simulate, action, adopt, adoptNew, findPet, switchPet,
     buyItem, buyTheme, finishGame, revive, checkAchievements,
     activePet, randomName, say, dailyLine, petSound, fmtMin, tier, nowKey,
     medicate, equipGear, setHouse
