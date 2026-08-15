@@ -1,5 +1,5 @@
 ﻿/* 云端小窝 · Service Worker（需通过 http(s) 访问才生效） */
-const CACHE = 'cloudnest-v9';
+const CACHE = 'cloudnest-v10';
 const ASSETS = ['./', './index.html', './css/style.css', './js/sprites.js', './js/room.js', './js/game.js', './js/minigames.js', './js/ui.js', './js/main.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
