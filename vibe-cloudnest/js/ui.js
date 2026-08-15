@@ -181,15 +181,6 @@
       b.addEventListener('click', () => { UI.selColor = id; UI.renderColor(); });
       sw.appendChild(b);
     });
-    const pw = $('patternSwatches');
-    pw.innerHTML = '';
-    Object.keys(SPRITES.PATTERNS).forEach(id => {
-      const b = document.createElement('button');
-      b.className = 'swatch swatch-pattern' + (id === UI.selPattern ? ' selected' : '');
-      b.textContent = SPRITES.PATTERNS[id].label;
-      b.addEventListener('click', () => { UI.selPattern = id; UI.renderColor(); });
-      pw.appendChild(b);
-    });
     if (!$('petNameInput').value) $('petNameInput').value = Game.randomName();
     UI.drawColorPreview();
   };
