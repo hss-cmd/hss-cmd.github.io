@@ -306,6 +306,13 @@
     const c = cv.getContext('2d');
     c.imageSmoothingEnabled = false;
     c.drawImage(img, trim.x, trim.y, trim.w, trim.h, 0, 0, trim.w, trim.h);
+    // alpha 二值化：身体像素实心，背景透明，避免幻透明感
+    const id = c.getImageData(0, 0, cv.width, cv.height);
+    const dpx = id.data;
+    for (let i = 3; i < dpx.length; i += 4) {
+      dpx[i] = dpx[i] < 30 ? 0 : 255;
+    }
+    c.putImageData(id, 0, 0);
     const pattern = pet.pattern || 'solid';
     if (pattern !== 'solid') {
       c.globalCompositeOperation = 'source-atop';
