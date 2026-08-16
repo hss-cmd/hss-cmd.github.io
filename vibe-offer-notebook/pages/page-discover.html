@@ -1089,6 +1089,24 @@ function resetDemo(){
   location.reload();
 }
 
+/* ============ 自适应缩放（无需手动缩放即可看全） ============ */
+function fitStage(){
+  const wrap = document.querySelector(".demo-wrap, .spec-wrap");
+  if(!wrap) return;
+  wrap.style.zoom = "1";
+  const W = wrap.offsetWidth, H = wrap.offsetHeight;
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
+  const isMobile = vw < 560;
+  let s = 1;
+  if(isMobile){ s = Math.min((vw - 40) / W, 1); }
+  else { s = Math.min((vw - 40) / W, (vh - 72) / H, 1); }
+  s = Math.max(s, 0.5);
+  wrap.style.zoom = String(s);
+}
+window.addEventListener("resize", fitStage);
+window.addEventListener("load", fitStage);
+
 /* ============ 初始化 ============ */
 document.addEventListener("DOMContentLoaded", ()=>{
   try{
@@ -1101,6 +1119,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if(document.getElementById("jobList")) renderHome();
   if(document.getElementById("feedList")) renderFeed();
   if(document.getElementById("msgList")) renderMsgs();
+  fitStage();
 });
 </script>
 <script>goPage('discover');</script>
