@@ -522,6 +522,50 @@ section[id],.edu-card[id],.exp-card[id]{scroll-margin-top:130px}
   .marquee-track{animation:none}
   #trail{display:none}
 }
+
+/* ===== 移动端适配（追加） ===== */
+@media(max-width:768px){
+  .container{padding:0 18px}
+  .section{padding:54px 0}
+  .sec-head{gap:12px;margin-bottom:28px}
+  .sec-icon{width:44px;height:44px;font-size:1.2rem;border-radius:13px}
+  .sec-title{font-size:clamp(1.6rem,7vw,2.05rem)}
+  .sec-title small{font-size:.72rem;letter-spacing:.08em}
+  .hero-grid{gap:34px}
+  .intro-print{font-size:.8rem;max-width:none;line-height:1.8}
+  .tags{gap:7px;margin:12px 0 16px}
+  .tag{padding:5px 12px;font-size:.8rem}
+  .edu-card{padding:20px 18px;gap:18px}
+  .campus-card{padding:22px 18px 20px}
+  .campus-stamp{top:-16px;right:12px}
+  .exp-item,.exp-item:nth-child(even){grid-template-columns:46px 1fr;gap:12px;padding:18px 0}
+  .exp-item .exp-dot,.exp-item:nth-child(even) .exp-dot{grid-column:1;grid-row:1;width:42px;height:42px;font-size:1.1rem}
+  .exp-item .exp-card,.exp-item:nth-child(even) .exp-card{grid-column:2;grid-row:1;justify-self:stretch;max-width:none;padding:16px 16px}
+  .exp-item .exp-logo,.exp-item:nth-child(even) .exp-logo{grid-column:2;grid-row:2;justify-self:stretch;width:100%;aspect-ratio:16/9}
+  .timeline-progress{left:23px}
+  .exp-card h3{font-size:1.02rem}
+  .exp-card li{font-size:.84rem}
+  .work-row .wr-body{padding:20px 18px}
+  .gacha-flex{flex-direction:column;align-items:center;gap:26px}
+  .gacha-machine{width:min(280px,100%)}
+  .gacha-panel{padding:30px 18px}
+  .td-deck{width:100%;max-width:230px}
+  .td-result .draw-card{width:200px;min-width:200px;height:356px;min-height:356px}
+  .td-result .draw-card.dealing{transform:translateX(-260px) translateY(40px) rotate(-10deg) scale(.5)}
+  .contact-huge{font-size:clamp(1.9rem,10vw,2.7rem)}
+  .contact-rows{margin-top:38px}
+  .contact-row{flex-direction:column;gap:6px;padding:14px 4px;font-size:.92rem}
+  .contact-btns{flex-direction:column;align-items:stretch;gap:12px}
+  .contact-btns a{text-align:center}
+}
+@media(max-width:480px){
+  .container{padding:0 15px}
+  .practice-row{grid-template-columns:1fr 1fr;gap:12px}
+  .film-frame{width:150px}
+  .exp-date{font-size:.68rem}
+  .hobby-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
