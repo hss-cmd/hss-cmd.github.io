@@ -196,10 +196,10 @@ h1.name .r{color:var(--red)} h1.name .b{color:var(--royal)} h1.name .y{color:var
 
 /* ===== 实习经历 · 竖向时间轴（两侧轮换） ===== */
 .exp-timeline{position:relative;margin-top:6px}
-.timeline-progress{position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:6px;z-index:1;pointer-events:none}
+.timeline-progress{position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:6px;z-index:0;pointer-events:none}
 .timeline-fill{position:absolute;left:50%;top:0;transform:translateX(-50%);width:6px;height:0;background:linear-gradient(180deg,var(--sun),var(--red) 55%,var(--royal));border-radius:3px;opacity:.9}
-.timeline-plane{position:absolute;left:50%;top:0;transform:translate(-50%,-50%) rotate(90deg);font-size:1.35rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));z-index:2}
-.exp-item{position:relative;display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;gap:0 22px;padding:26px 0}
+.timeline-plane{position:absolute;left:50%;top:0;transform:translate(-50%,-50%) rotate(90deg);font-size:1.35rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));z-index:0}
+.exp-item{position:relative;z-index:1;display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;gap:0 22px;padding:26px 0}
 .exp-card{grid-column:1;grid-row:1;justify-self:end;background:var(--cream);border:3px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:18px 20px;width:100%;max-width:430px;position:relative;transition:.2s}
 .exp-item:nth-child(even) .exp-card{grid-column:3;justify-self:start}
 .exp-dot{grid-column:2;grid-row:1;justify-self:center;width:58px;height:58px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-size:1.4rem;background:var(--sun);box-shadow:4px 4px 0 var(--ink);position:relative;z-index:2}
@@ -237,7 +237,7 @@ h1.name .r{color:var(--red)} h1.name .b{color:var(--royal)} h1.name .y{color:var
 
 
 .campus-card[class*="reveal"]:hover{transform:rotate(-1deg) translateY(-4px)}
-.campus-stamp{position:absolute;top:-15px;right:18px;background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px 14px;font-weight:900;font-size:.75rem;transform:rotate(4deg);box-shadow:3px 3px 0 var(--ink)}
+.campus-stamp{position:absolute;top:-18px;right:18px;background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:12px;padding:7px 18px;font-weight:900;font-size:.92rem;transform:rotate(4deg);box-shadow:3px 3px 0 var(--ink)}
 .campus-card .emo{font-size:1.6rem;margin-bottom:8px;display:inline-block}
 .campus-card h3{font-weight:900;font-size:1.1rem}
 .campus-card .where{color:var(--muted);font-weight:700;font-size:.84rem;margin:3px 0 10px}
@@ -698,6 +698,31 @@ section[id],.edu-card[id],.exp-card[id]{scroll-margin-top:130px}
     </div>
     <div class="exp-timeline">
       <div class="timeline-progress"><span class="timeline-fill"></span><span class="timeline-plane">✈️</span></div>
+      <div class="exp-item reveal-right" id="exp-iflytek">
+        <div class="exp-card">
+          <div class="exp-top"><span class="exp-date">2023.09 – 2023.11</span><span class="exp-co">科大讯飞 · 运营商事业部</span></div>
+          <h3>产品运营实习生</h3>
+          <ul>
+            <li>完成 5 台 AI 智能外呼机器人的方案策划、配置与上线</li>
+            <li>搭建稳定率 / 转化率监控，定位并解决 100+ 运行问题</li>
+            <li>跨部门协同推进交付，累计带来 10w+ 营收</li>
+          </ul>
+        </div>
+        <div class="exp-dot">🤖</div>
+        <div class="exp-logo"><img src="assets/logo-iflytek.png" alt="科大讯飞" loading="lazy"></div>
+      </div><div class="exp-item reveal-scale" id="exp-midea">
+        <div class="exp-card">
+          <div class="exp-top"><span class="exp-date">2024.02 – 2024.05</span><span class="exp-co">美的股份集团 · 线上业务部</span></div>
+          <h3>电商数据运营实习生</h3>
+          <ul>
+            <li>搭建日度销售明细、TOP200 产品结构等核心数据集</li>
+            <li>用 Excel / SQL / Python 取数，Tableau / Power BI 做可视化看板</li>
+            <li>输出销售进度通报、门体占比权重分析等业务报表</li>
+          </ul>
+        </div>
+        <div class="exp-dot">❄️</div>
+        <div class="exp-logo"><img src="assets/logo-midea.png" alt="美的" loading="lazy"></div>
+      </div>
       <div class="exp-item reveal-clip" id="exp-meituan">
         <div class="exp-card">
           <div class="exp-top"><span class="exp-date">2026.03 – 2026.06</span><span class="exp-co">美团 · 酒旅-交通业务部</span></div>
@@ -711,32 +736,7 @@ section[id],.edu-card[id],.exp-card[id]{scroll-margin-top:130px}
         <div class="exp-dot">🛵</div>
         <div class="exp-logo"><img src="assets/logo-meituan.png" alt="美团" loading="lazy"></div>
       </div>
-      <div class="exp-item reveal-scale" id="exp-midea">
-        <div class="exp-card">
-          <div class="exp-top"><span class="exp-date">2024.02 – 2024.05</span><span class="exp-co">美的股份集团 · 线上业务部</span></div>
-          <h3>电商数据运营实习生</h3>
-          <ul>
-            <li>搭建日度销售明细、TOP200 产品结构等核心数据集</li>
-            <li>用 Excel / SQL / Python 取数，Tableau / Power BI 做可视化看板</li>
-            <li>输出销售进度通报、门体占比权重分析等业务报表</li>
-          </ul>
-        </div>
-        <div class="exp-dot">❄️</div>
-        <div class="exp-logo"><img src="assets/logo-midea.png" alt="美的" loading="lazy"></div>
-      </div>
-      <div class="exp-item reveal-right" id="exp-iflytek">
-        <div class="exp-card">
-          <div class="exp-top"><span class="exp-date">2023.09 – 2023.11</span><span class="exp-co">科大讯飞 · 运营商事业部</span></div>
-          <h3>产品运营实习生</h3>
-          <ul>
-            <li>完成 5 台 AI 智能外呼机器人的方案策划、配置与上线</li>
-            <li>搭建稳定率 / 转化率监控，定位并解决 100+ 运行问题</li>
-            <li>跨部门协同推进交付，累计带来 10w+ 营收</li>
-          </ul>
-        </div>
-        <div class="exp-dot">🤖</div>
-        <div class="exp-logo"><img src="assets/logo-iflytek.png" alt="科大讯飞" loading="lazy"></div>
-      </div>
+      
       </div>
     </div>
   </div>
